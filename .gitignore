@@ -1,31 +1,6 @@
 #FS
 **/.DS_Store
 
-# Exclude knowledge base source documents but keep the directory structure
-knowledge-base/source-docs/*
-!knowledge-base/source-docs/.gitkeep
-
-# Exclude built vector databases (too large for git)
-knowledge-base/vector-db/*
-!knowledge-base/vector-db/.gitkeep
-data/vector_db/*
-!data/vector_db/.gitkeep
-
-knowledge-base/variables-db/*
-knowledge-base/variables-faiss/*
-knowledge-base/methodology-db/*
-knowledge-base/catalog_cache/*
-knowledge-base/model_cache_v2.0/*
-
-# Keep build artifacts out
-knowledge-base/*.log
-knowledge-base/build_manifest.json
-
-# Ignore all model cache files (recommended)
-knowledge-base/model_cache/
-model_cache/
-knowledge-base/embedding_cache
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -221,7 +196,6 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 .env
-knowledge-base/2023_ACS_Enriched_Universe.json
 # Large knowledge base files (too big for GitHub)
 knowledge-base/source-docs/
 knowledge-base/vector-db/
