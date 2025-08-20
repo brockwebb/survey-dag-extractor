@@ -1,6 +1,34 @@
+#FS
+**/.DS_Store
+
+# Exclude knowledge base source documents but keep the directory structure
+knowledge-base/source-docs/*
+!knowledge-base/source-docs/.gitkeep
+
+# Exclude built vector databases (too large for git)
+knowledge-base/vector-db/*
+!knowledge-base/vector-db/.gitkeep
+data/vector_db/*
+!data/vector_db/.gitkeep
+
+knowledge-base/variables-db/*
+knowledge-base/variables-faiss/*
+knowledge-base/methodology-db/*
+knowledge-base/catalog_cache/*
+knowledge-base/model_cache_v2.0/*
+
+# Keep build artifacts out
+knowledge-base/*.log
+knowledge-base/build_manifest.json
+
+# Ignore all model cache files (recommended)
+knowledge-base/model_cache/
+model_cache/
+knowledge-base/embedding_cache
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[codz]
+*.py[cod]
 *$py.class
 
 # C extensions
@@ -46,7 +74,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py.cover
+*.py,cover
 .hypothesis/
 .pytest_cache/
 cover/
@@ -106,23 +134,16 @@ ipython_config.py
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 #poetry.lock
-#poetry.toml
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
 #pdm.lock
-#pdm.toml
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+#   in version control.
+#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
+.pdm.toml
 .pdm-python
 .pdm-build/
-
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-#pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
@@ -136,7 +157,6 @@ celerybeat.pid
 
 # Environments
 .env
-.envrc
 .venv
 env/
 venv/
@@ -185,7 +205,7 @@ cython_debug/
 #  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
 #  and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#  you could uncomment the following to ignore the entire vscode folder
+#  you could uncomment the following to ignore the enitre vscode folder
 # .vscode/
 
 # Ruff stuff:
@@ -200,8 +220,11 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
-
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+.env
+knowledge-base/2023_ACS_Enriched_Universe.json
+# Large knowledge base files (too big for GitHub)
+knowledge-base/source-docs/
+knowledge-base/vector-db/
+knowledge-base/stats-index/
+knowledge-base/2023_ACS_Enriched_Universe.json
+knowledge-base/remaining_bulk_variables.json
