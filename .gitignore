@@ -1,6 +1,12 @@
 #FS
 **/.DS_Store
 
+#output directory contents
+output/*
+
+#legacy folder
+/legacy
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
