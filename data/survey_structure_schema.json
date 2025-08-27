@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Survey DAG Structure",
+  "type": "object",
+  "required": ["survey_dag_structure"],
+  "properties": {
+    "survey_dag_structure": {
+      "type": "object",
+      "required": ["id", "version", "start", "terminals", "nodes", "edges", "predicates"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "type": "string" },
+        "start": { "type": "string" },
+        "terminals": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "type": "string" },
+              "kind": { "type": "string", "enum": ["question", "junction", "terminal"] },
+              "block": { "type": ["string", "null"] },
+              "response_type": {
+                "type": ["string", "null"],
+                "enum": ["enum", "set", "text", "number", "boolean", null]
+              },
+              "universe": { "type": ["string", "null"] },
+              "universe_ast": { "type": ["array", "null"] }
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source", "target", "predicate"],
+            "properties": {
+              "source": { "type": "string" },
+              "target": { "type": "string" },
+              "predicate": { "type": "string" },
+              "provenance": {
+                "type": ["object", "null"],
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "predicates": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["expr", "ast", "depends_on"],
+            "properties": {
+              "expr": { "type": "string" },
+              "ast": { "type": "array" },
+              "depends_on": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

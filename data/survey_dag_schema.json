@@ -1,0 +1,525 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Survey DAG Schema",
+  "description": "Mathematical graph theory foundation for survey logic analysis",
+  "type": "object",
+  "required": ["survey_dag"],
+  "additionalProperties": false,
+  "properties": {
+    "survey_dag": {
+      "type": "object",
+      "required": ["metadata", "graph", "predicates"],
+      "additionalProperties": false,
+      "properties": {
+        
+        "metadata": {
+          "type": "object",
+          "required": ["id", "title", "version", "objective", "build"],
+          "additionalProperties": false,
+          "properties": {
+            "id": {"type": "string"},
+            "title": {"type": "string"},
+            "version": {"type": "string"},
+            "objective": {
+              "enum": ["node", "edge", "block", "predicate"],
+              "default": "edge",
+              "description": "Coverage target for mathematical algorithms"
+            },
+            "build": {
+              "type": "object",
+              "required": ["extractor_version", "extracted_at", "method"],
+              "additionalProperties": false,
+              "properties": {
+                "extractor_version": {"type": "string"},
+                "extracted_at": {"type": "string", "format": "date-time"},
+                "method": {"enum": ["llm_extraction", "rule_based", "hybrid"]},
+                "source_format": {"type": "string"},
+                "validation_passed": {"type": "boolean"},
+                "post_edit": {"type": "boolean", "description": "Manual edits made after extraction"}
+              }
+            },
+            "normalization": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id_transforms": {"type": "array", "items": {"type": "string"}},
+                "case_handling": {"enum": ["preserve", "upper", "lower"]},
+                "space_replacement": {"type": "string"}
+              }
+            }
+          }
+        },
+
+        "graph": {
+          "type": "object",
+          "required": ["start", "terminals", "nodes", "edges"],
+          "additionalProperties": false,
+          "properties": {
+            
+            "start": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{1,63}$",
+              "description": "ID of entry question (must be a non-terminal node; enforced in validation)"
+            },
+            
+            "terminals": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^END_[A-Z0-9_]+$"
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "IDs of terminal nodes (each must also appear in nodes[]; enforced in validation)"
+            },
+            
+            "nodes": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "required": ["id", "type"],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^(END_[A-Z0-9_]+|[A-Za-z][A-Za-z0-9_]{1,63})$"
+                  },
+                  "type": {
+                    "enum": ["question", "junction", "terminal"],
+                    "description": "Node type in the DAG. No edges may originate from terminal nodes."
+                  },
+                  "order_index": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Sequential position in survey flow"
+                  },
+                  "block": {
+                    "type": "string",
+                    "description": "Block containing this node (if applicable)"
+                  },
+                  "domain": {
+                    "type": "object",
+                    "required": ["kind"],
+                    "additionalProperties": false,
+                    "description": "Response domain for validation",
+                    "properties": {
+                      "kind": {"enum": ["enum", "set", "number", "text", "boolean", "terminal", "unknown"]},
+                      "values": {
+                        "type": "array",
+                        "items": {"type": ["string", "number"]},
+                        "description": "Required for enum/set domains"
+                      },
+                      "range": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "min": {"type": "number"},
+                          "max": {"type": "number"}
+                        },
+                        "description": "Optional for number domains"
+                      }
+                    },
+                    "allOf": [
+                      { "if": { "properties": { "kind": { "const": "enum" } } }, "then": { "required": ["values"] } },
+                      { "if": { "properties": { "kind": { "const": "set" } } },  "then": { "required": ["values"] } }
+                    ]
+                  },
+                  "universe": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "description": "Universe condition determining when this question is shown",
+                    "properties": {
+                      "expression": {
+                        "type": "string",
+                        "description": "Logical expression (e.g., 'D11 > 0', 'always_show')"
+                      },
+                      "dependencies": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "uniqueItems": true,
+                        "description": "Node IDs this universe condition depends on"
+                      },
+                      "universe_predicate": {
+                        "type": "string",
+                        "pattern": "^P_[A-Z0-9]+$",
+                        "description": "Optional compiled predicate ID (links to predicates.*)"
+                      }
+                    },
+                    "required": ["expression"]
+                  },
+                  "metadata":  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "description": "Additional node properties",
+                    "properties": {
+                      "text": {"type": "string"},
+                      "variable_name": {"type": "string"},
+                      "required": {"type": "boolean"},
+                      "display_logic": {"type": "string"}
+                    }
+                  },
+                  "annotations": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Human reviewer notes during post-edit phase"
+                  },
+                  "provenance": {"$ref": "#/definitions/provenance"}
+                }
+              }
+            },
+            
+            "edges": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object", 
+                "required": ["id", "source", "target", "predicate", "kind"],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^E_[A-Z0-9]{8,12}$",
+                    "description": "Unique edge identifier"
+                  },
+                  "source": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{1,63}$",
+                    "description": "Source node ID"
+                  },
+                  "target": {
+                    "type": "string", 
+                    "pattern": "^(END_[A-Z0-9_]+|[A-Za-z][A-Za-z0-9_]{1,63})$",
+                    "description": "Target node ID"
+                  },
+                  "predicate": {
+                    "type": "string",
+                    "pattern": "^P_[A-Z0-9]+$",
+                    "description": "Reference to predicate ID that must be true for traversal"
+                  },
+                  "kind": {
+                    "enum": ["fallthrough", "branch", "terminate"],
+                    "description": "fallthrough=sequence continuity, branch=conditional skip/jump, terminate=into END_* node"
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0,
+                    "description": "Evaluation order: lower number = higher priority"
+                  },
+                  "subkind": {
+                    "type": "string",
+                    "enum": ["sequence", "skip", "terminal_natural", "terminal_skip", "terminal_exit", "universe", "block_trans"],
+                    "description": "Detailed edge classification for diagnostics"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "condition_text": {"type": "string"},
+                      "action": {"type": "string"},
+                      "weight": {"type": "number"}
+                    }
+                  },
+                  "provenance": {"$ref": "#/definitions/provenance"}
+                }
+              }
+            }
+          }
+        },
+
+        "predicates": {
+          "type": "object",
+          "description": "Mathematical predicates defining edge conditions",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^P_[A-Z0-9]+$": {
+              "type": "object",
+              "required": ["ast"],
+              "additionalProperties": false,
+              "properties": {
+                "ast": {"$ref": "#/definitions/predicate_ast"},
+                "depends_on": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "uniqueItems": true,
+                  "description": "Node IDs this predicate depends on"
+                },
+                "complexity": {
+                  "enum": ["trivial", "simple", "complex"],
+                  "description": "Predicate complexity classification"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Human-readable predicate description"
+                },
+                "annotations": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "description": "Human reviewer notes during post-edit phase"
+                },
+                "provenance": {"$ref": "#/definitions/provenance"}
+              }
+            }
+          }
+        },
+
+        "validation": {
+          "type": "object",
+          "required": ["status", "issues"],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": ["OK", "OK_WITH_WARNINGS", "FAIL"],
+              "description": "Overall DAG validation status"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["code", "severity", "where", "message"],
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "MULTIPLE_START_NODES",
+                      "CYCLE_DETECTED", 
+                      "ORPHAN_NODES",
+                      "MISSING_TERMINAL",
+                      "INVALID_PREDICATE",
+                      "DUPLICATE_EDGE",
+                      "UNREACHABLE_TERMINAL",
+                      "MISSING_DEPENDENCY",
+                      "BLOCK_BOUNDARY_MISMATCH",
+                      "QUESTION_NOT_IN_ANY_BLOCK",
+                      "DUPLICATE_QUESTION_IN_BLOCKS",
+                      "INVALID_EDGE_ENDPOINT",
+                      "FORWARD_REFERENCE",
+                      "NON_LOCAL_PREDICATE",
+                      "UNCOVERED",
+                      "OVERLAP",
+                      "IMPUTED_ELSE",
+                      "IMPUTED_TARGET",
+                      "UNKNOWN_QUESTION_IN_BLOCK",
+                      "NO_QUESTIONS",
+                      "UNIVERSE_DEPENDENCY_MISMATCH"
+                    ]
+                  },
+                  "severity": {"enum": ["error", "warning", "info"]},
+                  "where": {
+                    "anyOf": [
+                      {"type": "string"},
+                      {"type": "string", "format": "json-pointer"}
+                    ],
+                    "description": "Location of issue - can be JSON Pointer like '/graph/nodes/5' or free text"
+                  },
+                  "message": {"type": "string"},
+                  "details": {"type": "object", "additionalProperties": true}
+                }
+              }
+            },
+            "gates": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Mathematical validation gate results",
+              "properties": {
+                "acyclic": {"type": "boolean"},
+                "single_start": {"type": "boolean"},
+                "all_reachable": {"type": "boolean", "description": "All non-terminal nodes reachable from start"},
+                "terminals_reachable": {"type": "boolean"},
+                "predicates_valid": {"type": "boolean"}
+              }
+            }
+          }
+        },
+
+        "analysis": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Graph analysis metrics",
+          "properties": {
+            "statistics": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "node_count": {"type": "integer"},
+                "edge_count": {"type": "integer"},
+                "predicate_count": {"type": "integer"},
+                "max_depth": {"type": "integer"},
+                "branching_factor": {"type": "number"},
+                "complexity_score": {"type": "number"}
+              }
+            },
+            "topology": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "topological_order": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "uniqueItems": true
+                },
+                "strongly_connected_components": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                  },
+                  "description": "Must be empty for valid DAG"
+                },
+                "critical_path": {
+                  "type": "array", 
+                  "items": {"type": "string"},
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        },
+
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Test coverage analysis results",
+          "properties": {
+            "universe": {
+              "type": "object",
+              "required": ["objective", "elements", "total_count"],
+              "additionalProperties": false,
+              "properties": {
+                "objective": {"enum": ["node", "edge", "block", "predicate"]},
+                "elements": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "uniqueItems": true
+                },
+                "total_count": {"type": "integer"}
+              }
+            },
+            "optimal_paths": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "nodes", "edges", "coverage"],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {"type": "string"},
+                  "nodes": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "uniqueItems": true
+                  },
+                  "edges": {
+                    "type": "array", 
+                    "items": {"type": "string"},
+                    "uniqueItems": true,
+                    "description": "Edge IDs traversed by this path"
+                  },
+                  "coverage": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "uniqueItems": true
+                  },
+                  "length": {"type": "integer"},
+                  "probability": {"type": "number"},
+                  "explanation": {"type": "string", "description": "Human-readable coverage explanation"}
+                }
+              }
+            },
+            "metrics": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "coverage_percentage": {"type": "number"},
+                "path_count": {"type": "integer"},
+                "algorithm": {"type": "string"},
+                "optimality_proof": {"type": "string"}
+              }
+            }
+          }
+        },
+
+        "provenance": {"$ref": "#/definitions/provenance"}
+      }
+    }
+  },
+
+  "definitions": {
+    "predicate_ast": {
+      "description": "JSON AST for mathematical predicates - canonical form only",
+      "oneOf": [
+        {
+          "type": "array", 
+          "items": [{"const": "TRUE"}],
+          "minItems": 1,
+          "maxItems": 1,
+          "description": "Always true predicate"
+        },
+        {
+          "type": "array",
+          "items": [{"const": "FALSE"}], 
+          "minItems": 1,
+          "maxItems": 1,
+          "description": "Always false predicate"
+        },
+        {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": [
+            {"const": "NOT"},
+            {"$ref": "#/definitions/predicate_ast"}
+          ],
+          "description": "Unary NOT operation"
+        },
+        {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": [
+            {"enum": ["AND", "OR", "==", "!=", ">", ">=", "<", "<=", "IN"]},
+            {"anyOf": [
+              {"type": "string"}, 
+              {"type": "number"}, 
+              {"$ref": "#/definitions/predicate_ast"}
+            ]},
+            {"anyOf": [
+              {"type": "string"}, 
+              {"type": "number"}, 
+              {"type": "array"}, 
+              {"$ref": "#/definitions/predicate_ast"}
+            ]}
+          ],
+          "additionalItems": false,
+          "description": "Binary operations"
+        }
+      ]
+    },
+
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Extraction traceability for QC and audits",
+      "properties": {
+        "source_id": {"type": "string"},
+        "locators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "value"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {"enum": ["page", "page_range", "line_number", "regex", "section"]},
+              "value": {"type": "string"}
+            }
+          }
+        },
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "method": {"type": "string"},
+        "human_verified": {"type": "boolean", "description": "Manual verification flag"},
+        "verified_by": {"type": "string", "description": "Identifier of the human reviewer"},
+        "verified_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
