@@ -1,0 +1,28 @@
+# Stage 0: Full-document question ID index (GPT-5 tuned)
+
+Goal
+- Read the ENTIRE survey text.
+- Output EVERY question in FIRST occurrence order, covering intro consent, screenings, all blocks, batteries, and terminals with question IDs.
+- Be exacting and complete; this index is the foundation for later stages.
+
+What counts as a "question"
+- A prompt that expects a response (single, multi-select, numeric, text, matrix battery items, “Other/specify”, etc.).
+- Include “_OTHER” or “_SPECIFY” questions as their own IDs.
+- Include terminal prompts like END/Submit only if they are explicitly named nodes with IDs in the instrument.
+
+Output format (STRICT JSON)
+{
+  "question_index": [
+    {"id": "STRING", "short_text": "STRING", "page_guess": INT}
+  ]
+}
+
+Rules
+- id: the canonical survey ID string as printed (e.g., D11, Q_HUNGER_1, NDX4_2, CONSENT, END). Preserve underscores and case.
+- short_text: the first ~120 chars of the visible item stem, cleaned of page headers/footers.
+- page_guess: integer page number (best effort) for the FIRST page where the item appears.
+- Do not paraphrase IDs. If no printed ID, construct a stable one from block and anchor (e.g., BLOCKX_Qn) and mark it clearly, but prefer printed IDs when present.
+- Never skip questions that appear only as part of a matrix/battery. Each row/item is a question if it has codes.
+
+Return ONLY the JSON object above. No commentary.
+

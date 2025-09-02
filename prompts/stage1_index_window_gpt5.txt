@@ -1,0 +1,25 @@
+# Stage 1: Windowed question index (GPT-5 tuned)
+
+Context
+- You are given a PARTIAL window of the full survey text (subset of pages). Treat it as incomplete context.
+
+Task
+- Enumerate questions that BEGIN within this window. Return a compact index for ONLY those that start here.
+
+Output format (STRICT JSON)
+{
+  "question_index": [
+    {"id": "STRING", "short_text": "STRING", "page_guess": INT}
+  ]
+}
+
+Rules
+- id must be the printed survey ID (e.g., Q1, D11, FD6_rev, ART1, *_OTHER).
+- short_text: first ~120 chars of the visible stem. Do NOT include response options or enumerators.
+- page_guess: best-effort page where the item starts within this window.
+- DO NOT treat section headers or enumerations of response options as questions.
+- If a question appears to continue from a previous page (started earlier), do not re-index it here.
+- Prefer recall: include candidates that clearly start here.
+
+Return ONLY the JSON object above. No commentary.
+

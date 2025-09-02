@@ -227,21 +227,21 @@
             }
           }
         },
-
+        
         "predicates": {
           "type": "object",
           "description": "Mathematical predicates defining edge conditions",
           "additionalProperties": false,
           "patternProperties": {
-            "^P_[A-Z0-9]+$": {
+            "^P_[A-Z0-9_]+$": {
               "type": "object",
               "required": ["ast"],
               "additionalProperties": false,
               "properties": {
-                "ast": {"$ref": "#/definitions/predicate_ast"},
+                "ast": { "$ref": "#/definitions/predicate_ast" },
                 "depends_on": {
                   "type": "array",
-                  "items": {"type": "string"},
+                  "items": { "type": "string" },
                   "uniqueItems": true,
                   "description": "Node IDs this predicate depends on"
                 },
@@ -255,10 +255,10 @@
                 },
                 "annotations": {
                   "type": "array",
-                  "items": {"type": "string"},
+                  "items": { "type": "string" },
                   "description": "Human reviewer notes during post-edit phase"
                 },
-                "provenance": {"$ref": "#/definitions/provenance"}
+                "provenance": { "$ref": "#/definitions/provenance" }
               }
             }
           }
