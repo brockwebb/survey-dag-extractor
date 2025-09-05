@@ -10,9 +10,13 @@ This Python project has no standard package management (no requirements.txt or p
 pip install langextract openai python-dotenv jsonschema
 ```
 
-**Main extraction command:**
+**Main extraction commands:**
 ```bash
-python dag_extract_agents.py --survey data/HTOPS_2502_Questionnaire_ENGLISH.pdf --out-base dag --output-dir output
+# Simple single-pass extraction
+python dag_extract_simple.py --survey data/HTOPS_2502_Questionnaire_ENGLISH.pdf --out-base dag --output-dir output
+
+# Multi-stage extraction with chunking and validation
+python dag_extract_staged.py --survey data/HTOPS_2502_Questionnaire_ENGLISH.pdf --out-base dag --output-dir output
 ```
 
 **Other key scripts:**
@@ -20,6 +24,7 @@ python dag_extract_agents.py --survey data/HTOPS_2502_Questionnaire_ENGLISH.pdf 
 - `python compare_dags.py` - Compare different DAG extractions
 - `python extract_pdf.py` - Basic PDF text extraction
 - `python process_section_1.py` - Process specific survey sections
+- `python stage0_full_index.py` - Generate full document question index
 
 **No test framework is configured** - the README mentions `python -m pytest tests/` but no tests directory exists.
 
