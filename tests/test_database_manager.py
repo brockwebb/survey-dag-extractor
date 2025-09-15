@@ -8,10 +8,10 @@ import sys
 from pathlib import Path
 
 # Add project root to path
-project_root = Path(__file__).parent
+project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from database_manager import DatabaseManager
+from core.database_manager import DatabaseManager
 
 def main():
     """Test the database manager."""

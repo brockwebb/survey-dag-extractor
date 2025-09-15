@@ -5,8 +5,8 @@ Quick test of the fixed database manager
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent))
-from database_manager import DatabaseManager
+sys.path.append(str(Path(__file__).parent.parent))
+from core.database_manager import DatabaseManager
 
 def main():
     print("TESTING FIXED DATABASE MANAGER")
