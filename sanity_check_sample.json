@@ -1,0 +1,89 @@
+{
+  "sample_nodes": [
+    {
+      "id": "Language",
+      "type": "question",
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "English",
+          "Espa\u00f1ol"
+        ]
+      },
+      "universe": "None"
+    },
+    {
+      "id": "Q1",
+      "type": "question",
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "Yes",
+          "Yes, but name has legally changed or is misspelled",
+          "No"
+        ]
+      },
+      "universe": "None"
+    },
+    {
+      "id": "NAME_CORR",
+      "type": "question",
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "TEXT_INPUT"
+        ]
+      },
+      "universe": {
+        "expression": "ASK IF Q1 == 2 OR Q1 == 3",
+        "dependencies": []
+      }
+    },
+    {
+      "id": "ADDRESS_CONFIRM",
+      "type": "question",
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "Yes",
+          "No"
+        ]
+      },
+      "universe": "None"
+    },
+    {
+      "id": "GET_NAME",
+      "type": "question",
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "Continue survey now",
+          "End survey"
+        ]
+      },
+      "universe": {
+        "expression": "ASK IF ADDRESS_CONFIRM == 2",
+        "dependencies": []
+      }
+    }
+  ],
+  "sample_edges": [
+    {
+      "id": "E_ULTIMATE",
+      "source": "SURVEY_COMPLETE",
+      "target": "FINAL_TERMINATION",
+      "predicate": "P_TRUE",
+      "kind": "terminate",
+      "condition": "always",
+      "edge_type": "ultimate_terminal"
+    }
+  ],
+  "stats": {
+    "total_nodes": 133,
+    "nodes_with_options": 119,
+    "nodes_with_universe": 74,
+    "total_edges": 1,
+    "is_dag": true,
+    "isolated_count": 131
+  }
+}

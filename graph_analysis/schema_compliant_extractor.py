@@ -147,8 +147,17 @@ class SchemaCompliantExtractor:
     def add_conditional_edge(self, source: str, target: str, condition: str, 
                            edge_type: str = "branch") -> str:
         """Add a conditional edge between nodes (Phase 3)."""
-        # Generate edge ID
-        edge_id = f"E_{len(self.get_all_edges()):08d}"
+        # Generate edge ID based on current edge count
+        edge_count = self.graph.number_of_edges()
+        edge_id = f"E_{edge_count:08d}"
+        
+        # Validate nodes exist
+        if not self.graph.has_node(source):
+            print(f"Warning: Source node {source} not found in graph")
+            return ""
+        if not self.graph.has_node(target):
+            print(f"Warning: Target node {target} not found in graph")
+            return ""
         
         # Add to NetworkX graph
         self.graph.add_edge(source, target, 

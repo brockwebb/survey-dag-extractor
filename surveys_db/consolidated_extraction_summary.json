@@ -1,0 +1,58 @@
+{
+  "consolidation_stats": {
+    "progress_files_processed": 24,
+    "nodes_updated": 3192,
+    "nodes_with_domains": 1499,
+    "universe_conditions_added": 859
+  },
+  "final_state": {
+    "total_nodes": 133,
+    "total_edges": 1,
+    "is_dag": true,
+    "isolated_nodes": 131
+  },
+  "sample_enriched_nodes": [
+    {
+      "id": "Language",
+      "has_domain": true,
+      "has_universe": false,
+      "domain_values_count": 2
+    },
+    {
+      "id": "Q1",
+      "has_domain": true,
+      "has_universe": false,
+      "domain_values_count": 3
+    },
+    {
+      "id": "NAME_CORR",
+      "has_domain": true,
+      "has_universe": true,
+      "domain_values_count": 1
+    },
+    {
+      "id": "ADDRESS_CONFIRM",
+      "has_domain": true,
+      "has_universe": false,
+      "domain_values_count": 2
+    },
+    {
+      "id": "GET_NAME",
+      "has_domain": true,
+      "has_universe": true,
+      "domain_values_count": 2
+    },
+    {
+      "id": "END",
+      "has_domain": true,
+      "has_universe": true,
+      "domain_values_count": 0
+    },
+    {
+      "id": "R2a",
+      "has_domain": true,
+      "has_universe": true,
+      "domain_values_count": 0
+    }
+  ]
+}

@@ -1,0 +1,1228 @@
+{
+  "phase3_summary": {
+    "total_nodes": 133,
+    "total_edges": 135,
+    "routing_rules_applied": 165,
+    "explicit_universe_conditions": 131
+  },
+  "routing_rules": [
+    {
+      "source": "Q1",
+      "target": "NAME_CORR",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF Q1 == 2 OR Q1 == 3"
+    },
+    {
+      "source": "ADDRESS_CONFIRM",
+      "target": "GET_NAME",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ADDRESS_CONFIRM == 2"
+    },
+    {
+      "source": "GET_NAME",
+      "target": "END",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF GET_NAME == 2"
+    },
+    {
+      "source": "LANG",
+      "target": "LANG1_R",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF LANG == 1"
+    },
+    {
+      "source": "D11",
+      "target": "D12",
+      "condition": "> 0",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D11 > 0"
+    },
+    {
+      "source": "D11",
+      "target": "D13",
+      "condition": "> 0",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D11 > 0"
+    },
+    {
+      "source": "D11",
+      "target": "EMP7",
+      "condition": "> 0",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D11 > 0"
+    },
+    {
+      "source": "EMP7",
+      "target": "EMP8",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF EMP7 == 1"
+    },
+    {
+      "source": "D12",
+      "target": "INF2",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D12 includes option 1 (Children under 1 year old)"
+    },
+    {
+      "source": "INF5",
+      "target": "INF6",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF INF5 == 2 OR INF5 == 3"
+    },
+    {
+      "source": "EMP2",
+      "target": "EMP3",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF EMP2 == 1"
+    },
+    {
+      "source": "EMP2",
+      "target": "EMP4",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF EMP2 == 2"
+    },
+    {
+      "source": "D11",
+      "target": "MH1",
+      "condition": "> 0",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D11 > 0"
+    },
+    {
+      "source": "MH1",
+      "target": "MH2",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF MH1 == 1 OR MH1 == 2"
+    },
+    {
+      "source": "MH2",
+      "target": "MH3",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF MH2 == 1 OR MH2 == 2"
+    },
+    {
+      "source": "SHORTAGE1",
+      "target": "SHORTAGE2A",
+      "condition": "> 5",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF SHORTAGE1 != 5"
+    },
+    {
+      "source": "D11",
+      "target": "FD2",
+      "condition": "> 0",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF D11 > 0"
+    },
+    {
+      "source": "FD1",
+      "target": "FD3",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF FD1 != 1 OR FD2 == 1 OR FD2 == 2"
+    },
+    {
+      "source": "FD6_rev",
+      "target": "FD7_new",
+      "condition": "> 3",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF FD6_rev includes option 3 or 4"
+    },
+    {
+      "source": "INFLATE1",
+      "target": "INFLATE2",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF INFLATE1 == 1"
+    },
+    {
+      "source": "HSE1",
+      "target": "HSE3",
+      "condition": "== 3",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF HSE1 == 3"
+    },
+    {
+      "source": "HSE1",
+      "target": "HSE4",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF HSE1 == 2"
+    },
+    {
+      "source": "HSE3",
+      "target": "HSE6",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF HSE3 == 2 OR HSE4 == 2"
+    },
+    {
+      "source": "HSE3",
+      "target": "HSE8",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF HSE3 == 2"
+    },
+    {
+      "source": "HSE4",
+      "target": "HSE9",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF HSE4 == 2"
+    },
+    {
+      "source": "TRANS2",
+      "target": "TRANS3",
+      "condition": "== 3",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF TRANS2 == 3 OR TRANS2 == 4 OR TRANS2 == 5"
+    },
+    {
+      "source": "NDX1",
+      "target": "NDX2",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX1 == 1"
+    },
+    {
+      "source": "NDX3",
+      "target": "NDX4",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX3 == 1"
+    },
+    {
+      "source": "NDX6",
+      "target": "NDX7",
+      "condition": "== 5",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX6 == 5"
+    },
+    {
+      "source": "ND5A",
+      "target": "ND5AA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5A != 1"
+    },
+    {
+      "source": "ND5B",
+      "target": "ND5BA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5B != 1"
+    },
+    {
+      "source": "ND5C",
+      "target": "ND5CA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5C != 1"
+    },
+    {
+      "source": "ND5D",
+      "target": "ND5DA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5D != 1"
+    },
+    {
+      "source": "ND5E",
+      "target": "ND5EA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5E != 1"
+    },
+    {
+      "source": "ND5F",
+      "target": "ND5FA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5F != 1"
+    },
+    {
+      "source": "ND5G",
+      "target": "ND5GA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5G != 1"
+    },
+    {
+      "source": "ND5H",
+      "target": "ND5HA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF ND5H != 1"
+    },
+    {
+      "source": "NDX11A",
+      "target": "NDX11AA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX11A != 1"
+    },
+    {
+      "source": "NDX11B",
+      "target": "NDX11BA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX11B != 1"
+    },
+    {
+      "source": "NDX11C",
+      "target": "NDX11CA",
+      "condition": "> 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX11C != 1"
+    },
+    {
+      "source": "NDX1",
+      "target": "NDX13",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX1 == 1"
+    },
+    {
+      "source": "NDX1",
+      "target": "NDX14",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX1 == 1"
+    },
+    {
+      "source": "NDX1",
+      "target": "NDX16",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF NDX1 == 1"
+    },
+    {
+      "source": "Q3",
+      "target": "Q6",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF Q3 == 2"
+    },
+    {
+      "source": "Q7",
+      "target": "Q8",
+      "condition": "== 1",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF Q7 == 1"
+    },
+    {
+      "source": "Q9",
+      "target": "Q10",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF Q9 == 2"
+    },
+    {
+      "source": "Q11_a",
+      "target": "Q12",
+      "condition": "== 2",
+      "type": "branch",
+      "derived_from": "universe condition: ASK IF Q11_a == 2 OR Q_11b == 2"
+    },
+    {
+      "source": "Language",
+      "target": "Q1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q1",
+      "target": "NAME_CORR",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NAME_CORR",
+      "target": "ADDRESS_CONFIRM",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ADDRESS_CONFIRM",
+      "target": "GET_NAME",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "GET_NAME",
+      "target": "LANG",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "LANG",
+      "target": "LANG1_R",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "LANG1_R",
+      "target": "HOWWELL_R",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HOWWELL_R",
+      "target": "OECD",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "OECD",
+      "target": "D11",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "D11",
+      "target": "D12",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "D12",
+      "target": "D13",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "D13",
+      "target": "EMP7",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP7",
+      "target": "EMP8",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP8",
+      "target": "INF2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INF2",
+      "target": "INF5",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INF5",
+      "target": "INF6",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INF6",
+      "target": "EMP1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP1",
+      "target": "EMP2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP2",
+      "target": "EMP3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP3",
+      "target": "EMP4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "EMP4",
+      "target": "SPN5_DAYSTW_2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SPN5_DAYSTW_2",
+      "target": "DIS1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS1",
+      "target": "DIS2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS2",
+      "target": "DIS4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS4",
+      "target": "DIS3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS3",
+      "target": "DIS5",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS5",
+      "target": "DIS6",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "DIS6",
+      "target": "HLTH1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HLTH1",
+      "target": "HLTH2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HLTH2",
+      "target": "HLTH3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HLTH3",
+      "target": "HLTH4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HLTH4",
+      "target": "MH1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "MH1",
+      "target": "MH2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "MH2",
+      "target": "MH3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "MH3",
+      "target": "MH4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "MH4",
+      "target": "HLTH8",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HLTH8",
+      "target": "SOC1_first",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SOC1_first",
+      "target": "SOC2_first",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SOC2_first",
+      "target": "SOCnew1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SOCnew1",
+      "target": "SOCnew2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SOCnew2",
+      "target": "FALLVAC",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FALLVAC",
+      "target": "RSVVAC",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "RSVVAC",
+      "target": "SHORTAGE1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SHORTAGE1",
+      "target": "SHORTAGE2A",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SHORTAGE2A",
+      "target": "FD1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD1",
+      "target": "FD2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD2",
+      "target": "FD3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD3",
+      "target": "FD4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD4",
+      "target": "FD6_rev",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD6_rev",
+      "target": "FD7_new",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "FD7_new",
+      "target": "SPN4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "SPN4",
+      "target": "INFLATE1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INFLATE1",
+      "target": "INFLATE2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INFLATE2",
+      "target": "INFLATE4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "INFLATE4",
+      "target": "HSE1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE1",
+      "target": "HSE3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE3",
+      "target": "HSE4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE4",
+      "target": "HSE6",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE6",
+      "target": "HSE8",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE8",
+      "target": "HSE9",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE9",
+      "target": "HSE10_rev",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE10_rev",
+      "target": "HSE11_rev",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE11_rev",
+      "target": "HSE12_rev",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "HSE12_rev",
+      "target": "TRANS1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "TRANS1",
+      "target": "TRANS2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "TRANS2",
+      "target": "TRANS3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "TRANS3",
+      "target": "ART1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ART1",
+      "target": "ART2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ART2",
+      "target": "ART3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ART3",
+      "target": "ART4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ART4",
+      "target": "ART5",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ART5",
+      "target": "Trust1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Trust1",
+      "target": "Trust2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Trust2",
+      "target": "Trust3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Trust3",
+      "target": "NDX1",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX1",
+      "target": "NDX2",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX2",
+      "target": "NDX3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX3",
+      "target": "NDX4",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX4",
+      "target": "NDX5",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX5",
+      "target": "NDX6",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX6",
+      "target": "NDX7",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX7",
+      "target": "NDX8",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX8",
+      "target": "NDX10",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX10",
+      "target": "ND5A",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5A",
+      "target": "ND5AA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5AA",
+      "target": "ND5B",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5B",
+      "target": "ND5BA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5BA",
+      "target": "ND5C",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5C",
+      "target": "ND5CA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5CA",
+      "target": "ND5D",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5D",
+      "target": "ND5DA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5DA",
+      "target": "ND5E",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5E",
+      "target": "ND5EA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5EA",
+      "target": "ND5F",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5F",
+      "target": "ND5FA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5FA",
+      "target": "ND5G",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5G",
+      "target": "ND5GA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5GA",
+      "target": "ND5H",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5H",
+      "target": "ND5HA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "ND5HA",
+      "target": "NDX11A",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11A",
+      "target": "NDX11AA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11AA",
+      "target": "NDX11B",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11B",
+      "target": "NDX11BA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11BA",
+      "target": "NDX11C",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11C",
+      "target": "NDX11CA",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX11CA",
+      "target": "NDX13",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX13",
+      "target": "NDX14",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX14",
+      "target": "NDX16",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "NDX16",
+      "target": "Q3",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q3",
+      "target": "Q6",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q6",
+      "target": "Q7",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q7",
+      "target": "Q8",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q8",
+      "target": "Q9",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q9",
+      "target": "Q10",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q10",
+      "target": "Q11_a",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q11_a",
+      "target": "Q_11b",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q_11b",
+      "target": "Q12",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    },
+    {
+      "source": "Q12",
+      "target": "RECONTACT",
+      "condition": "always",
+      "type": "fallthrough",
+      "derived_from": "sequential order inference"
+    }
+  ],
+  "validation_results": {
+    "basic_properties": {
+      "is_dag": true,
+      "is_connected": false,
+      "node_count": 133,
+      "edge_count": 135,
+      "isolated_nodes": [
+        "INTRO_INCENTIVE",
+        "Continue",
+        "PRA",
+        "R2a",
+        "EMP_Intro",
+        "display_HLTH",
+        "HLTH_intro",
+        "Arts_Intro",
+        "ND5intro",
+        "NDX11intro",
+        "POC_display"
+      ],
+      "cycles": [],
+      "has_self_loops": false
+    },
+    "dag_validation": {
+      "is_acyclic": true,
+      "node_count": 133,
+      "edge_count": 135,
+      "isolated_nodes": [
+        "INTRO_INCENTIVE",
+        "Continue",
+        "PRA",
+        "R2a",
+        "EMP_Intro",
+        "display_HLTH",
+        "HLTH_intro",
+        "Arts_Intro",
+        "ND5intro",
+        "NDX11intro",
+        "POC_display"
+      ],
+      "weakly_connected_components": 13,
+      "strongly_connected_components": 133
+    },
+    "reachability": {
+      "start_node": "Language",
+      "reachable_count": 120,
+      "total_nodes": 133,
+      "unreachable_nodes": [
+        "INTRO_INCENTIVE",
+        "Continue",
+        "PRA",
+        "R2a",
+        "EMP_Intro",
+        "display_HLTH",
+        "HLTH_intro",
+        "Arts_Intro",
+        "ND5intro",
+        "NDX11intro",
+        "POC_display",
+        "SURVEY_COMPLETE",
+        "FINAL_TERMINATION"
+      ]
+    }
+  }
+}
