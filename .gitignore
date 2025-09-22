@@ -3,6 +3,7 @@
 
 #output directory contents
 output/*
+pipeline*
 
 #legacy folder
 legacy/
