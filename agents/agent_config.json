@@ -1,0 +1,88 @@
+{
+  "agent_config": {
+    "model_settings": {
+      "model": "gpt-5"
+    },
+    "batch_settings": {
+      "default_batch_size": 20,
+      "max_batch_size": 25,
+      "min_batch_size": 5
+    },
+    "processing_settings": {
+      "include_pdf_context": true,
+      "include_survey_metadata": true,
+      "validate_responses": true,
+      "retry_on_failure": true,
+      "max_retries": 3
+    },
+    "output_settings": {
+      "create_timestamped_runs": true,
+      "save_batch_results": true,
+      "generate_quality_reports": true,
+      "include_confidence_scores": true
+    }
+  },
+  "routing_agent": {
+    "specialized_settings": {
+      "focus_on_skip_patterns": true,
+      "analyze_universe_conditions": true,
+      "detect_branching_logic": true,
+      "validate_edge_consistency": true
+    },
+    "comparison_settings": {
+      "use_gold_standard": true,
+      "gold_standard_path": "surveys_db/GoldStandardExtraction-9-11-2025/",
+      "generate_comparison_report": true
+    }
+  },
+  "variable_agent": {
+    "specialized_settings": {
+      "use_data_dictionary": true,
+      "infer_data_types": true,
+      "generate_confidence_scores": true,
+      "follow_naming_conventions": true
+    },
+    "naming_conventions": {
+      "demographic_prefix": "D",
+      "employment_prefix": "EMP",
+      "health_prefix": "HLTH",
+      "housing_prefix": "HSE",
+      "max_name_length": 15,
+      "use_uppercase": true
+    }
+  },
+  "survey_context": {
+    "survey_id": "htops_2025_02",
+    "survey_title": "Household Trends and Outlook Pulse Survey (HTOPS) February 2025",
+    "total_questions": 133,
+    "blocks": [
+      "entry_validation",
+      "language_satisfaction", 
+      "demographics",
+      "childcare_employment",
+      "health_disability",
+      "mental_health",
+      "health_insurance",
+      "social_support",
+      "vaccination",
+      "medical_shortages",
+      "food_security",
+      "financial_stress",
+      "housing",
+      "transportation",
+      "arts_entertainment",
+      "trust_government",
+      "natural_disasters",
+      "contact_information",
+      "termination"
+    ],
+    "pdf_path": "data/HTOPS_2502_Questionnaire_ENGLISH.pdf",
+    "data_dictionary_path": "data/htops_data_dictionary.json"
+  },
+  "environment": {
+    "env_file_path": ".env",
+    "required_keys": ["OPENAI_API_KEY"],
+    "project_root": ".",
+    "output_base_dir": "output"
+  }
+}

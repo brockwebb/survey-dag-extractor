@@ -31,7 +31,8 @@ class DatabaseManager:
     def __init__(self, project_root: Path = None):
         """Initialize database manager."""
         if project_root is None:
-            project_root = Path(__file__).parent
+            # Go up from core/ to project root
+            project_root = Path(__file__).parent.parent
         
         self.project_root = project_root
         self.db_dir = project_root / "surveys_db"

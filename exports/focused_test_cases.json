@@ -1,0 +1,44 @@
+{
+  "test_suite": "HTOPS_Focused_Test_Cases",
+  "generated_at": "2025-09-16",
+  "description": "Focused test cases for key survey logic paths",
+  "test_cases": [
+    {
+      "id": "TC001_AddressName_EarlyExit",
+      "description": "Address confirmation \u2192 Name \u2192 Early termination",
+      "focus_area": "Early screening and eligibility",
+      "path_length": 3,
+      "question_count": 2,
+      "node_sequence": [
+        "ADDRESS_CONFIRM",
+        "GET_NAME",
+        "END"
+      ],
+      "questions_sequence": [
+        "ADDRESS_CONFIRM",
+        "GET_NAME"
+      ]
+    },
+    {
+      "id": "TC004_Mood_To_Completion",
+      "description": "From mood question \u2192 shortest path to survey completion",
+      "focus_area": "Core survey completion (minimal branching)",
+      "path_length": 6,
+      "question_count": 4,
+      "node_sequence": [
+        "Q1",
+        "NAME_CORR",
+        "ADDRESS_CONFIRM",
+        "GET_NAME",
+        "END",
+        "SURVEY_COMPLETE"
+      ],
+      "questions_sequence": [
+        "Q1",
+        "NAME_CORR",
+        "ADDRESS_CONFIRM",
+        "GET_NAME"
+      ]
+    }
+  ]
+}

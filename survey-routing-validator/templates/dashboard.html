@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Analysis Dashboard</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; padding: 20px; background: #f8f9fa;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            background: white; padding: 20px; border-radius: 8px;
+            margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; margin-bottom: 10px; }
+        .nav { margin-top: 15px; }
+        .nav a {
+            display: inline-block; padding: 8px 16px; margin-right: 10px;
+            background: #3498db; color: white; text-decoration: none;
+            border-radius: 4px; font-size: 14px;
+        }
+        .nav a:hover { background: #2980b9; }
+        
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-title { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #2c3e50; }
+        .stat-subtitle { font-size: 12px; color: #888; margin-top: 5px; }
+        
+        .success { color: #27ae60; }
+        .warning { color: #f39c12; }
+        .danger { color: #e74c3c; }
+        
+        .issues-section {
+            background: white; padding: 20px; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .issue-item {
+            padding: 12px; margin-bottom: 8px; border-radius: 4px;
+            border-left: 4px solid;
+        }
+        .issue-high { background: #fdf2f2; border-color: #e74c3c; }
+        .issue-medium { background: #fefbf3; border-color: #f39c12; }
+        .issue-low { background: #f0f8ff; border-color: #3498db; }
+        
+        .progress-bar {
+            background: #ecf0f1; height: 8px; border-radius: 4px;
+            overflow: hidden; margin: 8px 0;
+        }
+        .progress-fill {
+            height: 100%; background: #3498db; transition: width 0.3s;
+        }
+        .progress-fill.success { background: #27ae60; }
+        .progress-fill.warning { background: #f39c12; }
+        .progress-fill.danger { background: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Survey Analysis Dashboard</h1>
+            <p><strong>Survey:</strong> {{ survey_path.split('/')[-1] }}</p>
+            <p><strong>Run ID:</strong> {{ metadata.run_id }} | <strong>Processed:</strong> {{ metadata.processed_at }}</p>
+            
+            <div class="nav">
+                <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+                <a href="{{ url_for('routing_flow') }}">🔄 Routing Flow</a>
+                <a href="{{ url_for('question_analysis') }}">❓ Questions</a>
+                <a href="{{ url_for('export_dag') }}">📤 Export DAG</a>
+                <a href="{{ url_for('index') }}">🏠 Home</a>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Nodes</div>
+                <div class="stat-value">{{ routing_stats.total_nodes }}</div>
+                <div class="stat-subtitle">{{ metadata.total_questions }} questions</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-title">Routing Coverage</div>
+                <div class="stat-value {{ 'success' if routing_stats.routing_coverage > 95 else 'warning' if routing_stats.routing_coverage > 80 else 'danger' }}">
+                    {{ "%.1f"|format(routing_stats.routing_coverage) }}%
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill {{ 'success' if routing_stats.routing_coverage > 95 else 'warning' if routing_stats.routing_coverage > 80 else 'danger' }}" 
+                         style="width: {{ routing_stats.routing_coverage }}%"></div>
+                </div>
+                <div class="stat-subtitle">{{ routing_stats.nodes_with_routing }}/{{ routing_stats.total_nodes }} nodes with routing</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-title">Avg Confidence</div>
+                <div class="stat-value {{ 'success' if routing_stats.avg_confidence > 0.8 else 'warning' if routing_stats.avg_confidence > 0.6 else 'danger' }}">
+                    {{ "%.2f"|format(routing_stats.avg_confidence) }}
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill {{ 'success' if routing_stats.avg_confidence > 0.8 else 'warning' if routing_stats.avg_confidence > 0.6 else 'danger' }}" 
+                         style="width: {{ (routing_stats.avg_confidence * 100)|int }}%"></div>
+                </div>
+                <div class="stat-subtitle">Range: {{ "%.2f"|format(routing_stats.min_confidence) }} - {{ "%.2f"|format(routing_stats.max_confidence) }}</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-title">Variable Coverage</div>
+                <div class="stat-value {{ 'success' if variable_stats.coverage_percentage > 90 else 'warning' if variable_stats.coverage_percentage > 70 else 'danger' }}">
+                    {{ "%.1f"|format(variable_stats.coverage_percentage) }}%
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill {{ 'success' if variable_stats.coverage_percentage > 90 else 'warning' if variable_stats.coverage_percentage > 70 else 'danger' }}" 
+                         style="width: {{ variable_stats.coverage_percentage }}%"></div>
+                </div>
+                <div class="stat-subtitle">{{ variable_stats.mapped_count }}/{{ variable_stats.total_questions }} questions mapped</div>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Routing Assignments</div>
+                <div class="stat-value">{{ routing_stats.total_routing_assignments }}</div>
+                <div class="stat-subtitle">
+                    {% for edge_type, count in routing_stats.edge_type_distribution.items() %}
+                        {{ edge_type }}: {{ count }}{% if not loop.last %} | {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-title">High Confidence Variables</div>
+                <div class="stat-value {{ 'success' if variable_stats.high_confidence_percentage > 80 else 'warning' if variable_stats.high_confidence_percentage > 60 else 'danger' }}">
+                    {{ "%.1f"|format(variable_stats.high_confidence_percentage) }}%
+                </div>
+                <div class="stat-subtitle">{{ variable_stats.high_confidence_count }} questions with >80% confidence</div>
+            </div>
+        </div>
+        
+        {% if issues %}
+        <div class="issues-section">
+            <h3>🚨 Routing Issues ({{ total_issues }} total)</h3>
+            
+            {% for issue in issues %}
+            <div class="issue-item issue-{{ issue.severity }}">
+                <strong>{{ issue.node_id }}</strong> - 
+                {% if issue.type == 'low_confidence' %}
+                    Low routing confidence ({{ "%.2f"|format(issue.confidence) }}) to {{ issue.target }}
+                {% elif issue.type == 'variable_mapping' %}
+                    Variable mapping issue (confidence: {{ "%.2f"|format(issue.confidence) }})
+                {% elif issue.type == 'missing_routing' %}
+                    Missing routing assignments
+                {% endif %}
+                <span style="float: right; font-size: 12px; color: #666;">{{ issue.severity }}</span>
+            </div>
+            {% endfor %}
+            
+            {% if total_issues > issues|length %}
+            <p style="text-align: center; color: #666; margin-top: 15px;">
+                ... and {{ total_issues - issues|length }} more issues
+            </p>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="issues-section">
+            <h3 style="color: #27ae60;">✅ No Critical Issues Found</h3>
+            <p>The automated routing extraction appears to be working well!</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

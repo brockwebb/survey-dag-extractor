@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Validation - Question {{ question_index }}/{{ total_questions }}</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; padding: 20px; background: #f8f9fa;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            background: white; padding: 20px; border-radius: 8px;
+            margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            background: #ecf0f1; height: 8px; border-radius: 4px;
+            overflow: hidden; margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%; background: #3498db; transition: width 0.3s;
+        }
+        
+        /* Status indicators */
+        .status-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 12px;
+            font-size: 12px; font-weight: bold; text-transform: uppercase;
+        }
+        .status-missing_routing { background: #fdf2f2; color: #e74c3c; }
+        .status-needs_attention { background: #fefbf3; color: #f39c12; }
+        .status-auto_validated { background: #f0f8f0; color: #27ae60; }
+        .status-validated { background: #e8f4fd; color: #3498db; }
+        .status-manually_corrected { background: #f3e8fd; color: #8e44ad; }
+        
+        /* Main layout */
+        .validation-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; align-items: start;
+        }
+        
+        /* Question panel */
+        .question-panel {
+            background: white; padding: 25px; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question-id {
+            font-family: monospace; font-weight: bold; color: #2c3e50;
+            font-size: 18px; margin-bottom: 15px;
+        }
+        .question-text {
+            line-height: 1.5; color: #2c3e50; margin-bottom: 20px;
+            padding: 15px; background: #f8f9fa; border-radius: 6px;
+        }
+        .variable-info {
+            background: #e8f5e8; padding: 12px; border-radius: 4px;
+            margin-bottom: 15px; font-size: 14px;
+        }
+        .variable-name {
+            font-family: monospace; font-weight: bold; color: #27ae60;
+        }
+        .confidence-bar {
+            width: 100px; height: 20px; background: #ecf0f1;
+            border-radius: 10px; position: relative; overflow: hidden;
+            display: inline-block; vertical-align: middle; margin-left: 10px;
+        }
+        .confidence-fill {
+            height: 100%; border-radius: 10px;
+        }
+        .confidence-high { background: #27ae60; }
+        .confidence-medium { background: #f39c12; }
+        .confidence-low { background: #e74c3c; }
+        .confidence-text {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px; font-weight: bold; color: white;
+        }
+        
+        /* Routing panel */
+        .routing-panel {
+            background: white; padding: 25px; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .routing-section h3 {
+            color: #2c3e50; margin-bottom: 15px;
+            padding-bottom: 8px; border-bottom: 2px solid #3498db;
+        }
+        
+        <!-- Existing routing display -->
+        .existing-routing {
+            margin-bottom: 25px;
+        }
+        .routing-assignment {
+            border: 1px solid #ddd; border-radius: 6px; padding: 20px;
+            margin-bottom: 15px; position: relative;
+        }
+        .routing-assignment.low-confidence {
+            border-color: #f39c12; background: #fefbf3;
+        }
+        .routing-assignment.high-confidence {
+            border-color: #27ae60; background: #f0f8f0;
+        }
+        .routing-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .routing-target {
+            font-family: monospace; font-weight: bold; color: #2c3e50;
+            font-size: 16px;
+        }
+        .target-details {
+            background: #f8f9fa; padding: 12px; border-radius: 4px;
+            margin: 10px 0; border-left: 3px solid #3498db;
+        }
+        .target-type {
+            font-size: 12px; color: #666; text-transform: uppercase;
+            background: #ecf0f1; padding: 2px 6px; border-radius: 3px;
+            display: inline-block; margin-bottom: 5px;
+        }
+        .target-question {
+            background: #e8f4fd; color: #3498db;
+        }
+        .target-instruction {
+            background: #f8f9fa; color: #95a5a6;
+        }
+        .target-terminal {
+            background: #fdf2f2; color: #e74c3c;
+        }
+        .target-text {
+            color: #2c3e50; font-size: 14px; line-height: 1.4;
+        }
+        .routing-condition-block {
+            background: #e8f4fd; padding: 12px; border-radius: 4px;
+            margin: 10px 0; border-left: 3px solid #3498db;
+        }
+        .condition-title {
+            font-weight: bold; color: #2c3e50; margin-bottom: 5px;
+        }
+        .condition-logic {
+            font-family: monospace; background: white; padding: 8px;
+            border-radius: 3px; color: #2c3e50; border: 1px solid #ddd;
+        }
+        .routing-metadata {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;
+        }
+        .metadata-item {
+            font-size: 12px; color: #666;
+        }
+        .routing-actions {
+            display: flex; gap: 8px;
+        }
+        .edit-btn {
+            background: #3498db; color: white; border: none;
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;
+        }
+        .edit-btn:hover { background: #2980b9; }
+        .delete-btn {
+            background: #e74c3c; color: white; border: none;
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;
+        }
+        .delete-btn:hover { background: #c0392b; }
+        
+        /* Add routing form */
+        .add-routing-form {
+            background: #f8f9fa; padding: 20px; border-radius: 6px;
+            border: 2px dashed #ddd; margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex; gap: 10px; margin-bottom: 15px; align-items: center;
+        }
+        .form-input {
+            padding: 8px; border: 1px solid #ddd; border-radius: 4px;
+        }
+        .form-select {
+            padding: 8px; border: 1px solid #ddd; border-radius: 4px;
+            background: white;
+        }
+        .form-label {
+            min-width: 120px; font-weight: bold; color: #2c3e50;
+        }
+        
+        /* Terminal management */
+        .terminal-section {
+            background: #fdf2f2; padding: 15px; border-radius: 6px;
+            border-left: 4px solid #e74c3c; margin-bottom: 20px;
+        }
+        
+        /* Navigation */
+        .navigation {
+            background: white; padding: 20px; border-radius: 8px;
+            margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .nav-btn {
+            background: #3498db; color: white; padding: 12px 24px;
+            border: none; border-radius: 4px; cursor: pointer;
+            margin: 0 10px; font-size: 16px; text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:hover { background: #2980b9; }
+        .nav-btn:disabled { background: #95a5a6; cursor: not-allowed; }
+        .nav-btn.primary { background: #27ae60; }
+        .nav-btn.primary:hover { background: #229954; }
+        
+        /* Validation notes */
+        .validation-notes {
+            margin-top: 20px; background: #e8f4fd; padding: 15px;
+            border-radius: 6px; border-left: 4px solid #3498db;
+        }
+        .notes-textarea {
+            width: 100%; padding: 10px; border: 1px solid #ddd;
+            border-radius: 4px; resize: vertical; font-family: inherit;
+        }
+        
+        /* Messages */
+        .alert {
+            padding: 12px 16px; border-radius: 4px; margin-bottom: 15px;
+        }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* Validation Status Buttons */
+        .status-btn {
+            padding: 8px 16px; border: 2px solid #ddd; border-radius: 6px;
+            background: white; cursor: pointer; font-size: 14px;
+            transition: all 0.2s; font-weight: bold;
+        }
+        .status-btn:hover {
+            transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-btn.active {
+            border-width: 3px; transform: scale(1.05);
+        }
+        .status-not-reviewed {
+            border-color: #95a5a6; color: #95a5a6;
+        }
+        .status-not-reviewed.active {
+            background: #ecf0f1; border-color: #95a5a6; color: #2c3e50;
+        }
+        .status-flagged {
+            border-color: #f39c12; color: #f39c12;
+        }
+        .status-flagged.active {
+            background: #fef9e7; border-color: #f39c12; color: #f39c12;
+        }
+        .status-validated {
+            border-color: #27ae60; color: #27ae60;
+        }
+        .status-validated.active {
+            background: #eafaf1; border-color: #27ae60; color: #27ae60;
+        }
+        
+        /* Summary stats */
+        .summary-stats {
+            display: flex; gap: 15px; margin-bottom: 15px;
+        }
+        .stat-item {
+            background: #f8f9fa; padding: 10px 15px; border-radius: 4px;
+            text-align: center; flex: 1;
+        }
+        .stat-number {
+            font-size: 18px; font-weight: bold; color: #2c3e50;
+        }
+        .stat-label {
+            font-size: 12px; color: #666; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>👨‍💻 Human Validation</h1>
+            <div style="background: #3498db; color: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                <h2 style="margin: 0; font-size: 24px;">{{ current_question.id }}</h2>
+                <div style="margin-top: 8px; font-size: 14px; opacity: 0.9;">
+                    <strong>Type:</strong> {{ current_question.type|title }} | 
+                    <strong>Block:</strong> {{ current_question.block }} | 
+                    <strong>Order:</strong> {{ current_question.order_index }}
+                </div>
+            </div>
+            <div class="summary-stats">
+                <div class="stat-item">
+                    <div class="stat-number">{{ question_index }}</div>
+                    <div class="stat-label">Current</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ total_questions }}</div>
+                    <div class="stat-label">Total Nodes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ validation_summary.not_reviewed }}</div>
+                    <div class="stat-label">Not Reviewed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ validation_summary.flagged_for_review }}</div>
+                    <div class="stat-label">Flagged</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ validation_summary.validated }}</div>
+                    <div class="stat-label">Validated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ validation_summary.missing_routing }}</div>
+                    <div class="stat-label">Missing Routing</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ "%.0f"|format(validation_summary.completion_percentage) }}%</div>
+                    <div class="stat-label">Complete</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress_percent }}%"></div>
+            </div>
+            
+            <p><strong>Status:</strong> 
+                <span class="status-badge status-{{ validation_status.status }}">{{ validation_status.status.replace('_', ' ') }}</span>
+                {% if validation_status.status == 'needs_attention' %}
+                    - Low confidence routing detected
+                {% elif validation_status.status == 'missing_routing' %}
+                    - No routing assignments found
+                {% elif validation_status.status == 'manually_corrected' %}
+                    - Manual corrections applied
+                {% endif %}
+                
+                <!-- Human Validation Status -->
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #3498db;">
+                    <h4 style="margin: 0 0 15px 0; color: #2c3e50;">🎯 Human Validation Status</h4>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <button onclick="setValidationStatus('not_reviewed')" 
+                                class="status-btn status-not-reviewed" 
+                                id="status-not-reviewed">
+                            🔴 Not Reviewed
+                        </button>
+                        <button onclick="setValidationStatus('flagged_for_review')" 
+                                class="status-btn status-flagged" 
+                                id="status-flagged-for-review">
+                            🟡 Flagged for Review
+                        </button>
+                        <button onclick="setValidationStatus('validated')" 
+                                class="status-btn status-validated" 
+                                id="status-validated">
+                            🟢 Validated
+                        </button>
+                    </div>
+                    
+                    <div id="current-status" style="font-size: 14px; color: #666; margin-bottom: 10px;">
+                        Current Status: <span id="status-display">Loading...</span>
+                    </div>
+                    
+                    <div style="font-size: 12px; color: #888;">
+                        <strong>Quick Actions:</strong> 
+                        <a href="#" onclick="setValidationStatus('validated'); nextQuestion(); return false;" style="color: #27ae60;">✓ Approve & Next</a> |
+                        <a href="#" onclick="setValidationStatus('flagged_for_review'); nextQuestion(); return false;" style="color: #f39c12;">⚠ Flag & Next</a>
+                    </div>
+                </div>
+            </p>
+        </div>
+        
+        <div class="validation-grid">
+            <!-- Node Panel -->
+            <div class="question-panel">
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid #3498db;">
+                    <div class="question-id">{{ current_question.id }}</div>
+                    <div style="color: #666; font-size: 14px; margin-top: 5px;">
+                        <strong>Type:</strong> {{ current_question.type|title }} | 
+                        <strong>Block:</strong> {{ current_question.block }} | 
+                        <strong>Order:</strong> {{ current_question.order_index }}
+                    </div>
+                </div>
+                
+                <div class="question-text">{{ current_question.text }}</div>
+                
+                {% if variable_name and current_question.type == 'question' %}
+                <div class="variable-info">
+                    <strong>Variable:</strong> <span class="variable-name">{{ variable_name }}</span>
+                    
+                    {% if variable_info.confidence %}
+                    <div style="margin-top: 8px;">
+                        <strong>Mapping Confidence:</strong>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill {{ 'confidence-high' if variable_info.confidence > 0.8 else 'confidence-medium' if variable_info.confidence > 0.5 else 'confidence-low' }}" 
+                                 style="width: {{ (variable_info.confidence * 100)|int }}%"></div>
+                            <div class="confidence-text">{{ "%.0f"|format(variable_info.confidence * 100) }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if variable_info.data_type %}
+                    <div><strong>Type:</strong> {{ variable_info.data_type }}</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Validation Notes -->
+                <div class="validation-notes">
+                    <h4>Validation Notes:</h4>
+                    <textarea class="notes-textarea" id="validationNotes" placeholder="Add validation notes..." rows="3">{{ validation_status.validation_notes.note if validation_status.validation_notes else '' }}</textarea>
+                    <br><br>
+                    <button onclick="saveValidationNote()" class="nav-btn">Save Note</button>
+                </div>
+            </div>
+            
+            <!-- Routing Panel -->
+            <div class="routing-panel">
+                <div class="routing-section">
+                    <h3>Routing Assignments</h3>
+                    
+                    <!-- Existing Routing (from automation) -->
+                    <div class="existing-routing">
+                        {% if existing_routing %}
+                            <h4>Current Routing ({{ existing_routing|length }} assignments):</h4>
+                            {% for routing in existing_routing %}
+                            <div class="routing-assignment {{ 'low-confidence' if routing.confidence < 0.7 else 'high-confidence' }}" 
+                                 data-routing-index="{{ loop.index0 }}">
+                                
+                                <div class="routing-header">
+                                    <div class="routing-target">→ {{ routing.target_question }}</div>
+                                    <div class="routing-actions">
+                                        <button class="edit-btn" onclick="editRouting({{ loop.index0 }})">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRouting({{ loop.index0 }})">Delete</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Target Node Details -->
+                                <div class="target-details">
+                                    <div class="target-type" id="target-type-{{ loop.index0 }}">Loading...</div>
+                                    <div class="target-text" id="target-text-{{ loop.index0 }}">Loading target information...</div>
+                                </div>
+                                
+                                <!-- Routing Condition Logic -->
+                                <div class="routing-condition-block">
+                                    <div class="condition-title">Routing Condition:</div>
+                                    {% if routing.response_value == '*' %}
+                                        <div class="condition-logic">ALWAYS → {{ routing.target_question }}</div>
+                                        <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                            <strong>Logic:</strong> Automatic fallthrough (no user response required)
+                                        </div>
+                                    {% else %}
+                                        <div class="condition-logic">
+                                            IF {{ current_question.id }} response = "{{ routing.response_value }}" THEN → {{ routing.target_question }}
+                                        </div>
+                                        <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                            <strong>Logic:</strong> Conditional branch based on user response
+                                        </div>
+                                    {% endif %}
+                                    <div style="margin-top: 8px; color: #666; font-size: 14px;">
+                                        <strong>Predicate:</strong> <code>{{ routing.predicate }}</code>
+                                    </div>
+                                </div>
+                                
+                                <!-- Routing Metadata -->
+                                <div class="routing-metadata">
+                                    <div class="metadata-item">
+                                        <strong>Edge Type:</strong> {{ routing.edge_type }}
+                                    </div>
+                                    <div class="metadata-item">
+                                        <strong>Confidence:</strong> 
+                                        <span class="{{ 'confidence-high' if routing.confidence > 0.8 else 'confidence-medium' if routing.confidence > 0.5 else 'confidence-low' }}">
+                                            {{ "%.0f"|format(routing.confidence * 100) }}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <strong>No routing assignments found!</strong> 
+                                This question needs routing logic to connect it to the rest of the survey.
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Add New Routing -->
+                    <div class="add-routing-form">
+                        <h4>Add/Edit Routing Assignment:</h4>
+                        <div class="form-row">
+                            <label class="form-label">Response Value:</label>
+                            <input type="text" id="responseValue" class="form-input" placeholder="1, 2, or * for always" style="flex: 1;">
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Target:</label>
+                            <select id="targetSelect" class="form-select" style="flex: 1;">
+                                <option value="">Select target...</option>
+                                {% for target in available_targets %}
+                                <option value="{{ target.id }}">{{ target.id }} ({{ target.type }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Edge Type:</label>
+                            <select id="edgeType" class="form-select" style="flex: 1;">
+                                <option value="branch">Branch (conditional)</option>
+                                <option value="fallthrough">Fallthrough (always)</option>
+                                <option value="terminate">Terminate (end survey)</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <button onclick="addRouting()" class="nav-btn">Add Routing</button>
+                            <button onclick="clearForm()" class="nav-btn" style="background: #95a5a6;">Clear</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Terminal -->
+                    <div class="terminal-section">
+                        <h4>Add New Terminal:</h4>
+                        <div class="form-row">
+                            <input type="text" id="terminalId" class="form-input" placeholder="Terminal ID" style="flex: 1;">
+                            <input type="text" id="terminalText" class="form-input" placeholder="Terminal text" style="flex: 2;">
+                            <button onclick="addTerminal()" class="nav-btn" style="background: #e74c3c;">Add Terminal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="navigation">
+            <div>
+                <a href="{{ url_for('survey_quest_game') }}" class="nav-btn" style="background: #8e44ad;">🎮 Game Mode</a>
+                <form method="POST" action="{{ url_for('prev_question') }}" style="display: inline;">
+                    <button type="submit" class="nav-btn" {{ 'disabled' if question_index <= 1 else '' }}>
+                        ← Previous
+                    </button>
+                </form>
+            
+            <span style="margin: 0 20px; color: #666;">
+                Node {{ question_index }} of {{ total_questions }} ({{ current_question.type|title }})
+            </span>
+            
+            <form method="POST" action="{{ url_for('next_question') }}" style="display: inline;">
+                <button type="submit" class="nav-btn primary" {{ 'disabled' if question_index >= total_questions else '' }}>
+                    {% if question_index >= total_questions %}
+                        Complete →
+                    {% else %}
+                        Next →
+                    {% endif %}
+                </button>
+            </form>
+            
+            {% if question_index >= total_questions %}
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('complete') }}" class="nav-btn primary">Finish Validation</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        let currentRouting = {{ existing_routing | tojson }};
+        let editingIndex = -1;
+        
+        // Load target node details on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            currentRouting.forEach((routing, index) => {
+                loadTargetNodeDetails(routing.target_question, index);
+            });
+            
+            // Load current validation status
+            loadCurrentValidationStatus();
+        });
+        
+        function loadCurrentValidationStatus() {
+            // Get validation status from backend or set default
+            const currentStatus = '{{ validation_status.validation_notes.status if validation_status.validation_notes else "not_reviewed" }}';
+            updateValidationStatusDisplay(currentStatus);
+        }
+        
+        function setValidationStatus(status) {
+            fetch('/api/set_validation_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question_id: '{{ current_question.id }}',
+                    status: status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateValidationStatusDisplay(status);
+                } else {
+                    alert('Error updating status: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error setting validation status:', error);
+                alert('Error updating validation status');
+            });
+        }
+        
+        function updateValidationStatusDisplay(status) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.status-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to selected button
+            const activeBtn = document.getElementById(`status-${status.replace('_', '-')}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            // Update status display text
+            const statusDisplay = document.getElementById('status-display');
+            const statusText = {
+                'not_reviewed': '🔴 Not Reviewed',
+                'flagged_for_review': '🟡 Flagged for Review', 
+                'validated': '🟢 Validated'
+            };
+            statusDisplay.textContent = statusText[status] || 'Unknown';
+        }
+        
+        function nextQuestion() {
+            // Navigate to next question
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/next_question';
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
+        function loadTargetNodeDetails(targetId, index) {
+            fetch(`/api/node_details/${targetId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById(`target-type-${index}`).textContent = 'Unknown';
+                        document.getElementById(`target-text-${index}`).textContent = `Target "${targetId}" not found`;
+                        return;
+                    }
+                    
+                    // Update target type
+                    const typeElement = document.getElementById(`target-type-${index}`);
+                    typeElement.textContent = `${data.type} in ${data.block} (Order #${data.order_index})`;
+                    typeElement.className = `target-type target-${data.type}`;
+                    
+                    // Update target text (truncated)
+                    const textElement = document.getElementById(`target-text-${index}`);
+                    const truncatedText = data.text.length > 150 ? 
+                        data.text.substring(0, 150) + '...' : 
+                        data.text;
+                    textElement.textContent = truncatedText;
+                    
+                    // Add variable info if it's a question
+                    if (data.type === 'question' && data.variable) {
+                        const variableSpan = document.createElement('div');
+                        variableSpan.style.marginTop = '8px';
+                        variableSpan.style.fontSize = '12px';
+                        variableSpan.style.color = '#27ae60';
+                        variableSpan.innerHTML = `<strong>Variable:</strong> ${data.variable}`;
+                        textElement.appendChild(variableSpan);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading target details:', error);
+                    document.getElementById(`target-type-${index}`).textContent = 'Error';
+                    document.getElementById(`target-text-${index}`).textContent = 'Failed to load target information';
+                });
+        }
+        
+        function addRouting() {
+            const responseValue = document.getElementById('responseValue').value;
+            const target = document.getElementById('targetSelect').value;
+            const edgeType = document.getElementById('edgeType').value;
+            
+            if (!responseValue || !target) {
+                alert('Please fill in response value and target');
+                return;
+            }
+            
+            const newRouting = {
+                response_value: responseValue,
+                target_question: target,
+                predicate: responseValue === '*' ? 'ALWAYS' : `RESPONSE == ${responseValue}`,
+                edge_type: edgeType,
+                confidence: 1.0  // Human-added = high confidence
+            };
+            
+            if (editingIndex >= 0) {
+                currentRouting[editingIndex] = newRouting;
+                editingIndex = -1;
+            } else {
+                currentRouting.push(newRouting);
+            }
+            
+            updateRoutingDisplay();
+            saveRouting();
+            clearForm();
+        }
+        
+        function editRouting(index) {
+            const routing = currentRouting[index];
+            document.getElementById('responseValue').value = routing.response_value;
+            document.getElementById('targetSelect').value = routing.target_question;
+            document.getElementById('edgeType').value = routing.edge_type;
+            editingIndex = index;
+        }
+        
+        function deleteRouting(index) {
+            if (confirm('Delete this routing assignment?')) {
+                currentRouting.splice(index, 1);
+                updateRoutingDisplay();
+                saveRouting();
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('responseValue').value = '';
+            document.getElementById('targetSelect').value = '';
+            document.getElementById('edgeType').value = 'branch';
+            editingIndex = -1;
+        }
+        
+        function updateRoutingDisplay() {
+            // This would update the display, but for simplicity we'll just refresh
+            location.reload();
+        }
+        
+        function saveRouting() {
+            fetch('/api/update_routing', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question_id: '{{ current_question.id }}',
+                    routing_assignments: currentRouting
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error saving routing: ' + (data.error || 'Unknown error'));
+                }
+            });
+        }
+        
+        function saveValidationNote() {
+            const note = document.getElementById('validationNotes').value;
+            
+            fetch('/api/add_validation_note', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question_id: '{{ current_question.id }}',
+                    note: note
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Validation note saved!');
+                } else {
+                    alert('Error saving note: ' + (data.error || 'Unknown error'));
+                }
+            });
+        }
+        
+        function addTerminal() {
+            const terminalId = document.getElementById('terminalId').value;
+            const terminalText = document.getElementById('terminalText').value;
+            
+            if (!terminalId) {
+                alert('Please enter terminal ID');
+                return;
+            }
+            
+            fetch('/api/add_terminal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: terminalId,
+                    text: terminalText || `Terminal: ${terminalId}`
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Terminal added! Refreshing...');
+                    location.reload();
+                } else {
+                    alert('Error adding terminal: ' + (data.error || 'Unknown error'));
+                }
+            });
+        }
+    </script>
+</body>
+</html>

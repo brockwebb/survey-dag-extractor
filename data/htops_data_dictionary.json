@@ -1,0 +1,1461 @@
+{
+  "metadata": {
+    "source_file": "HTOPS_data_dictionary.xlsx",
+    "total_variables": 206,
+    "columns": [
+      "PUF Variable Name",
+      "Variable Label",
+      "Question text ",
+      "Variable Type",
+      "Variable Length",
+      "Values",
+      "Universe",
+      "Notes"
+    ],
+    "converted_at": "2025-09-17T10:19:41.563394"
+  },
+  "variables": [
+    {
+      "variable_name": "LANG",
+      "description": "Including you and the adults regularly living with you, does anyone primarily speak a language other than [Field-LANGfill] at home?",
+      "data_type": "Including you and the adults regularly living with you, does anyone primarily speak a language other than [Field-LANGfill] at home?",
+      "values": "num",
+      "row_index": 0
+    },
+    {
+      "variable_name": "LANG1_R",
+      "description": "What language is regularly spoken at home?\n\nIf more than one, select the language spoken most often. - Selected Choice",
+      "data_type": "What language is regularly spoken at home?\n\nIf more than one, select the language spoken most often. - Selected Choice",
+      "values": "num",
+      "row_index": 1
+    },
+    {
+      "variable_name": "HOWWELL_R",
+      "description": "How well do you speak English?",
+      "data_type": "How well do you speak English?",
+      "values": "num",
+      "row_index": 2
+    },
+    {
+      "variable_name": "AF_HHLD",
+      "description": "Did you or anyone in your household ever serve on active duty in the U.S. Armed Forces?",
+      "data_type": "Did you or anyone in your household ever serve on active duty in the U.S. Armed Forces?",
+      "values": "num",
+      "row_index": 3
+    },
+    {
+      "variable_name": "SATISFACTION",
+      "description": "Overall Satisfaction",
+      "data_type": "Overall how satisfied are you with life as a whole these days?",
+      "values": "num",
+      "row_index": 4
+    },
+    {
+      "variable_name": "THHLD_NUMKID",
+      "description": "Number of people under 18 years living in household  THHLD_NUMKID topcoded to  5 kids",
+      "data_type": "Number of people under 18 years living in household THHLD_NUMKID topcoded to 5 kids",
+      "values": "num",
+      "row_index": 5
+    },
+    {
+      "variable_name": "KIDS_LT1Y",
+      "description": "Children under 1 year old",
+      "data_type": "In your household, are there... Select all that apply. - Children under 1 year old?",
+      "values": "num",
+      "row_index": 6
+    },
+    {
+      "variable_name": "KIDS_1_4Y",
+      "description": "Children 1 through 4 years old",
+      "data_type": "In your household, are there... Select all that apply. - Children 1 through 4 years old?",
+      "values": "num",
+      "row_index": 7
+    },
+    {
+      "variable_name": "KIDS_5_11Y",
+      "description": "Children 5 through 11 years old",
+      "data_type": "In your household, are there... Select all that apply. - Children 5 through 11 years old?",
+      "values": "num",
+      "row_index": 8
+    },
+    {
+      "variable_name": "KIDS_12_17Y",
+      "description": "Children 12 through 17 years old",
+      "data_type": "In your household, are there... Select all that apply. - Children 12 through 17 years old?",
+      "values": "num",
+      "row_index": 9
+    },
+    {
+      "variable_name": "ENRPUBCHK",
+      "description": "Enrolled in a public school (checkbox)",
+      "data_type": "During the school year that began in the Summer / Fall of 2024, how many children in this household are enrolled in Kindergarten through 12th grade or grade equivalent? Enter whole numbers for all that apply. - Selected Choice - Number enrolled in a public school",
+      "values": "num",
+      "row_index": 10
+    },
+    {
+      "variable_name": "ENRPRVCHK",
+      "description": "Enrolled in a private school (checkbox)",
+      "data_type": "During the school year that began in the Summer / Fall of 2024, how many children in this household are enrolled in Kindergarten through 12th grade or grade equivalent? Enter whole numbers for all that apply. - Selected Choice - Number enrolled in a private school",
+      "values": "num",
+      "row_index": 11
+    },
+    {
+      "variable_name": "ENRHMSCHK",
+      "description": "Homeschooled, that is not enrolled in public or private school (checkbox)",
+      "data_type": "During the school year that began in the Summer / Fall of 2024, how many children in this household are enrolled in Kindergarten through 12th grade or grade equivalent? Enter whole numbers for all that apply. - Selected Choice - Number homeschooled, that is not enrolled in public or private school",
+      "values": "num",
+      "row_index": 12
+    },
+    {
+      "variable_name": "ENROLLNONE",
+      "description": "Children are not enrolled any of the school types (checkbox)",
+      "data_type": "During the school year that began in the Summer / Fall of 2024, how many children in this household are enrolled in Kindergarten through 12th grade or grade equivalent? Enter whole numbers for all that apply. - Selected Choice - None",
+      "values": "num",
+      "row_index": 13
+    },
+    {
+      "variable_name": "TENROLLPUB",
+      "description": "Number of kids enrolled in public school TENROLLPUB topcoded to 4 children",
+      "data_type": "Number of kids enrolled in public TENROLLPUB topcoded to 4 children",
+      "values": "num",
+      "row_index": 14
+    },
+    {
+      "variable_name": "TENROLLPRV",
+      "description": "Number of kids enrolled in private school TENROLLPRV topcoded to 2 children",
+      "data_type": "Number of kids enrolled in private TENROLLPRV topcoded to 2 children",
+      "values": "num",
+      "row_index": 15
+    },
+    {
+      "variable_name": "TENROLLHMSCH",
+      "description": "Number of kids enrolled in homeschool TENROLLHMSCH topcoded to2 children",
+      "data_type": " Number of kids enrolled in homeschool TENROLLHMSCH topcoded to 2 children",
+      "values": "num",
+      "row_index": 16
+    },
+    {
+      "variable_name": "CHILDCARE",
+      "description": "Childcare arrangement",
+      "data_type": "Next, we are going to ask about the childcare arrangements for children in the household. \nAt any time in the last 4 weeks, were any children in the household unable to attend daycare or another childcare arrangement as a result of child care being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care?  Please include before school care, after school care, and all other forms of childcare that were unavailable. Select only one answer.",
+      "values": "num",
+      "row_index": 17
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT1",
+      "description": "Result of no childcare - You (or another adult) took unpaid leave to care for the children ",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) took unpaid leave to care for the children ",
+      "values": "num",
+      "row_index": 18
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT2",
+      "description": "Result of no childcare - You (or another adult) used vacation, or sick days, or other paid leave in order to care for the children",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) used vacation, or sick days, or other paid leave in order to care for the children",
+      "values": "num",
+      "row_index": 19
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT3",
+      "description": "Result of no childcare - You (or another adult) cut your work hours in order to care for the children",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) cut your work hours in order to care for the children",
+      "values": "num",
+      "row_index": 20
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT4",
+      "description": "Result of no childcare - You (or another adult) left a job in order to care for the children",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) left a job in order to care for the children",
+      "values": "num",
+      "row_index": 21
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT5",
+      "description": "Result of no childcare - You (or another adult) lost a job because of time away to care for the children",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) lost a job because of time away to care for the children",
+      "values": "num",
+      "row_index": 22
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT6",
+      "description": "Result of no childcare - You (or another adult) did not look for a job in order to care for the children",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) did not look for a job in order to care for the children",
+      "values": "num",
+      "row_index": 23
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT7",
+      "description": "Result of no childcare - You (or another adult) supervised one or more children while working",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - You (or another adult) supervised one or more children while working",
+      "values": "num",
+      "row_index": 24
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT8",
+      "description": "Result of no childcare - Other (specify) ",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - Other (specify) ",
+      "values": "num",
+      "row_index": 25
+    },
+    {
+      "variable_name": "CHILDCARE_RSLT9",
+      "description": "Result of no childcare - None of the above",
+      "data_type": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply. - Selected Choice - None of the above",
+      "values": "num",
+      "row_index": 26
+    },
+    {
+      "variable_name": "FRMLA_AGE",
+      "description": "Age of youngest infant in household",
+      "data_type": "How many months old is the baby or infant in your household? If there is more than one, please report the age of the youngest.",
+      "values": "num",
+      "row_index": 27
+    },
+    {
+      "variable_name": "BABY_FED",
+      "description": "How is the baby in your household fed",
+      "data_type": "How is the baby in your household fed (in addition to any solid foods the baby may be consuming)? If there is more than one baby, please report on the youngest.",
+      "values": "num",
+      "row_index": 28
+    },
+    {
+      "variable_name": "FRMLA_DIFFCLT",
+      "description": "Formula difficult to obtain past month",
+      "data_type": "In the last 4 weeks, did you have difficulty getting infant formula?",
+      "values": "num",
+      "row_index": 29
+    },
+    {
+      "variable_name": "WRKLOSSRV",
+      "description": "Recent household job loss",
+      "data_type": "Have you, or has\nanyone in your household experienced a loss of employment income in the last 4 weeks?  Select only\none answer.",
+      "values": "num",
+      "row_index": 30
+    },
+    {
+      "variable_name": "ANYWORK",
+      "description": "Employment status for last 7 days",
+      "data_type": "In the last 7 days, did you do ANY\nwork for either pay or profit? Select only one answer.",
+      "values": "num",
+      "row_index": 31
+    },
+    {
+      "variable_name": "KINDWORK",
+      "description": "Sector of employment",
+      "data_type": "Are you employed by the government, by a private company, a nonprofit\norganization or are you self-employed or working in a family business? Select only one answer.",
+      "values": "num",
+      "row_index": 32
+    },
+    {
+      "variable_name": "RSNNOWRKRV",
+      "description": "Main reason for not working for pay or profit",
+      "data_type": "What is your main reason for not working for pay or profit?\nSelect only one answer.\nI did not work because: - Selected Choice",
+      "values": "num",
+      "row_index": 33
+    },
+    {
+      "variable_name": "TWDAYS_RESP",
+      "description": "Number of telework days in past week - respondent",
+      "data_type": "In the last 7 days, have you teleworked or worked from home?",
+      "values": "num",
+      "row_index": 34
+    },
+    {
+      "variable_name": "SEEING",
+      "description": "Limitations in seeing",
+      "data_type": "Do you have difficulty seeing, even when wearing glasses? Select only one answer.",
+      "values": "num",
+      "row_index": 35
+    },
+    {
+      "variable_name": "HEARING",
+      "description": "Limitations in hearing",
+      "data_type": "Do you have difficulty hearing, even when using a hearing aid? Select only one answer.",
+      "values": "num",
+      "row_index": 36
+    },
+    {
+      "variable_name": "MOBILITY",
+      "description": "Limitations in mobility",
+      "data_type": "Do you have difficulty walking or climbing stairs? Select only one answer.",
+      "values": "num",
+      "row_index": 37
+    },
+    {
+      "variable_name": "REMEMBERING",
+      "description": "Limitations in remembering or concentrating",
+      "data_type": "Do you have difficulty remembering or concentrating? Select only one answer.",
+      "values": "num",
+      "row_index": 38
+    },
+    {
+      "variable_name": "SELFCARE",
+      "description": "Limitations in self-care",
+      "data_type": "Do you have difficulty with self-care, such as washing all over or dressing? Select only one answer.",
+      "values": "num",
+      "row_index": 39
+    },
+    {
+      "variable_name": "UNDERSTAND",
+      "description": "Limitations in understanding or being understood",
+      "data_type": "Using your usual language, do you have difficulty communicating, for example understanding or being understood? Select only one answer.",
+      "values": "num",
+      "row_index": 40
+    },
+    {
+      "variable_name": "ANXIOUS",
+      "description": "Frequency of anxiety over previous 2 weeks",
+      "data_type": "Feeling\nnervous, anxious, or on edge? Select only one answer.",
+      "values": "num",
+      "row_index": 41
+    },
+    {
+      "variable_name": "WORRY",
+      "description": "Frequency of worry over previous 2 weeks",
+      "data_type": "Not being\nable to stop or control worrying? Select only one answer.",
+      "values": "num",
+      "row_index": 42
+    },
+    {
+      "variable_name": "INTEREST",
+      "description": "Frequency of having little interest in things over previous 2 weeks",
+      "data_type": "Having little interest or\npleasure in doing things? Select only one answer.",
+      "values": "num",
+      "row_index": 43
+    },
+    {
+      "variable_name": "DOWN",
+      "description": "Frequency of feeling depressed over previous 2 weeks",
+      "data_type": "Feeling down, depressed, or\nhopeless? Select only one answer.",
+      "values": "num",
+      "row_index": 44
+    },
+    {
+      "variable_name": "MHLTH_NEED",
+      "description": "Children need for mental health treatment",
+      "data_type": "During the last 4 weeks, did any children in your household need mental health treatment? Mental health treatment includes health services like counseling or medication.",
+      "values": "num",
+      "row_index": 45
+    },
+    {
+      "variable_name": "MHLTH_GET",
+      "description": "Children receive mental health treatment",
+      "data_type": "Did the children who needed mental health treatment receive it?",
+      "values": "num",
+      "row_index": 46
+    },
+    {
+      "variable_name": "MHLTH_SATISFD",
+      "description": "Satisfaction with mental health treatment",
+      "data_type": "Were you satisfied with the type, quality, and quantity of mental health treatment the children received?",
+      "values": "num",
+      "row_index": 47
+    },
+    {
+      "variable_name": "MHLTH_DIFFCLT",
+      "description": "Difficulty obtaining mental health treatment",
+      "data_type": "How difficult was it to get mental health treatment for the children?",
+      "values": "num",
+      "row_index": 48
+    },
+    {
+      "variable_name": "HLTHINS1",
+      "description": "Currently covered by: Insurance through a current or former employer",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Insurance through a current or former employer or union (through yourself or another family member)",
+      "values": "num",
+      "row_index": 49
+    },
+    {
+      "variable_name": "HLTHINS2",
+      "description": "Currently covered by: Insurance purchased directly from an insurance compan",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Insurance purchased directly from an insurance company, including marketplace coverage (through yourself or another family member)",
+      "values": "num",
+      "row_index": 50
+    },
+    {
+      "variable_name": "HLTHINS3",
+      "description": "Currently covered by: Medicare, for people 65 and older, or people with certain disabilities",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Medicare, for people 65 and older, or people with certain disabilities",
+      "values": "num",
+      "row_index": 51
+    },
+    {
+      "variable_name": "HLTHINS4",
+      "description": "Currently covered by: Medicaid, Medical Assistance, or any kind of government-assistance plan",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Medicaid, Medical Assistance, or any kind of government-assistance plan for those with low incomes or a disability",
+      "values": "num",
+      "row_index": 52
+    },
+    {
+      "variable_name": "HLTHINS5",
+      "description": "Currently covered by: TRICARE or other military health care ",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - TRICARE or other military health care",
+      "values": "num",
+      "row_index": 53
+    },
+    {
+      "variable_name": "HLTHINS6",
+      "description": "Currently covered by: VA",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - VA (including those who have ever used or enrolled for VA health care)",
+      "values": "num",
+      "row_index": 54
+    },
+    {
+      "variable_name": "HLTHINS7",
+      "description": "Currently covered by: Indian Health Service",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Indian Health Service",
+      "values": "num",
+      "row_index": 55
+    },
+    {
+      "variable_name": "HLTHINS8",
+      "description": "Currently covered by: Other insurance",
+      "data_type": "Are you currently covered by any of the following types of health\ninsurance or health coverage plans? Mark Yes or No for each. - Other",
+      "values": "num",
+      "row_index": 56
+    },
+    {
+      "variable_name": "SOCIAL1_first",
+      "description": "Social and emotional support ",
+      "data_type": "How often do you get the social and emotional support you need?",
+      "values": "num",
+      "row_index": 57
+    },
+    {
+      "variable_name": "SOCIAL2_first",
+      "description": "Frequency of Loneliness",
+      "data_type": "How often do you feel lonely?",
+      "values": "num",
+      "row_index": 58
+    },
+    {
+      "variable_name": "SOCnew1",
+      "description": "Get together with family, friends, or neighbors",
+      "data_type": "In a typical week, how often do you get together in person, or talk on the phone (or video) with family members, friends or neighbors? Do not include text, DM or email.",
+      "values": "num",
+      "row_index": 59
+    },
+    {
+      "variable_name": "SOCnew2",
+      "description": "Attends meetings of clubs or organizations",
+      "data_type": "In a typical year, how often do you participate in meetings of the clubs or organizations you belong to such as volunteer groups, school groups, social clubs or gatherings or religious services?",
+      "values": "num",
+      "row_index": 60
+    },
+    {
+      "variable_name": "FALLVAC_1",
+      "description": "Received fall 2024 vaccination - Covid",
+      "data_type": "Have you received the following vaccines this season (that is, since August  2024)? - COVID",
+      "values": "num",
+      "row_index": 61
+    },
+    {
+      "variable_name": "FALLVAC_2",
+      "description": "Received fall 2024 vaccination - Flu",
+      "data_type": "Have you received the following vaccines this season (that is, since August  2024)? - Flu",
+      "values": "num",
+      "row_index": 62
+    },
+    {
+      "variable_name": "RSVVACC",
+      "description": "Ever received RSV vaccine",
+      "data_type": "Have you ever received a vaccine for RSV?",
+      "values": "num",
+      "row_index": 63
+    },
+    {
+      "variable_name": "SHRTGMEDICAL1",
+      "description": "Medication shortage - A medicine or medication that requires a prescription or is given by provider, pharmacist, or hospital",
+      "data_type": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply. - Selected Choice - A medicine or medication that requires a prescription or is given by provider, pharmacist, or hospital",
+      "values": "num",
+      "row_index": 64
+    },
+    {
+      "variable_name": "SHRTGMEDICAL2",
+      "description": "Medication shortage - A medicine or medication that is sold over the counter (without a prescription)",
+      "data_type": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply. - Selected Choice - A medicine or medication that is sold over the counter (without a prescription)",
+      "values": "num",
+      "row_index": 65
+    },
+    {
+      "variable_name": "SHRTGMEDICAL3",
+      "description": "Medication shortage - A medical equipment or supplies used at home such as infusion pumps, glucose monitors, home ventilators, masks, gloves, etc.",
+      "data_type": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply. - Selected Choice - A medical equipment or supplies used at home such as infusion pumps, glucose monitors, home ventilators, masks, gloves, etc.",
+      "values": "num",
+      "row_index": 66
+    },
+    {
+      "variable_name": "SHRTGMEDICAL4",
+      "description": "Medication shortage - Other critical medical products, please specify",
+      "data_type": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply. - Selected Choice - Other critical medical products, please specify",
+      "values": "num",
+      "row_index": 67
+    },
+    {
+      "variable_name": "SHRTGMEDICAL5",
+      "description": "Medication shortage - My household has not been affected by any of these shortages",
+      "data_type": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply. - Selected Choice - My household has not been affected by any of these shortages",
+      "values": "num",
+      "row_index": 68
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT1",
+      "description": "Response to Medication shortage - Changed to a substitute or alternative medication, equipment, or medical product",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Changed to a substitute or alternative medication, equipment, or medical product",
+      "values": "num",
+      "row_index": 69
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT2",
+      "description": "Response to Medication shortage - Spent more money or time to find the medication, equipment, or medical products",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Spent more money or time to find the medication, equipment, or medical products",
+      "values": "num",
+      "row_index": 70
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT3",
+      "description": "Response to Medication shortage - Delayed, stopped, rationed or re-used medication, equipment, or medical products",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Delayed, stopped, rationed or re-used medication, equipment, or medical products",
+      "values": "num",
+      "row_index": 71
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT4",
+      "description": "Response to Medication shortage - Delayed or canceled a medical procedure or treatment because medication, equipment or products needed for care were not available to me or a provider",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Delayed or canceled a medical procedure or treatment because medication, equipment or products needed for care were not available to me or a provider",
+      "values": "num",
+      "row_index": 72
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT5",
+      "description": "Response to Medication shortage - Consulted a medical professional or other sources to help me get medication, equipment, or medical products",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Consulted a medical professional or other sources to help me get medication, equipment, or medical products",
+      "values": "num",
+      "row_index": 73
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT6",
+      "description": "Response to Medication shortage - Experienced negative physical health impacts",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Experienced negative physical health impacts",
+      "values": "num",
+      "row_index": 74
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT7",
+      "description": "Response to Medication shortage - Experienced negative mental health impacts",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Experienced negative mental health impacts",
+      "values": "num",
+      "row_index": 75
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT8",
+      "description": "Response to Medication shortage - I don't know",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - I don't know",
+      "values": "num",
+      "row_index": 76
+    },
+    {
+      "variable_name": "SHRTGMED_RSP_ALT9",
+      "description": "Response to Medication shortage - Other, specify",
+      "data_type": "How did you or a member of your household respond to the shortage? Select all that apply. - Selected Choice - Other, specify",
+      "values": "num",
+      "row_index": 77
+    },
+    {
+      "variable_name": "CURFOODSUF",
+      "description": "Household food sufficiency for last 7 days",
+      "data_type": "Getting enough food can be a problem for some people. In the last 7 days,\nwhich of these statements best describes the food eaten in your household? Select only one answer.",
+      "values": "num",
+      "row_index": 78
+    },
+    {
+      "variable_name": "CHILDFOOD",
+      "description": "Children not eating enough because we couldn't afford enough food",
+      "data_type": "Please indicate whether the next statement was often true, sometimes true, or never true in the last 7 days for the children living in your household who are under 18 years old.  \n\"The children were not eating enough because we just couldn't afford enough food.\"",
+      "values": "num",
+      "row_index": 79
+    },
+    {
+      "variable_name": "FOODRSNRV1",
+      "description": "Why not enough to eat - Couldn't afford to buy more food",
+      "data_type": "Why did you not have enough to eat\n(or not what you wanted to eat)? Select all that\napply. - Couldn't afford to buy more food ",
+      "values": "num",
+      "row_index": 80
+    },
+    {
+      "variable_name": "FOODRSNRV2",
+      "description": "Why not enough to eat - Couldn’t get out to buy food",
+      "data_type": "Why did you not have enough to eat\n(or not what you wanted to eat)? Select all that\napply. - Couldn't get to store to buy food (for example, didn't have transportation, have mobility or health limitations that prevent you from getting out) ",
+      "values": "num",
+      "row_index": 81
+    },
+    {
+      "variable_name": "FOODRSNRV3",
+      "description": "Why not enough to eat - Couldn’t go to store due to safety concerns",
+      "data_type": "Why did you not have enough to eat\n(or not what you wanted to eat)? Select all that\napply. - Couldn't go to store due to safety concerns",
+      "values": "num",
+      "row_index": 82
+    },
+    {
+      "variable_name": "FOODRSNRV4",
+      "description": "Why not enough to eat - No reason",
+      "data_type": "Why did you not have enough to eat\n(or not what you wanted to eat)? Select all that\napply. - None of the above",
+      "values": "num",
+      "row_index": 83
+    },
+    {
+      "variable_name": "FREEFOOD",
+      "description": "Got free groceries from a food pantry, food bank, church, or other place that provides free food",
+      "data_type": "During the last 7 days, did you or anyone in your household get free groceries from a food pantry, food bank, church, or other place that provides free food? Select only one answer.",
+      "values": "num",
+      "row_index": 84
+    },
+    {
+      "variable_name": "FDBENEFIT1",
+      "description": "Currently received benefits from: Supplemental Nutrition Assistance Program (SNAP) or Food Stamp Program",
+      "data_type": "Do you or does anyone in your household currently receive benefits from... Select all that apply. - Supplemental Nutrition Assistance Program (SNAP) or Food Stamp Program",
+      "values": "num",
+      "row_index": 85
+    },
+    {
+      "variable_name": "FDBENEFIT2",
+      "description": "Currently received benefits from: WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)",
+      "data_type": "Do you or does anyone in your household currently receive benefits from... Select all that apply. - WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)",
+      "values": "num",
+      "row_index": 86
+    },
+    {
+      "variable_name": "FDBENEFIT3",
+      "description": "Currently received benefits from: Free or reduced-price meals at school through NSLP (National School Lunch Program)",
+      "data_type": "Do you or does anyone in your household currently receive benefits from... Select all that apply. - Free or reduced-price meals at school through NSLP (National School Lunch Program)",
+      "values": "num",
+      "row_index": 87
+    },
+    {
+      "variable_name": "FDBENEFIT4",
+      "description": "Currently received benefits from: Pay full-price meals at school through NSLP (National School Lunch Program)",
+      "data_type": "Do you or does anyone in your household currently receive benefits from... Select all that apply. - Pay full-price meals at school through NSLP (National School Lunch Program)",
+      "values": "num",
+      "row_index": 88
+    },
+    {
+      "variable_name": "FDBENEFIT5",
+      "description": "Currently received benefits from: None of these",
+      "data_type": "Do you or does anyone in your household currently receive benefits from... Select all that apply. - None of these",
+      "values": "num",
+      "row_index": 89
+    },
+    {
+      "variable_name": "SCHLFDEXPNS",
+      "description": "Difficulty with paying for school food",
+      "data_type": "Does having to pay for the food children eat at school make it difficult for your household to pay for other expenses?",
+      "values": "num",
+      "row_index": 90
+    },
+    {
+      "variable_name": "EXPNS_DIF",
+      "description": "Difficulty with expenses",
+      "data_type": "In the last 2 months, how difficult has it been for your household to pay for usual household expenses, including but not limited to food, rent or mortgage, car payments, medical expenses, student loans, and so on? Select only one answer.",
+      "values": "num",
+      "row_index": 91
+    },
+    {
+      "variable_name": "PRICECHNG",
+      "description": "Perception of price changes",
+      "data_type": "In the area where you live and shop, do you think prices in general have changed in the last 2 months? Select only one answer.",
+      "values": "num",
+      "row_index": 92
+    },
+    {
+      "variable_name": "PRICESTRESS",
+      "description": "Stress of price changes",
+      "data_type": "How stressful, if at all, has the increase in prices in the last 2 months been for you? Select only one answer.",
+      "values": "num",
+      "row_index": 93
+    },
+    {
+      "variable_name": "PRICECONCRN",
+      "description": "Concern of price changes",
+      "data_type": "In the area you live and shop, how concerned are you, if at all, that prices will increase in the next 6 months? Select only one answer.",
+      "values": "num",
+      "row_index": 94
+    },
+    {
+      "variable_name": "TENURE",
+      "description": "Housing owned or rented",
+      "data_type": "The next questions ask about housing.\n\nIs your house or apartment...? Select only one answer.",
+      "values": "num",
+      "row_index": 95
+    },
+    {
+      "variable_name": "RENTCUR",
+      "description": "Caught up on rent",
+      "data_type": "Is this household currently caught up on rent payments? Select only one answer.",
+      "values": "num",
+      "row_index": 96
+    },
+    {
+      "variable_name": "MORTCUR",
+      "description": "Caught up on mortgage",
+      "data_type": "Is this household currently caught up on mortgage payments? Select only one answer.",
+      "values": "num",
+      "row_index": 97
+    },
+    {
+      "variable_name": "EVICT",
+      "description": "Eviction in next two months",
+      "data_type": "How likely is it that your household will have to leave this home or apartment within the next 2 months because of eviction? Select only one answer.",
+      "values": "num",
+      "row_index": 98
+    },
+    {
+      "variable_name": "FORECLOSE",
+      "description": "Foreclose in next two months",
+      "data_type": "How likely is it that your household will have to leave this home within the next 2 months because of foreclosure? Select only one answer.",
+      "values": "num",
+      "row_index": 99
+    },
+    {
+      "variable_name": "ENERGY",
+      "description": "Trouble paying energy bill",
+      "data_type": "In the last 2 months, Did your household reduce or forego expenses for basic household necessities, such as medicine or food, in order to pay an energy bill?",
+      "values": "num",
+      "row_index": 100
+    },
+    {
+      "variable_name": "HSE_TEMP",
+      "description": "Kept household at unsafe temp because of cost",
+      "data_type": "In the last 2 months, did your household keep your home at a temperature that you felt was unsafe or unhealthy?",
+      "values": "num",
+      "row_index": 101
+    },
+    {
+      "variable_name": "ENRGY_BILL",
+      "description": "Unable to pay full energy bill",
+      "data_type": "In the last 2 months, was your household unable to pay an energy bill or unable to pay the full bill amount?",
+      "values": "num",
+      "row_index": 102
+    },
+    {
+      "variable_name": "TRANSPORT1",
+      "description": "Available transportation options - Walk",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Walk",
+      "values": "num",
+      "row_index": 103
+    },
+    {
+      "variable_name": "TRANSPORT2",
+      "description": "Available transportation options - Bike or e-scooter",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Bike or e-scooter",
+      "values": "num",
+      "row_index": 104
+    },
+    {
+      "variable_name": "TRANSPORT3",
+      "description": "Available transportation options - Motorcycle or moped",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Motorcycle or moped",
+      "values": "num",
+      "row_index": 105
+    },
+    {
+      "variable_name": "TRANSPORT4",
+      "description": "Available transportation options - Your own personal vehicle (e.g., car, truck, SUV)",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Your own personal vehicle (e.g., car, truck, SUV)",
+      "values": "num",
+      "row_index": 106
+    },
+    {
+      "variable_name": "TRANSPORT5",
+      "description": "Available transportation options - A personal vehicle borrowed from a friend, family member, neighbor, coworker, or acquaintance (including carpooling)",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - A personal vehicle borrowed from a friend, family member, neighbor, coworker, or acquaintance (including carpooling)",
+      "values": "num",
+      "row_index": 107
+    },
+    {
+      "variable_name": "TRANSPORT6",
+      "description": "Available transportation options - Rental car or carsharing service (e.g., Zipcar)",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Rental car or carsharing service (e.g., Zipcar)",
+      "values": "num",
+      "row_index": 108
+    },
+    {
+      "variable_name": "TRANSPORT7",
+      "description": "Available transportation options - Taxi service or rideshare (e.g., Uber, Lyft)",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Taxi service or rideshare (e.g., Uber, Lyft)",
+      "values": "num",
+      "row_index": 109
+    },
+    {
+      "variable_name": "TRANSPORT8",
+      "description": "Available transportation options - Bus",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Bus",
+      "values": "num",
+      "row_index": 110
+    },
+    {
+      "variable_name": "TRANSPORT9",
+      "description": "Available transportation options - Rail transit (subway, light rail, streetcar, commuter rail)",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Rail transit (subway, light rail, streetcar, commuter rail)",
+      "values": "num",
+      "row_index": 111
+    },
+    {
+      "variable_name": "TRANSPORT10",
+      "description": "Available transportation options - Ferryboat",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Ferryboat",
+      "values": "num",
+      "row_index": 112
+    },
+    {
+      "variable_name": "TRANSPORT11",
+      "description": "Available transportation options - Paratransit",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Paratransit (that is, specialized, door-to-door transport service for people with disabilities)",
+      "values": "num",
+      "row_index": 113
+    },
+    {
+      "variable_name": "TRANSPORT12",
+      "description": "Available transportation options - Other methods, please specify",
+      "data_type": "Currently, which of the following transportation options do you have access to:\n\nSelect all that apply. - Selected Choice - Other methods, please specify",
+      "values": "num",
+      "row_index": 114
+    },
+    {
+      "variable_name": "ACCESS_TRANSP",
+      "description": "Access to transportation in the last 4 weeks",
+      "data_type": "Which one of the following statements best describes your access to transportation in the last 4 weeks:",
+      "values": "num",
+      "row_index": 115
+    },
+    {
+      "variable_name": "NEEDS_TRANSP1",
+      "description": "Reason for unmet transportation needs - My transportation options are not available when I need them",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - My transportation options are not available when I need them",
+      "values": "num",
+      "row_index": 116
+    },
+    {
+      "variable_name": "NEEDS_TRANSP2",
+      "description": "Reason for unmet transportation needs - My transportation options require more travel time than I have available",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - My transportation options require more travel time than I have available",
+      "values": "num",
+      "row_index": 117
+    },
+    {
+      "variable_name": "NEEDS_TRANSP3",
+      "description": "Reason for unmet transportation needs - My transportation options are unpredictable (travel time, availability)",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - My transportation options are unpredictable (travel time, availability)",
+      "values": "num",
+      "row_index": 118
+    },
+    {
+      "variable_name": "NEEDS_TRANSP4",
+      "description": "Reason for unmet transportation needs - My transportation options cost more than I can afford",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - My transportation options cost more than I can afford",
+      "values": "num",
+      "row_index": 119
+    },
+    {
+      "variable_name": "NEEDS_TRANSP5",
+      "description": "Reason for unmet transportation needs - My transportation options feel unsafe",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - My transportation options feel unsafe",
+      "values": "num",
+      "row_index": 120
+    },
+    {
+      "variable_name": "NEEDS_TRANSP6",
+      "description": "Reason for unmet transportation needs - I have a disability that limits my travel options or makes travel challenging",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - I have a disability that limits my travel options or makes travel challenging",
+      "values": "num",
+      "row_index": 121
+    },
+    {
+      "variable_name": "NEEDS_TRANSP7",
+      "description": "Reason for unmet transportation needs - None of the above",
+      "data_type": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply): - None of the above",
+      "values": "num",
+      "row_index": 122
+    },
+    {
+      "variable_name": "LIVENTERTAINMENT",
+      "description": "Attend live entertainment in person",
+      "data_type": "During the last 4 weeks, did you attend any live music, dance, or theater performances in person?",
+      "values": "num",
+      "row_index": 123
+    },
+    {
+      "variable_name": "ARTEXHIBIT",
+      "description": "Attend art exhibit",
+      "data_type": "During the last 4 weeks, did you go in person to an art exhibit, such as paintings, sculpture, textiles, graphic design, or photography?",
+      "values": "num",
+      "row_index": 124
+    },
+    {
+      "variable_name": "MOVIES",
+      "description": "Go to the movies",
+      "data_type": "During the last 4 weeks, did you go to the movies?",
+      "values": "num",
+      "row_index": 125
+    },
+    {
+      "variable_name": "CREATEART",
+      "description": "Create, practice, or perform your own art",
+      "data_type": "During the last 4 weeks, did you create, practice, or perform art of your own? \nThis may have included music, dance, or theater; creative writing; crafts or visual arts; digital art; or film or photography done for artistic purposes.",
+      "values": "num",
+      "row_index": 126
+    },
+    {
+      "variable_name": "PARTINARTS",
+      "description": "Take part in neighborhood or community arts and cultural activities",
+      "data_type": "Please indicate whether you strongly agree, agree, disagree, or strongly disagree with the next statement.\n\n\n\"There are plenty of opportunities for me to take part in arts and cultural activities in my neighborhood or community.\"",
+      "values": "num",
+      "row_index": 127
+    },
+    {
+      "variable_name": "TRUST1",
+      "description": "Trust in federal statistics",
+      "data_type": "The population count, the crime rate, and the unemployment rate are examples of statistics produced by the federal government. Personally, how much trust do you have in federal statistics in the United States? Would you say that you tend to trust federal statistics or you tend not to trust them?",
+      "values": "num",
+      "row_index": 128
+    },
+    {
+      "variable_name": "TRUST2_MILITARY",
+      "description": "Confidence in: The military",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - The military",
+      "values": "num",
+      "row_index": 129
+    },
+    {
+      "variable_name": "TRUST2_POLICE",
+      "description": "Confidence in: The police",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - The police",
+      "values": "num",
+      "row_index": 130
+    },
+    {
+      "variable_name": "TRUST2_SUPREME",
+      "description": "Confidence in: The U.S. Supreme Court",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - The U.S. Supreme Court",
+      "values": "num",
+      "row_index": 131
+    },
+    {
+      "variable_name": "TRUST2_PRESIDENCY",
+      "description": "Confidence in: The presidency",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - The presidency",
+      "values": "num",
+      "row_index": 132
+    },
+    {
+      "variable_name": "TRUST2_SCHOOLS",
+      "description": "Confidence in: Public schools",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - Public schools",
+      "values": "num",
+      "row_index": 133
+    },
+    {
+      "variable_name": "TRUST2_CRIMJUST",
+      "description": "Confidence in: The criminal justice system",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - The criminal justice system",
+      "values": "num",
+      "row_index": 134
+    },
+    {
+      "variable_name": "TRUST2_CONGRESS",
+      "description": "Confidence in: Congress",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - Congress",
+      "values": "num",
+      "row_index": 135
+    },
+    {
+      "variable_name": "TRUST2_CENSUS",
+      "description": "Confidence in: U.S. Census Bureau",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - U.S. Census Bureau",
+      "values": "num",
+      "row_index": 136
+    },
+    {
+      "variable_name": "TRUST2_STATISTICAL",
+      "description": "Confidence in: U.S. statistical agencies",
+      "data_type": "Below is a list of institutions in American society.  Please indicate how much confidence you, yourself, have in each one. - U.S. statistical agencies",
+      "values": "num",
+      "row_index": 137
+    },
+    {
+      "variable_name": "FEDSTAT_TRUST",
+      "description": "Agree or disagree that: Policy makers need federal statistics to make good decisions about things like federal funding.",
+      "data_type": "To what extent do you agree or disagree with the following statement?\n\nPolicy makers need federal statistics to make good decisions about things like federal funding.",
+      "values": "num",
+      "row_index": 138
+    },
+    {
+      "variable_name": "NDX1_AFFECTED",
+      "description": "Affected by a natural disaster",
+      "data_type": "The next set of questions asks about natural disasters, such as hurricanes, floods and fires. \n\nSince January 2024 (last year), were you or was anyone currently living or staying with you affected by a natural disaster?",
+      "values": "num",
+      "row_index": 139
+    },
+    {
+      "variable_name": "NDX2_HURRICANE",
+      "description": "Type of natural disaster - Hurricane",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Hurricane",
+      "values": "num",
+      "row_index": 140
+    },
+    {
+      "variable_name": "NDX2_FLOOD",
+      "description": "Type of natural disaster - Flood",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Flood",
+      "values": "num",
+      "row_index": 141
+    },
+    {
+      "variable_name": "NDX2_FIRE",
+      "description": "Type of natural disaster - Fire",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Fire",
+      "values": "num",
+      "row_index": 142
+    },
+    {
+      "variable_name": "NDX2_TORNADO",
+      "description": "Type of natural disaster - Tornado",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Tornado",
+      "values": "num",
+      "row_index": 143
+    },
+    {
+      "variable_name": "NDX2_VOLCANIV",
+      "description": "Type of natural disaster - Volcanic activity",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Volcanic activity",
+      "values": "num",
+      "row_index": 144
+    },
+    {
+      "variable_name": "NDX2_ EARTHQUAKE",
+      "description": "Type of natural disaster - Earthquake",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Earthquake",
+      "values": "num",
+      "row_index": 145
+    },
+    {
+      "variable_name": "NDX2_LANDSLID",
+      "description": "Type of natural disaster - Landslide/mudslide/rockfall",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Landslide/mudslide/rockfall",
+      "values": "num",
+      "row_index": 146
+    },
+    {
+      "variable_name": "NDX2_OTHER",
+      "description": "Type of natural disaster - Other",
+      "data_type": "What type of natural disaster? Select all that apply. - Selected Choice - Other, specify",
+      "values": "num",
+      "row_index": 147
+    },
+    {
+      "variable_name": "NDX3",
+      "description": "Displaced from home because of natural disaster",
+      "data_type": "Since January 2024 (last year), were you or was anyone currently living or staying with you displaced from their home because of a natural disaster?",
+      "values": "num",
+      "row_index": 148
+    },
+    {
+      "variable_name": "NDX5_NUM_DISPLACED",
+      "description": "Number of times displaced",
+      "data_type": "How many times have you (or they) been displaced in 2024 due to a natural disaster?",
+      "values": "num",
+      "row_index": 149
+    },
+    {
+      "variable_name": "NDX6_DUR_DISPLACED",
+      "description": "Duration of being displaced",
+      "data_type": "How long were you (or they) displaced from the home?",
+      "values": "num",
+      "row_index": 150
+    },
+    {
+      "variable_name": "NDX7_SETTLE",
+      "description": "In transition or permanently settled",
+      "data_type": "Would you say that you are still in transition or are you now permanently settled in a home?",
+      "values": "num",
+      "row_index": 151
+    },
+    {
+      "variable_name": "NDX8_RELATIVES",
+      "description": "Shared living quarters: with relatives or friends",
+      "data_type": "Did you or your family share living quarters with relatives or friends, people you did not know, or did you not share living quarters with others? Select all that apply. - Relatives or friends",
+      "values": "num",
+      "row_index": 152
+    },
+    {
+      "variable_name": "NDX8_STRANGERS",
+      "description": "Shared living quarters: with people you did not know",
+      "data_type": "Did you or your family share living quarters with relatives or friends, people you did not know, or did you not share living quarters with others? Select all that apply. - People you did not know",
+      "values": "num",
+      "row_index": 153
+    },
+    {
+      "variable_name": "NDX8_NONE",
+      "description": "Did not share living quarters with others",
+      "data_type": "Did you or your family share living quarters with relatives or friends, people you did not know, or did you not share living quarters with others? Select all that apply. - Did not share living quarters with others",
+      "values": "num",
+      "row_index": 154
+    },
+    {
+      "variable_name": "NDX10_POSSESSIONS",
+      "description": "Amount of damage to property or possessions",
+      "data_type": "Altogether, how much damage to property or possessions did you (or they) experience as a result of natural disasters since January 2024 (last year)?",
+      "values": "num",
+      "row_index": 155
+    },
+    {
+      "variable_name": "ND5_FDSHRTAGE",
+      "description": "Shortage of food - DURATION",
+      "data_type": "A shortage of food?",
+      "values": "num",
+      "row_index": 156
+    },
+    {
+      "variable_name": "ND5_FDSHRTAGE_STILL",
+      "description": "Shortage of food - CURRENTLY",
+      "data_type": "Are you/they still experiencing a shortage of food?",
+      "values": "num",
+      "row_index": 157
+    },
+    {
+      "variable_name": "ND5_WATER",
+      "description": "Shortage of drinkable water - DURATION",
+      "data_type": "A shortage of drinkable water?",
+      "values": "num",
+      "row_index": 158
+    },
+    {
+      "variable_name": "ND5_WATER_STILL",
+      "description": "Shortage of drinkable water - CURRENTLY",
+      "data_type": "Are you/they still experiencing a shortage of water?",
+      "values": "num",
+      "row_index": 159
+    },
+    {
+      "variable_name": "ND5_ELECTRICITY",
+      "description": "Loss of electricity - DURATION",
+      "data_type": "Loss of electricity?",
+      "values": "num",
+      "row_index": 160
+    },
+    {
+      "variable_name": "ND5_ELECTRICITY_STILL",
+      "description": "Loss of electricity - CURRENTLY",
+      "data_type": "Are you/they still experiencing a loss of electricity?",
+      "values": "num",
+      "row_index": 161
+    },
+    {
+      "variable_name": "ND5_UNSANITARY",
+      "description": "Unsanitary conditions - DURATION",
+      "data_type": "Unsanitary conditions, such as inadequate toilets?",
+      "values": "num",
+      "row_index": 162
+    },
+    {
+      "variable_name": "ND5_UNSANITARY_STILL",
+      "description": "Unsanitary conditions - CURRENTLY",
+      "data_type": "Are you/they still experiencing unsanitary conditions?",
+      "values": "num",
+      "row_index": 163
+    },
+    {
+      "variable_name": "ND5_ISOLATE",
+      "description": "Feeling isolated, down, depressed, anxious, nervous or on edge - DURATION",
+      "data_type": "Feeling isolated, down, depressed, anxious, nervous or on edge?",
+      "values": "num",
+      "row_index": 164
+    },
+    {
+      "variable_name": "ND5_ISOLATE_STILL",
+      "description": "Feeling isolated, down, depressed, anxious nervous or on edge - CURRENTLY",
+      "data_type": "Are you/they still experiencing feeling isolated, down, depressed, anxious nervous or on edge?",
+      "values": "num",
+      "row_index": 165
+    },
+    {
+      "variable_name": "ND5_CRIME",
+      "description": "Fear of crime - DURATION",
+      "data_type": "Fear of crime?",
+      "values": "num",
+      "row_index": 166
+    },
+    {
+      "variable_name": "ND5_CRIME_STILL",
+      "description": "Fear of crime - CURRENTLY",
+      "data_type": "Are you/they still experiencing fear of crime?",
+      "values": "num",
+      "row_index": 167
+    },
+    {
+      "variable_name": "ND5_SCAM",
+      "description": "Offers that seemed like a scam - DURATION",
+      "data_type": "Offers that seemed like a scam?",
+      "values": "num",
+      "row_index": 168
+    },
+    {
+      "variable_name": "ND5_SCAM_STILL",
+      "description": "Offers that seem like a scam - CURRENTLY",
+      "data_type": "Are you/they still experiencing offers that seem like a scam?",
+      "values": "num",
+      "row_index": 169
+    },
+    {
+      "variable_name": "ND5_INTERNET",
+      "description": "Disruption to internet - DURATION",
+      "data_type": "Disruption to internet?",
+      "values": "num",
+      "row_index": 170
+    },
+    {
+      "variable_name": "ND5_INTERNET_STILL",
+      "description": "Disruption to internet - CURRENTLY",
+      "data_type": "Are you/they still experiencing disruption to internet?",
+      "values": "num",
+      "row_index": 171
+    },
+    {
+      "variable_name": "NDX11_WORK",
+      "description": "Length of disruption to: WORK",
+      "data_type": "Work?",
+      "values": "num",
+      "row_index": 172
+    },
+    {
+      "variable_name": "NDX11_WORK_STILL",
+      "description": "Still experiencing disruption to: WORK",
+      "data_type": "Are you/they still experiencing disruption to work?",
+      "values": "num",
+      "row_index": 173
+    },
+    {
+      "variable_name": "NDX11_SCHOOL",
+      "description": "Length of disruption to: SCHOOL/CHILDCARE",
+      "data_type": "School/childcare?",
+      "values": "num",
+      "row_index": 174
+    },
+    {
+      "variable_name": "NDX11_SCHOOL_STILL",
+      "description": "Still experiencing disruption to: SCHOOL/CHILDCARE",
+      "data_type": "Are you/they still experiencing disruption to school/childcare?",
+      "values": "num",
+      "row_index": 175
+    },
+    {
+      "variable_name": "NDX11_MEDICAL",
+      "description": "Length of disruption to: MEDICAL SERVICES",
+      "data_type": "Medical services?",
+      "values": "num",
+      "row_index": 176
+    },
+    {
+      "variable_name": "NDX11_MEDICAL_STILL",
+      "description": "Still experiencing disruption to: MEDICAL SERVICES",
+      "data_type": "Are you/they still experiencing disruption to medical services?",
+      "values": "num",
+      "row_index": 177
+    },
+    {
+      "variable_name": "NDX11_HOUSING",
+      "description": "Received any form of temporary housing assistance",
+      "data_type": "Have you received any form of temporary housing assistance since the natural disaster?",
+      "values": "num",
+      "row_index": 178
+    },
+    {
+      "variable_name": "NDX14_FOOD",
+      "description": "Most immediate need right now: Food",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Food",
+      "values": "num",
+      "row_index": 179
+    },
+    {
+      "variable_name": "NDX14_SHELTER",
+      "description": "Most immediate need right now: Shelter",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Shelter",
+      "values": "num",
+      "row_index": 180
+    },
+    {
+      "variable_name": "NDX14_MEDICAL",
+      "description": "Most immediate need right now: Medical assistance",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Medical assistance",
+      "values": "num",
+      "row_index": 181
+    },
+    {
+      "variable_name": "NDX14_EMOTIONAL",
+      "description": "Most immediate need right now: Emotional support",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Emotional support",
+      "values": "num",
+      "row_index": 182
+    },
+    {
+      "variable_name": "NDX14_ELECTRICITY",
+      "description": "Most immediate need right now: Electricity",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Electricity",
+      "values": "num",
+      "row_index": 183
+    },
+    {
+      "variable_name": "NDX14_FRESHWATER",
+      "description": "Most immediate need right now: Access to fresh water",
+      "data_type": "What is your most immediate need right now? Select all that apply. - Access to Fresh Water",
+      "values": "num",
+      "row_index": 184
+    },
+    {
+      "variable_name": "NDX14_NONE_NEEDED",
+      "description": "Most immediate need right now: No immediate assistance needed",
+      "data_type": "What is your most immediate need right now? Select all that apply. - No immediate assistance needed",
+      "values": "num",
+      "row_index": 185
+    },
+    {
+      "variable_name": "NDX16_INSURANCE",
+      "description": "Household insurance at the time of the disaster that covered the damage/loss related to the disaster",
+      "data_type": "Did you (or they) have household insurance at the time of the disaster that covered the damage/loss related to the disaster?",
+      "values": "num",
+      "row_index": 186
+    },
+    {
+      "variable_name": "SCRAMID",
+      "description": "Scrambled ID for linking files",
+      "data_type": "Unique record ID used to link the same record across various data files.",
+      "values": "char",
+      "row_index": 187
+    },
+    {
+      "variable_name": "PWEIGHT",
+      "description": "Person weight",
+      "data_type": "Person weight",
+      "values": "num",
+      "row_index": 188
+    },
+    {
+      "variable_name": "HWEIGHT",
+      "description": "Household weight",
+      "data_type": "Household weight",
+      "values": "num",
+      "row_index": 189
+    },
+    {
+      "variable_name": "A_SEX1",
+      "description": "PUF Allocation Flag for Sex at Birth of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Sex at Birth of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 190
+    },
+    {
+      "variable_name": "A_AGE1",
+      "description": "PUF Allocation Flag for Age of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Age of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 191
+    },
+    {
+      "variable_name": "A_BIRTH_YEAR1",
+      "description": "PUF Allocation Flag for Year of Birth of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Year of Birth of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 192
+    },
+    {
+      "variable_name": "A_HISPANIC1",
+      "description": "PUF Allocation Flag for Hispanic Origin of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Hispanic Origin of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 193
+    },
+    {
+      "variable_name": "A_RACE1",
+      "description": "PUF Allocation Flag for Race of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Race of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 194
+    },
+    {
+      "variable_name": "A_EDUC1",
+      "description": "PUF Allocation Flag for Education of Household Member 1 (Respondent)",
+      "data_type": "PUF Allocation Flag for Education of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 195
+    },
+    {
+      "variable_name": "AHHLD_NUMKID",
+      "description": "Allocation Flag for Number of Household Persons Under 18 As Reported by Respondent",
+      "data_type": "Allocation flag for Household Number of Kids Edit",
+      "values": "num",
+      "row_index": 196
+    },
+    {
+      "variable_name": "HHLD_NUMPER",
+      "description": "Total Number of People in The Household",
+      "data_type": "How many total people (adults and children)currently live in your household, including yourself? Please don't count anyone who lives most of their time somewhere else, even if they are currently staying here. Please enter a number.",
+      "values": "num",
+      "row_index": 197
+    },
+    {
+      "variable_name": "THHLD_NUMADULT",
+      "description": "Number of Adults in Household (Top Coded To 10)",
+      "data_type": "Number of adults in household (top coded)",
+      "values": "num",
+      "row_index": 198
+    },
+    {
+      "variable_name": "MARITAL1",
+      "description": "Reported Marital Status of Respondent",
+      "data_type": "Derived variable indicating respondent’s marital status, compiled from MS_1 or MS_S based on household size.",
+      "values": "num",
+      "row_index": 199
+    },
+    {
+      "variable_name": "ESEX1",
+      "description": "Edited Sex Data for Household Member 1 (Respondent)",
+      "data_type": "Derived from the Sex Question for Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 200
+    },
+    {
+      "variable_name": "RRACE1",
+      "description": "Recoded Race Response for Household Member 1 (Respondent)",
+      "data_type": "Derived from the Race Recode of ERACE - Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 201
+    },
+    {
+      "variable_name": "RHISPANIC1",
+      "description": "Recoded Hispanic Origin Response for Household Member 1 (Respondent)",
+      "data_type": "Derived from the Hispanic Origin Recode of EHISPANIC - Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 202
+    },
+    {
+      "variable_name": "TAGE1",
+      "description": "Top Coded Age Data for Household Member 1 (Respondent)",
+      "data_type": "Topcoded age of Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 203
+    },
+    {
+      "variable_name": "TBIRTH_YEAR1",
+      "description": "Top Coded Birth Year of Household Member 1 (Respondent)",
+      "data_type": "Topcoded Year of Birth for Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 204
+    },
+    {
+      "variable_name": "REDUC1",
+      "description": "Recoded Educational Attainment Data for Household Member 1 (Respondent)",
+      "data_type": "Recoded variable from edited educational attainment response - Household Member 1 (Respondent)",
+      "values": "num",
+      "row_index": 205
+    }
+  ]
+}

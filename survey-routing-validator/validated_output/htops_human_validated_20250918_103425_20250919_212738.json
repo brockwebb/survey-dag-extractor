@@ -1,0 +1,6191 @@
+{
+  "survey_dag": {
+    "metadata": {
+      "id": "htops_human_validated_20250918_103425",
+      "title": "HTOPS Survey - Human Validated",
+      "version": "1.1",
+      "objective": "edge",
+      "build": {
+        "extractor_version": "human_validated_automated_base",
+        "extracted_at": "2025-09-19T21:27:38.569562",
+        "method": "human_validation",
+        "source_format": "automated_extraction_base",
+        "validation_passed": true,
+        "post_edit": true,
+        "original_run_id": "20250918_103425",
+        "validation_stats": {
+          "total_questions": 129,
+          "manually_corrected": 0,
+          "validation_notes": 5,
+          "completion_percentage": 3.875968992248062
+        }
+      }
+    },
+    "graph": {
+      "start": "INTRO_INCENTIVE",
+      "terminals": [
+        "END",
+        "R2a",
+        "SURVEY_COMPLETE",
+        "FINAL_TERMINATION"
+      ],
+      "nodes": [
+        {
+          "id": "INTRO_INCENTIVE",
+          "type": "instruction",
+          "text": "Welcome! Thank you for participating in this survey as a member of the Household Trends and Outlooks Pulse Survey. This month, you will receive your $5 incentive by email. Within two weeks of survey closing, you will receive an email containing a link to redeem your $5 as a digital Mastercard/Visa or your choice of $5 at various stores. This month's survey includes content from the Household Pulse Survey. It will be about 20 minutes and will help measure the impact of social and economic factors on topics like: employment status food security housing security physical and mental wellbeing.",
+          "block": "entry_validation",
+          "order_index": 1
+        },
+        {
+          "id": "Language",
+          "type": "question",
+          "text": "This survey is available in English and Spanish. Please select the language in which you prefer to complete the survey.",
+          "block": "entry_validation",
+          "order_index": 2,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.15
+          }
+        },
+        {
+          "id": "Continue",
+          "type": "instruction",
+          "text": "Click the \"NEXT\" button below to begin.",
+          "block": "entry_validation",
+          "order_index": 3
+        },
+        {
+          "id": "PRA",
+          "type": "instruction",
+          "text": "The authority for the collection of this information for the Household Trends and Outlook Pulse Survey (0607-1029) is provided under Title 13, Sections 141, 182, and 193. The February topical survey will include content from the Household Pulse Survey. Disclosure of the information provided to us with other Census Bureau staff for work-related purposes is permitted under the Privacy Act of 1974 (5 U.S.C. \u00a7 552a). Disclosure of this information is also subject to all of the published routine uses as identified in the Privacy Act System of Records Notice COMMERCE/Census-3 Demographic Survey Collection (Census Bureau Sampling Frame). Staff (employees and contractors) received training on privacy and confidentiality policies and practices; access to PII is restricted to authorized personnel only. Personally identifiable information collected includes name, address, telephone/cell phone number, DOB or age, email address, race or ethnicity. FedRAMP-approved computer systems that maintain sensitive information are in compliance with the Federal Information Security Management Act. Unsecured telecommunications to transmit individually identifiable information is prohibited. Information will only be shared with staff and contractors that are special sworn status and sponsors of reimbursable surveys. Furnishing this information is voluntary. Failure to do so will result in no consequences to you. We estimate that completing this voluntary survey will take 20 minutes on average. Send comments regarding this estimate or any other aspect of this survey to adrm.pra@census.gov. The U.S. Census Bureau is required by law to protect your information. The Census Bureau is not permitted to publicly release your responses in a way that could identify you. Federal law protects your privacy (Title 5, U.S. Code, Section 552a) and keeps your answers confidential (Title 13, United States Code, Section 9). This collection has been approved by the Office of Management and Budget (OMB). This eight-digit OMB approval number, 0607-1029, confirms this approval and expires on 7/31/2027. If this number were not displayed, we could not conduct this survey.",
+          "block": "entry_validation",
+          "order_index": 4
+        },
+        {
+          "id": "Q1",
+          "type": "question",
+          "text": "Our records have your name as ${e://Field/FirstNameFill} ${e://Field/LastNameFill}. Is this correct?",
+          "block": "entry_validation",
+          "order_index": 5,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.1
+          }
+        },
+        {
+          "id": "NAME_CORR",
+          "type": "question",
+          "text": "What is your name?",
+          "block": "entry_validation",
+          "order_index": 6,
+          "domain": {
+            "kind": "text",
+            "confidence": 0.1
+          }
+        },
+        {
+          "id": "ADDRESS_CONFIRM",
+          "type": "question",
+          "text": "Do you live at ${e://Field/BestAddress1} ${e://Field/BestAddress2} ${e://Field/BestCity}, ${e://Field/BestState} ${e://Field/BestZIP}?",
+          "block": "entry_validation",
+          "order_index": 7,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.1
+          }
+        },
+        {
+          "id": "GET_NAME",
+          "type": "question",
+          "text": "Our records have ${e://Field/FirstNameFill} ${e://Field/LastNameFill} as the primary respondent for your household. Please either ask ${e://Field/FirstNameFill} ${e://Field/LastNameFill} to complete the survey now, or share the link you used to access the survey with them.",
+          "block": "entry_validation",
+          "order_index": 8,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.1
+          }
+        },
+        {
+          "id": "END",
+          "type": "terminal",
+          "text": "Please close your browser window now. The survey can be continued at a later time using the same link.",
+          "block": "entry_validation",
+          "order_index": 9
+        },
+        {
+          "id": "R2a",
+          "type": "terminal",
+          "text": "You are not eligible to complete this survey. Thank you for your time.",
+          "block": "entry_validation",
+          "order_index": 10
+        },
+        {
+          "id": "LANG",
+          "type": "question",
+          "text": "Including you and the adults regularly living with you, does anyone primarily speak a language other than ${e://Field/LANGfill} at home?",
+          "block": "language_satisfaction",
+          "order_index": 11,
+          "variable": "LANG",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "LANG1_R",
+          "type": "question",
+          "text": "What language is regularly spoken at home? If more than one, select the language spoken most often.",
+          "block": "language_satisfaction",
+          "order_index": 12,
+          "variable": "LANG1_R",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HOWWELL_R",
+          "type": "question",
+          "text": "How well do you speak English?",
+          "block": "language_satisfaction",
+          "order_index": 13,
+          "variable": "HOWWELL_R",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "OECD",
+          "type": "question",
+          "text": "Overall how satisfied are you with life as a whole these days?",
+          "block": "language_satisfaction",
+          "order_index": 14,
+          "variable": "SATISFACTION",
+          "domain": {
+            "kind": "numeric",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "D11",
+          "type": "question",
+          "text": "How many people under 18 years-old currently live in your household? Please enter a number.",
+          "block": "demographics",
+          "order_index": 15,
+          "variable": "THHLD_NUMKID",
+          "domain": {
+            "kind": "numeric",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "D12",
+          "type": "question",
+          "text": "In your household, are there\u2026 Select all that apply.",
+          "block": "demographics",
+          "order_index": 16,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "D13",
+          "type": "question",
+          "text": "During the school year that began in the Summer / Fall of 2024, how many children in this household are enrolled in Kindergarten through 12th grade or grade equivalent? Enter whole numbers for all that apply.",
+          "block": "demographics",
+          "order_index": 17,
+          "domain": {
+            "kind": "numeric",
+            "confidence": 0.97
+          }
+        },
+        {
+          "id": "EMP7",
+          "type": "question",
+          "text": "At any time in the last 4 weeks, were any children in the household unable to attend daycare or another childcare arrangement as a result of child care being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Please include before school care, after school care, and all other forms of childcare that were unavailable. Select only one answer.",
+          "block": "childcare_employment",
+          "order_index": 18,
+          "variable": "CHILDCARE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "EMP8",
+          "type": "question",
+          "text": "Which if any of the following occurred in the last 4 weeks as a result of childcare being closed, unavailable, unaffordable, or because you are concerned about your child's safety in care? Select all that apply.",
+          "block": "childcare_employment",
+          "order_index": 19,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "INF2",
+          "type": "question",
+          "text": "How many months old is the baby or infant in your household? If there is more than one, please report the age of the youngest.",
+          "block": "childcare_employment",
+          "order_index": 20,
+          "variable": "FRMLA_AGE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.96
+          }
+        },
+        {
+          "id": "INF5",
+          "type": "question",
+          "text": "How is the baby in your household fed (in addition to any solid foods the baby may be consuming)? If there is more than one baby, please report on the youngest.",
+          "block": "childcare_employment",
+          "order_index": 21,
+          "variable": "BABY_FED",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "INF6",
+          "type": "question",
+          "text": "In the last 4 weeks, did you have difficulty getting infant formula?",
+          "block": "childcare_employment",
+          "order_index": 22,
+          "variable": "FRMLA_DIFFCLT",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "EMP_Intro",
+          "type": "instruction",
+          "text": "Now we are going to ask about your employment.",
+          "block": "childcare_employment",
+          "order_index": 23
+        },
+        {
+          "id": "EMP1",
+          "type": "question",
+          "text": "Have you, or has anyone in your household experienced a loss of employment income in the last 4 weeks? Select only one answer.",
+          "block": "childcare_employment",
+          "order_index": 24,
+          "variable": "WRKLOSSRV",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "EMP2",
+          "type": "question",
+          "text": "In the last 7 days, did you do ANY work for either pay or profit? Select only one answer.",
+          "block": "childcare_employment",
+          "order_index": 25,
+          "variable": "ANYWORK",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "EMP3",
+          "type": "question",
+          "text": "Are you employed by the government, by a private company, a nonprofit organization or are you self-employed or working in a family business? Select only one answer.",
+          "block": "childcare_employment",
+          "order_index": 26,
+          "variable": "KINDWORK",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "EMP4",
+          "type": "question",
+          "text": "What is your main reason for not working for pay or profit? Select only one answer. I did not work because:",
+          "block": "childcare_employment",
+          "order_index": 27,
+          "variable": "RSNNOWRKRV",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "SPN5_DAYSTW_2",
+          "type": "question",
+          "text": "In the last 7 days, have you teleworked or worked from home?",
+          "block": "childcare_employment",
+          "order_index": 28,
+          "variable": "TWDAYS_RESP",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.97
+          }
+        },
+        {
+          "id": "display_HLTH",
+          "type": "instruction",
+          "text": "Next, we will ask about health.",
+          "block": "health_disability",
+          "order_index": 29
+        },
+        {
+          "id": "DIS1",
+          "type": "question",
+          "text": "Do you have difficulty seeing, even when wearing glasses? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 30,
+          "variable": "SEEING",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "DIS2",
+          "type": "question",
+          "text": "Do you have difficulty hearing, even when using a hearing aid? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 31,
+          "variable": "HEARING",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "DIS4",
+          "type": "question",
+          "text": "Do you have difficulty walking or climbing stairs? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 32,
+          "variable": "MOBILITY",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "DIS3",
+          "type": "question",
+          "text": "Do you have difficulty remembering or concentrating? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 33,
+          "variable": "REMEMBERING",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "DIS5",
+          "type": "question",
+          "text": "Do you have difficulty with self-care, such as washing all over or dressing? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 34,
+          "variable": "SELFCARE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "DIS6",
+          "type": "question",
+          "text": "Using your usual language, do you have difficulty communicating, for example understanding or being understood? Select only one answer.",
+          "block": "health_disability",
+          "order_index": 35,
+          "variable": "UNDERSTAND",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "HLTH_intro",
+          "type": "instruction",
+          "text": "Over the last 2 weeks, how often have you been bothered by...",
+          "block": "mental_health",
+          "order_index": 36
+        },
+        {
+          "id": "HLTH1",
+          "type": "question",
+          "text": "Feeling nervous, anxious, or on edge? Select only one answer.",
+          "block": "mental_health",
+          "order_index": 37,
+          "variable": "ANXIOUS",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "HLTH2",
+          "type": "question",
+          "text": "Not being able to stop or control worrying? Select only one answer.",
+          "block": "mental_health",
+          "order_index": 38,
+          "variable": "WORRY",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "HLTH3",
+          "type": "question",
+          "text": "Having little interest or pleasure in doing things? Select only one answer.",
+          "block": "mental_health",
+          "order_index": 39,
+          "variable": "INTEREST",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HLTH4",
+          "type": "question",
+          "text": "Feeling down, depressed, or hopeless? Select only one answer.",
+          "block": "mental_health",
+          "order_index": 40,
+          "variable": "DOWN",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "MH1",
+          "type": "question",
+          "text": "During the last 4 weeks, did any children in your household need mental health treatment? Mental health treatment includes health services like counseling or medication.",
+          "block": "mental_health",
+          "order_index": 41,
+          "variable": "MHLTH_NEED",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "MH2",
+          "type": "question",
+          "text": "Did the children who needed mental health treatment receive it?",
+          "block": "mental_health",
+          "order_index": 42,
+          "variable": "MHLTH_GET",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "MH3",
+          "type": "question",
+          "text": "Were you satisfied with the type, quality, and quantity of mental health treatment the children received?",
+          "block": "mental_health",
+          "order_index": 43,
+          "variable": "MHLTH_SATISFD",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "MH4",
+          "type": "question",
+          "text": "How difficult was it to get mental health treatment for the children?",
+          "block": "mental_health",
+          "order_index": 44,
+          "variable": "MHLTH_DIFFCLT",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HLTH8",
+          "type": "question",
+          "text": "Are you currently covered by any of the following types of health insurance or health coverage plans? Mark Yes or No for each.",
+          "block": "health_insurance",
+          "order_index": 45,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "SOC1_first",
+          "type": "question",
+          "text": "How often do you get the social and emotional support you need?",
+          "block": "social_support",
+          "order_index": 46,
+          "variable": "SOCIAL1_first",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "SOC2_first",
+          "type": "question",
+          "text": "How often do you feel lonely?",
+          "block": "social_support",
+          "order_index": 47,
+          "variable": "SOCIAL2_first",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "SOCnew1",
+          "type": "question",
+          "text": "In a typical week, how often do you get together in person, or talk on the phone (or video) with family members, friends or neighbors? Do not include text, DM or email.",
+          "block": "social_support",
+          "order_index": 48,
+          "variable": "SOCnew1",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "SOCnew2",
+          "type": "question",
+          "text": "In a typical year, how often do you participate in meetings of the clubs or organizations you belong to such as volunteer groups, school groups, social clubs or gatherings or religious services?",
+          "block": "social_support",
+          "order_index": 49,
+          "variable": "SOCnew2",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "FALLVAC",
+          "type": "question",
+          "text": "Have you received the following vaccines this season (that is, since August 2024)?",
+          "block": "vaccination",
+          "order_index": 50,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "RSVVAC",
+          "type": "question",
+          "text": "Have you ever received a vaccine for RSV?",
+          "block": "vaccination",
+          "order_index": 51,
+          "variable": "RSVVACC",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "SHORTAGE1",
+          "type": "question",
+          "text": "In the last 4 weeks, have you or a member of your household been directly affected by a shortage of the following? Select all that apply.",
+          "block": "medical_shortages",
+          "order_index": 52,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "SHORTAGE2A",
+          "type": "question",
+          "text": "How did you or a member of your household respond to the shortage? Select all that apply.",
+          "block": "medical_shortages",
+          "order_index": 53,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "FD1",
+          "type": "question",
+          "text": "Getting enough food can be a problem for some people. In the last 7 days, which of these statements best describes the food eaten in your household? Select only one answer.",
+          "block": "food_security",
+          "order_index": 54,
+          "variable": "CURFOODSUF",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "FD2",
+          "type": "question",
+          "text": "Please indicate whether the next statement was often true, sometimes true, or never true in the last 7 days for the children living in your household who are under 18 years old. \"The children were not eating enough because we just couldn't afford enough food.\"",
+          "block": "food_security",
+          "order_index": 55,
+          "variable": "CHILDFOOD",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "FD3",
+          "type": "question",
+          "text": "Why did you not have enough to eat (or not what you wanted to eat)? Select all that apply.",
+          "block": "food_security",
+          "order_index": 56,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "FD4",
+          "type": "question",
+          "text": "During the last 7 days, did you or anyone in your household get free groceries from a food pantry, food bank, church, or other place that provides free food? Select only one answer.",
+          "block": "food_security",
+          "order_index": 57,
+          "variable": "FREEFOOD",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "FD6_rev",
+          "type": "question",
+          "text": "Do you or does anyone in your household currently receive benefits from\u2026 Select all that apply.",
+          "block": "food_security",
+          "order_index": 58,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.99
+          }
+        },
+        {
+          "id": "FD7_new",
+          "type": "question",
+          "text": "Does having to pay for the food children eat at school make it difficult for your household to pay for other expenses?",
+          "block": "food_security",
+          "order_index": 59,
+          "variable": "SCHLFDEXPNS",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "SPN4",
+          "type": "question",
+          "text": "In the last 2 months, how difficult has it been for your household to pay for usual household expenses, including but not limited to food, rent or mortgage, car payments, medical expenses, student loans, and so on? Select only one answer.",
+          "block": "financial_stress",
+          "order_index": 60,
+          "variable": "EXPNS_DIF",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "INFLATE1",
+          "type": "question",
+          "text": "In the area where you live and shop, do you think prices in general have changed in the last 2 months? Select only one answer.",
+          "block": "financial_stress",
+          "order_index": 61,
+          "variable": "PRICECHNG",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "INFLATE2",
+          "type": "question",
+          "text": "How stressful, if at all, has the increase in prices in the last 2 months been for you? Select only one answer.",
+          "block": "financial_stress",
+          "order_index": 62,
+          "variable": "PRICESTRESS",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "INFLATE4",
+          "type": "question",
+          "text": "In the area you live and shop, how concerned are you, if at all, that prices will increase in the next 6 months? Select only one answer.",
+          "block": "financial_stress",
+          "order_index": 63,
+          "variable": "PRICECONCRN",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HSE1",
+          "type": "question",
+          "text": "The next questions ask about housing. Is your house or apartment\u2026? Select only one answer.",
+          "block": "housing",
+          "order_index": 64,
+          "variable": "TENURE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HSE3",
+          "type": "question",
+          "text": "Is this household currently caught up on rent payments? Select only one answer.",
+          "block": "housing",
+          "order_index": 65,
+          "variable": "RENTCUR",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HSE4",
+          "type": "question",
+          "text": "Is this household currently caught up on mortgage payments? Select only one answer.",
+          "block": "housing",
+          "order_index": 66,
+          "variable": "MORTCUR",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HSE6",
+          "type": "question",
+          "text": "How many months behind is this household in paying your rent or mortgage?",
+          "block": "housing",
+          "order_index": 67,
+          "domain": {
+            "kind": "numeric",
+            "confidence": 0.2
+          }
+        },
+        {
+          "id": "HSE8",
+          "type": "question",
+          "text": "How likely is it that your household will have to leave this home or apartment within the next 2 months because of eviction? Select only one answer.",
+          "block": "housing",
+          "order_index": 68,
+          "variable": "EVICT",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "HSE9",
+          "type": "question",
+          "text": "How likely is it that your household will have to leave this home within the next 2 months because of foreclosure? Select only one answer.",
+          "block": "housing",
+          "order_index": 69
+        },
+        {
+          "id": "HSE10_rev",
+          "type": "question",
+          "text": "In the last 2 months, Did your household reduce or forego expenses for basic household necessities, such as medicine or food, in order to pay an energy bill?",
+          "block": "housing",
+          "order_index": 70
+        },
+        {
+          "id": "HSE11_rev",
+          "type": "question",
+          "text": "In the last 2 months, did your household keep your home at a temperature that you felt was unsafe or unhealthy?",
+          "block": "housing",
+          "order_index": 71
+        },
+        {
+          "id": "HSE12_rev",
+          "type": "question",
+          "text": "In the last 2 months, was your household unable to pay an energy bill or unable to pay the full bill amount?",
+          "block": "housing",
+          "order_index": 72
+        },
+        {
+          "id": "TRANS1",
+          "type": "question",
+          "text": "Currently, which of the following transportation options do you have access to: Select all that apply.",
+          "block": "transportation",
+          "order_index": 73
+        },
+        {
+          "id": "TRANS2",
+          "type": "question",
+          "text": "Which one of the following statements best describes your access to transportation in the last 4 weeks:",
+          "block": "transportation",
+          "order_index": 74
+        },
+        {
+          "id": "TRANS3",
+          "type": "question",
+          "text": "If you do not have enough transportation to meet your needs, which of the following reasons explain why (select all that apply):",
+          "block": "transportation",
+          "order_index": 75
+        },
+        {
+          "id": "Arts_Intro",
+          "type": "instruction",
+          "text": "Next, we have a few questions about participation with the arts and entertainment.",
+          "block": "arts_entertainment",
+          "order_index": 76
+        },
+        {
+          "id": "ART1",
+          "type": "question",
+          "text": "During the last 4 weeks, did you attend any live music, dance, or theater performances in person?",
+          "block": "arts_entertainment",
+          "order_index": 77
+        },
+        {
+          "id": "ART2",
+          "type": "question",
+          "text": "During the last 4 weeks, did you go in person to an art exhibit, such as paintings, sculpture, textiles, graphic design, or photography?",
+          "block": "arts_entertainment",
+          "order_index": 78
+        },
+        {
+          "id": "ART3",
+          "type": "question",
+          "text": "During the last 4 weeks, did you go to the movies?",
+          "block": "arts_entertainment",
+          "order_index": 79
+        },
+        {
+          "id": "ART4",
+          "type": "question",
+          "text": "During the last 4 weeks, did you create, practice, or perform art of your own? This may have included music, dance, or theater; creative writing; crafts or visual arts; digital art; or film or photography done for artistic purposes.",
+          "block": "arts_entertainment",
+          "order_index": 80,
+          "variable": "CREATEART",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ART5",
+          "type": "question",
+          "text": "Please indicate whether you strongly agree, agree, disagree, or strongly disagree with the next statement. \"There are plenty of opportunities for me to take part in arts and cultural activities in my neighborhood or community.\"",
+          "block": "arts_entertainment",
+          "order_index": 81,
+          "variable": "PARTINARTS",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "Trust1",
+          "type": "question",
+          "text": "The population count, the crime rate, and the unemployment rate are examples of statistics produced by the federal government. Personally, how much trust do you have in federal statistics in the United States? Would you say that you tend to trust federal statistics or you tend not to trust them?",
+          "block": "trust_government",
+          "order_index": 82,
+          "variable": "TRUST1",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "Trust2",
+          "type": "question",
+          "text": "Below is a list of institutions in American society. Please indicate how much confidence you, yourself, have in each one.",
+          "block": "trust_government",
+          "order_index": 83,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.98
+          }
+        },
+        {
+          "id": "Trust3",
+          "type": "question",
+          "text": "To what extent do you agree or disagree with the following statement? Policy makers need federal statistics to make good decisions about things like federal funding.",
+          "block": "trust_government",
+          "order_index": 84,
+          "variable": "FEDSTAT_TRUST",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX1",
+          "type": "question",
+          "text": "The next set of questions asks about natural disasters, such as hurricanes, floods and fires. Since January 2024 (last year), were you or was anyone currently living or staying with you affected by a natural disaster?",
+          "block": "natural_disasters",
+          "order_index": 85,
+          "variable": "NDX1_AFFECTED",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX2",
+          "type": "question",
+          "text": "What type of natural disaster? Select all that apply.",
+          "block": "natural_disasters",
+          "order_index": 86,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 0.96
+          }
+        },
+        {
+          "id": "NDX3",
+          "type": "question",
+          "text": "Since January 2024 (last year), were you or was anyone currently living or staying with you displaced from their home because of a natural disaster?",
+          "block": "natural_disasters",
+          "order_index": 87,
+          "variable": "NDX3",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX4",
+          "type": "question",
+          "text": "How many people currently living in your home were displaced because of a natural disaster?",
+          "block": "natural_disasters",
+          "order_index": 88,
+          "domain": {
+            "kind": "numeric",
+            "confidence": 0.2
+          }
+        },
+        {
+          "id": "NDX5",
+          "type": "question",
+          "text": "How many times have you (or they) been displaced in 2024 due to a natural disaster?",
+          "block": "natural_disasters",
+          "order_index": 89,
+          "variable": "NDX5_NUM_DISPLACED",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX6",
+          "type": "question",
+          "text": "How long were you (or they) displaced from the home?",
+          "block": "natural_disasters",
+          "order_index": 90,
+          "variable": "NDX6_DUR_DISPLACED",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX7",
+          "type": "question",
+          "text": "Would you say that you are still in transition or are you now permanently settled in a home?",
+          "block": "natural_disasters",
+          "order_index": 91,
+          "variable": "NDX7_SETTLE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX8",
+          "type": "question",
+          "text": "Did you or your family share living quarters with relatives or friends, people you did not know, or did you not share living quarters with others? Select all that apply.",
+          "block": "natural_disasters",
+          "order_index": 92,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX10",
+          "type": "question",
+          "text": "Altogether, how much damage to property or possessions did you (or they) experience as a result of natural disasters since January 2024 (last year)?",
+          "block": "natural_disasters",
+          "order_index": 93,
+          "variable": "NDX10_POSSESSIONS",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5intro",
+          "type": "instruction",
+          "text": "For how long after the event did you (or they) experience any of the following:",
+          "block": "natural_disasters",
+          "order_index": 94
+        },
+        {
+          "id": "ND5A",
+          "type": "question",
+          "text": "A shortage of food?",
+          "block": "natural_disasters",
+          "order_index": 95,
+          "variable": "ND5_FDSHRTAGE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5AA",
+          "type": "question",
+          "text": "Are you/they still experiencing a shortage of food?",
+          "block": "natural_disasters",
+          "order_index": 96,
+          "variable": "ND5_FDSHRTAGE_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5B",
+          "type": "question",
+          "text": "A shortage of drinkable water?",
+          "block": "natural_disasters",
+          "order_index": 97,
+          "variable": "ND5_WATER",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5BA",
+          "type": "question",
+          "text": "Are you/they still experiencing a shortage of water?",
+          "block": "natural_disasters",
+          "order_index": 98,
+          "variable": "ND5_WATER_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5C",
+          "type": "question",
+          "text": "Loss of electricity?",
+          "block": "natural_disasters",
+          "order_index": 99,
+          "variable": "ND5_ELECTRICITY",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5CA",
+          "type": "question",
+          "text": "Are you/they still experiencing a loss of electricity?",
+          "block": "natural_disasters",
+          "order_index": 100,
+          "variable": "ND5_ELECTRICITY_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5D",
+          "type": "question",
+          "text": "Unsanitary conditions, such as inadequate toilets?",
+          "block": "natural_disasters",
+          "order_index": 101,
+          "variable": "ND5_UNSANITARY",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5DA",
+          "type": "question",
+          "text": "Are you/they still experiencing unsanitary conditions?",
+          "block": "natural_disasters",
+          "order_index": 102,
+          "variable": "ND5_UNSANITARY_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5E",
+          "type": "question",
+          "text": "Feeling isolated, down, depressed, anxious, nervous or on edge?",
+          "block": "natural_disasters",
+          "order_index": 103,
+          "variable": "ND5_ISOLATE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5EA",
+          "type": "question",
+          "text": "Are you/they still experiencing feeling isolated, down, depressed, anxious nervous or on edge?",
+          "block": "natural_disasters",
+          "order_index": 104,
+          "variable": "ND5_ISOLATE_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5F",
+          "type": "question",
+          "text": "Fear of crime?",
+          "block": "natural_disasters",
+          "order_index": 105,
+          "variable": "ND5_CRIME",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5FA",
+          "type": "question",
+          "text": "Are you/they still experiencing fear of crime?",
+          "block": "natural_disasters",
+          "order_index": 106,
+          "variable": "ND5_CRIME_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5G",
+          "type": "question",
+          "text": "Offers that seemed like a scam?",
+          "block": "natural_disasters",
+          "order_index": 107,
+          "variable": "ND5_SCAM",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5GA",
+          "type": "question",
+          "text": "Are you/they still experiencing offers that seem like a scam?",
+          "block": "natural_disasters",
+          "order_index": 108,
+          "variable": "ND5_SCAM_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5H",
+          "type": "question",
+          "text": "Disruption to internet?",
+          "block": "natural_disasters",
+          "order_index": 109,
+          "variable": "ND5_INTERNET",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "ND5HA",
+          "type": "question",
+          "text": "Are you/they still experiencing disruption to internet?",
+          "block": "natural_disasters",
+          "order_index": 110,
+          "variable": "ND5_INTERNET_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11intro",
+          "type": "instruction",
+          "text": "For how long after the event did you (or they) experience disruption to any of the following:",
+          "block": "natural_disasters",
+          "order_index": 111
+        },
+        {
+          "id": "NDX11A",
+          "type": "question",
+          "text": "Work?",
+          "block": "natural_disasters",
+          "order_index": 112,
+          "variable": "NDX11_WORK",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11AA",
+          "type": "question",
+          "text": "Are you/they still experiencing disruption to work?",
+          "block": "natural_disasters",
+          "order_index": 113,
+          "variable": "NDX11_WORK_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11B",
+          "type": "question",
+          "text": "School/childcare?",
+          "block": "natural_disasters",
+          "order_index": 114,
+          "variable": "NDX11_SCHOOL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11BA",
+          "type": "question",
+          "text": "Are you/they still experiencing disruption to school/childcare?",
+          "block": "natural_disasters",
+          "order_index": 115,
+          "variable": "NDX11_SCHOOL_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11C",
+          "type": "question",
+          "text": "Medical services?",
+          "block": "natural_disasters",
+          "order_index": 116,
+          "variable": "NDX11_MEDICAL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX11CA",
+          "type": "question",
+          "text": "Are you/they still experiencing disruption to medical services?",
+          "block": "natural_disasters",
+          "order_index": 117,
+          "variable": "NDX11_MEDICAL_STILL",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX13",
+          "type": "question",
+          "text": "Have you received any form of temporary housing assistance since the natural disaster?",
+          "block": "natural_disasters",
+          "order_index": 118,
+          "variable": "NDX11_HOUSING",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX14",
+          "type": "question",
+          "text": "What is your most immediate need right now? Select all that apply.",
+          "block": "natural_disasters",
+          "order_index": 119,
+          "domain": {
+            "kind": "multiple_choice",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "NDX16",
+          "type": "question",
+          "text": "Did you (or they) have household insurance at the time of the disaster that covered the damage/loss related to the disaster?",
+          "block": "natural_disasters",
+          "order_index": 120,
+          "variable": "NDX16_INSURANCE",
+          "domain": {
+            "kind": "categorical",
+            "confidence": 1.0
+          }
+        },
+        {
+          "id": "POC_display",
+          "type": "instruction",
+          "text": "Please review the contact information we have for you and indicate whether the information is correct or needs to be updated.",
+          "block": "contact_information",
+          "order_index": 121
+        },
+        {
+          "id": "Q3",
+          "type": "question",
+          "text": "Our records have your phone number as ${e://Field/BestPhone}. Is this correct?",
+          "block": "contact_information",
+          "order_index": 122,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q6",
+          "type": "question",
+          "text": "What is a good phone number to reach you?",
+          "block": "contact_information",
+          "order_index": 123,
+          "domain": {
+            "kind": "text",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q7",
+          "type": "question",
+          "text": "Is this number a cell phone or land line?",
+          "block": "contact_information",
+          "order_index": 124,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q8",
+          "type": "question",
+          "text": "We send survey invitations via text message. Message and data rates may apply, depending on your mobile phone service plan. Message frequency varies. You can opt out of these messages at any time by replying STOP or reply HELP for more assistance. Would you like us to contact you by text message?",
+          "block": "contact_information",
+          "order_index": 125,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q9",
+          "type": "question",
+          "text": "Our records have your email address as ${e://Field/BestEmail}. Is this correct?",
+          "block": "contact_information",
+          "order_index": 126,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q10",
+          "type": "question",
+          "text": "What is the best email address for us to reach you?",
+          "block": "contact_information",
+          "order_index": 127,
+          "domain": {
+            "kind": "text",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q11_a",
+          "type": "question",
+          "text": "Our records have the following address as your home address where we will mail incentives for taking surveys. Is this correct? ${e://Field/BestAddress1} ${e://Field/BestAddress2} ${e://Field/BestCity}, ${e://Field/BestState} ${e://Field/BestZIP}",
+          "block": "contact_information",
+          "order_index": 128,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q_11b",
+          "type": "question",
+          "text": "Our records have the following address as your home address where we will mail incentives for taking surveys. Is this correct? ${e://Field/BestAddress1} ${e://Field/BestCity}, ${e://Field/BestState} ${e://Field/BestZIP}",
+          "block": "contact_information",
+          "order_index": 129,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "Q12",
+          "type": "question",
+          "text": "Please enter your home address.",
+          "block": "contact_information",
+          "order_index": 130,
+          "domain": {
+            "kind": "text",
+            "confidence": 0.05
+          }
+        },
+        {
+          "id": "RECONTACT",
+          "type": "question",
+          "text": "We may recontact this household in the future to update information. We would like to use some of the information you have provided today to make that interview shorter and more efficient. When we speak to you or to someone else you are living with, is it OK if we use some of your answers as a starting point?",
+          "block": "contact_information",
+          "order_index": 131,
+          "domain": {
+            "kind": "categorical",
+            "confidence": 0.1
+          }
+        },
+        {
+          "id": "SURVEY_COMPLETE",
+          "type": "terminal",
+          "text": "That concludes the survey. Please click on the \"Submit\" button when you are finished. Thank you for participating in the Household Trends and Outlook Pulse Survey.",
+          "block": "termination",
+          "order_index": 132
+        },
+        {
+          "id": "FINAL_TERMINATION",
+          "type": "terminal",
+          "text": "Survey session ended.",
+          "block": "termination",
+          "order_index": 133
+        }
+      ],
+      "edges": [
+        {
+          "id": "E_00000000",
+          "source": "INTRO_INCENTIVE",
+          "target": "Language",
+          "predicate": "P_INTRO_INCENTIVE_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INTRO_INCENTIVE = '*'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000001",
+          "source": "Language",
+          "target": "Continue",
+          "predicate": "P_LANGUAGE_1_OR_2",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Language = '1|2'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000002",
+          "source": "Continue",
+          "target": "PRA",
+          "predicate": "P_CONTINUE_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Continue = '*'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000003",
+          "source": "PRA",
+          "target": "Q1",
+          "predicate": "P_PRA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If PRA = '*'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000004",
+          "source": "Q1",
+          "target": "ADDRESS_CONFIRM",
+          "predicate": "P_Q1_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q1 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000005",
+          "source": "Q1",
+          "target": "NAME_CORR",
+          "predicate": "P_Q1_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q1 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000006",
+          "source": "Q1",
+          "target": "GET_NAME",
+          "predicate": "P_Q1_3",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q1 = '3'",
+            "original_confidence": 0.95,
+            "human_validated": true,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000007",
+          "source": "NAME_CORR",
+          "target": "ADDRESS_CONFIRM",
+          "predicate": "P_NAME_CORR_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NAME_CORR = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000008",
+          "source": "ADDRESS_CONFIRM",
+          "target": "LANG",
+          "predicate": "P_ADDRESS_CONFIRM_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ADDRESS_CONFIRM = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000009",
+          "source": "ADDRESS_CONFIRM",
+          "target": "R2a",
+          "predicate": "P_ADDRESS_CONFIRM_2",
+          "kind": "terminate",
+          "subkind": "terminal_branch",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ADDRESS_CONFIRM = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000010",
+          "source": "GET_NAME",
+          "target": "ADDRESS_CONFIRM",
+          "predicate": "P_GET_NAME_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If GET_NAME = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000011",
+          "source": "GET_NAME",
+          "target": "END",
+          "predicate": "P_GET_NAME_2",
+          "kind": "terminate",
+          "subkind": "terminal_branch",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If GET_NAME = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000012",
+          "source": "LANG",
+          "target": "LANG1_R",
+          "predicate": "P_LANG_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000013",
+          "source": "LANG",
+          "target": "OECD",
+          "predicate": "P_LANG_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG = '2'",
+            "original_confidence": 0.8,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000014",
+          "source": "LANG",
+          "target": "HOWWELL_R",
+          "predicate": "P_LANG_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG = '2'",
+            "original_confidence": 0.8,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000015",
+          "source": "LANG",
+          "target": "LANG1_R",
+          "predicate": "P_LANG_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG = '*'",
+            "original_confidence": 0.5,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000016",
+          "source": "LANG1_R",
+          "target": "OECD",
+          "predicate": "P_LANG1_R_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG1_R = '2'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000017",
+          "source": "LANG1_R",
+          "target": "HOWWELL_R",
+          "predicate": "P_LANG1_R_*",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If LANG1_R = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000018",
+          "source": "HOWWELL_R",
+          "target": "OECD",
+          "predicate": "P_HOWWELL_R_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HOWWELL_R = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000019",
+          "source": "OECD",
+          "target": "D11",
+          "predicate": "P_OECD_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If OECD = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000020",
+          "source": "D11",
+          "target": "EMP7",
+          "predicate": "P_D11_0",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If D11 = '0'",
+            "original_confidence": 0.7,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000021",
+          "source": "D11",
+          "target": "D12",
+          "predicate": "P_D11_>0",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If D11 = '>0'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000022",
+          "source": "D12",
+          "target": "D13",
+          "predicate": "P_D12_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If D12 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000023",
+          "source": "D13",
+          "target": "EMP7",
+          "predicate": "P_D13_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If D13 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000024",
+          "source": "EMP7",
+          "target": "EMP8",
+          "predicate": "P_EMP7_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP7 = '1'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000025",
+          "source": "EMP7",
+          "target": "INF2",
+          "predicate": "P_EMP7_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP7 = '2'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000026",
+          "source": "EMP7",
+          "target": "INF2",
+          "predicate": "P_EMP7_3",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP7 = '3'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000027",
+          "source": "EMP7",
+          "target": "EMP_Intro",
+          "predicate": "P_EMP7_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP7 = '2'",
+            "original_confidence": 0.8,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000028",
+          "source": "EMP7",
+          "target": "EMP_Intro",
+          "predicate": "P_EMP7_3",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP7 = '3'",
+            "original_confidence": 0.8,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000029",
+          "source": "EMP8",
+          "target": "INF2",
+          "predicate": "P_EMP8_*",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP8 = '*'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000030",
+          "source": "EMP8",
+          "target": "EMP_Intro",
+          "predicate": "P_EMP8_*",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP8 = '*'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000031",
+          "source": "INF2",
+          "target": "INF5",
+          "predicate": "P_INF2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF2 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000032",
+          "source": "INF5",
+          "target": "INF6",
+          "predicate": "P_INF5_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF5 = '2'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000033",
+          "source": "INF5",
+          "target": "INF6",
+          "predicate": "P_INF5_3",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF5 = '3'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000034",
+          "source": "INF5",
+          "target": "EMP_Intro",
+          "predicate": "P_INF5_1",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF5 = '1'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000035",
+          "source": "INF5",
+          "target": "EMP_Intro",
+          "predicate": "P_INF5_4",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF5 = '4'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000036",
+          "source": "INF6",
+          "target": "EMP_Intro",
+          "predicate": "P_INF6_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INF6 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000037",
+          "source": "EMP_Intro",
+          "target": "EMP1",
+          "predicate": "P_EMP_INTRO_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP_Intro = 'None'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000038",
+          "source": "EMP1",
+          "target": "EMP2",
+          "predicate": "P_EMP1_1",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP1 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000039",
+          "source": "EMP1",
+          "target": "EMP2",
+          "predicate": "P_EMP1_2",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP1 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000040",
+          "source": "EMP2",
+          "target": "EMP3",
+          "predicate": "P_EMP2_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP2 = '1'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000041",
+          "source": "EMP2",
+          "target": "EMP4",
+          "predicate": "P_EMP2_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP2 = '2'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000042",
+          "source": "EMP3",
+          "target": "SPN5_DAYSTW_2",
+          "predicate": "P_EMP3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP3 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000043",
+          "source": "EMP4",
+          "target": "display_HLTH",
+          "predicate": "P_EMP4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If EMP4 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000044",
+          "source": "SPN5_DAYSTW_2",
+          "target": "display_HLTH",
+          "predicate": "P_SPN5_DAYSTW_2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SPN5_DAYSTW_2 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000045",
+          "source": "display_HLTH",
+          "target": "DIS1",
+          "predicate": "P_DISPLAY_HLTH_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If display_HLTH = 'None'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000046",
+          "source": "DIS1",
+          "target": "DIS2",
+          "predicate": "P_DIS1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS1 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000047",
+          "source": "DIS2",
+          "target": "DIS4",
+          "predicate": "P_DIS2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS2 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000048",
+          "source": "DIS4",
+          "target": "DIS3",
+          "predicate": "P_DIS4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS4 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000049",
+          "source": "DIS3",
+          "target": "DIS5",
+          "predicate": "P_DIS3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS3 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000050",
+          "source": "DIS5",
+          "target": "DIS6",
+          "predicate": "P_DIS5_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS5 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000051",
+          "source": "DIS6",
+          "target": "HLTH_intro",
+          "predicate": "P_DIS6_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If DIS6 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000052",
+          "source": "HLTH_intro",
+          "target": "HLTH1",
+          "predicate": "P_HLTH_INTRO_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH_intro = 'None'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000053",
+          "source": "HLTH1",
+          "target": "HLTH2",
+          "predicate": "P_HLTH1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH1 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000054",
+          "source": "HLTH2",
+          "target": "HLTH3",
+          "predicate": "P_HLTH2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH2 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000055",
+          "source": "HLTH3",
+          "target": "HLTH4",
+          "predicate": "P_HLTH3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH3 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000056",
+          "source": "HLTH4",
+          "target": "MH1",
+          "predicate": "P_HLTH4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH4 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000057",
+          "source": "MH1",
+          "target": "MH2",
+          "predicate": "P_MH1_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH1 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000058",
+          "source": "MH1",
+          "target": "MH2",
+          "predicate": "P_MH1_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH1 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000059",
+          "source": "MH1",
+          "target": "HLTH8",
+          "predicate": "P_MH1_3",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH1 = '3'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000060",
+          "source": "MH1",
+          "target": "HLTH8",
+          "predicate": "P_MH1_NA",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH1 = 'NA'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000061",
+          "source": "MH2",
+          "target": "MH3",
+          "predicate": "P_MH2_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH2 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000062",
+          "source": "MH2",
+          "target": "MH3",
+          "predicate": "P_MH2_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH2 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000063",
+          "source": "MH2",
+          "target": "MH4",
+          "predicate": "P_MH2_3",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH2 = '3'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000064",
+          "source": "MH3",
+          "target": "MH4",
+          "predicate": "P_MH3_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH3 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000065",
+          "source": "MH4",
+          "target": "HLTH8",
+          "predicate": "P_MH4_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If MH4 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000066",
+          "source": "HLTH8",
+          "target": "SOC1_first",
+          "predicate": "P_HLTH8_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HLTH8 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000067",
+          "source": "SOC1_first",
+          "target": "SOC2_first",
+          "predicate": "P_SOC1_FIRST_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SOC1_first = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000068",
+          "source": "SOC2_first",
+          "target": "SOCnew1",
+          "predicate": "P_SOC2_FIRST_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SOC2_first = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000069",
+          "source": "SOCnew1",
+          "target": "SOCnew2",
+          "predicate": "P_SOCNEW1_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SOCnew1 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000070",
+          "source": "SOCnew2",
+          "target": "FALLVAC",
+          "predicate": "P_SOCNEW2_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SOCnew2 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000071",
+          "source": "FALLVAC",
+          "target": "RSVVAC",
+          "predicate": "P_FALLVAC_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FALLVAC = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000072",
+          "source": "RSVVAC",
+          "target": "SHORTAGE1",
+          "predicate": "P_RSVVAC_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If RSVVAC = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000073",
+          "source": "SHORTAGE1",
+          "target": "SHORTAGE2A",
+          "predicate": "P_SHORTAGE1_ANY(1,2,3,4)",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SHORTAGE1 = 'any(1,2,3,4)'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000074",
+          "source": "SHORTAGE1",
+          "target": "FD1",
+          "predicate": "P_SHORTAGE1_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SHORTAGE1 = '5'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000075",
+          "source": "SHORTAGE1",
+          "target": "FD1",
+          "predicate": "P_SHORTAGE1_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SHORTAGE1 = 'none'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000076",
+          "source": "SHORTAGE2A",
+          "target": "FD1",
+          "predicate": "P_SHORTAGE2A_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SHORTAGE2A = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000077",
+          "source": "FD1",
+          "target": "FD2",
+          "predicate": "P_FD1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD1 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000078",
+          "source": "FD2",
+          "target": "FD3",
+          "predicate": "P_FD2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD2 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000079",
+          "source": "FD3",
+          "target": "FD4",
+          "predicate": "P_FD3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD3 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000080",
+          "source": "FD4",
+          "target": "FD6_rev",
+          "predicate": "P_FD4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD4 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000081",
+          "source": "FD6_rev",
+          "target": "FD7_new",
+          "predicate": "P_FD6_REV_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD6_rev = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000082",
+          "source": "FD7_new",
+          "target": "SPN4",
+          "predicate": "P_FD7_NEW_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FD7_new = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000083",
+          "source": "SPN4",
+          "target": "INFLATE1",
+          "predicate": "P_SPN4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SPN4 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000084",
+          "source": "INFLATE1",
+          "target": "INFLATE2",
+          "predicate": "P_INFLATE1_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INFLATE1 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000085",
+          "source": "INFLATE1",
+          "target": "INFLATE4",
+          "predicate": "P_INFLATE1_2_OR_3_OR_4",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INFLATE1 = '2|3|4'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000086",
+          "source": "INFLATE2",
+          "target": "INFLATE4",
+          "predicate": "P_INFLATE2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INFLATE2 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000087",
+          "source": "INFLATE4",
+          "target": "HSE1",
+          "predicate": "P_INFLATE4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If INFLATE4 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000088",
+          "source": "HSE1",
+          "target": "HSE3",
+          "predicate": "P_HSE1_3",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE1 = '3'",
+            "original_confidence": 0.97,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000089",
+          "source": "HSE1",
+          "target": "HSE4",
+          "predicate": "P_HSE1_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE1 = '2'",
+            "original_confidence": 0.97,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000090",
+          "source": "HSE1",
+          "target": "HSE10_rev",
+          "predicate": "P_HSE1_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE1 = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000091",
+          "source": "HSE1",
+          "target": "HSE10_rev",
+          "predicate": "P_HSE1_4",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE1 = '4'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000092",
+          "source": "HSE3",
+          "target": "HSE8",
+          "predicate": "P_HSE3_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE3 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000093",
+          "source": "HSE3",
+          "target": "HSE6",
+          "predicate": "P_HSE3_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE3 = '2'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000094",
+          "source": "HSE4",
+          "target": "HSE9",
+          "predicate": "P_HSE4_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE4 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000095",
+          "source": "HSE4",
+          "target": "HSE6",
+          "predicate": "P_HSE4_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE4 = '2'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000096",
+          "source": "HSE6",
+          "target": "HSE8",
+          "predicate": "P_HSE6_*",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE6 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000097",
+          "source": "HSE6",
+          "target": "HSE9",
+          "predicate": "P_HSE6_*",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE6 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000098",
+          "source": "HSE8",
+          "target": "HSE10_rev",
+          "predicate": "P_HSE8_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE8 = '*'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000099",
+          "source": "HSE9",
+          "target": "HSE10_rev",
+          "predicate": "P_HSE9_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE9 = '*'",
+            "original_confidence": 0.97,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000100",
+          "source": "HSE10_rev",
+          "target": "HSE11_rev",
+          "predicate": "P_HSE10_REV_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE10_rev = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000101",
+          "source": "HSE11_rev",
+          "target": "HSE12_rev",
+          "predicate": "P_HSE11_REV_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE11_rev = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000102",
+          "source": "HSE12_rev",
+          "target": "TRANS1",
+          "predicate": "P_HSE12_REV_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If HSE12_rev = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000103",
+          "source": "TRANS1",
+          "target": "TRANS2",
+          "predicate": "P_TRANS1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If TRANS1 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000104",
+          "source": "TRANS2",
+          "target": "TRANS3",
+          "predicate": "P_TRANS2_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If TRANS2 = '3|4|5'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000105",
+          "source": "TRANS2",
+          "target": "Arts_Intro",
+          "predicate": "P_TRANS2_1_OR_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If TRANS2 = '1|2'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000106",
+          "source": "TRANS3",
+          "target": "Arts_Intro",
+          "predicate": "P_TRANS3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If TRANS3 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000107",
+          "source": "Arts_Intro",
+          "target": "ART1",
+          "predicate": "P_ARTS_INTRO_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Arts_Intro = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000108",
+          "source": "ART1",
+          "target": "ART2",
+          "predicate": "P_ART1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ART1 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000109",
+          "source": "ART2",
+          "target": "ART3",
+          "predicate": "P_ART2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ART2 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000110",
+          "source": "ART3",
+          "target": "ART4",
+          "predicate": "P_ART3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ART3 = '*'",
+            "original_confidence": 0.99,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000111",
+          "source": "ART4",
+          "target": "ART5",
+          "predicate": "P_ART4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ART4 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000112",
+          "source": "ART5",
+          "target": "Trust1",
+          "predicate": "P_ART5_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ART5 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000113",
+          "source": "Trust1",
+          "target": "Trust2",
+          "predicate": "P_TRUST1_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Trust1 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000114",
+          "source": "Trust2",
+          "target": "Trust3",
+          "predicate": "P_TRUST2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Trust2 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000115",
+          "source": "Trust3",
+          "target": "NDX1",
+          "predicate": "P_TRUST3_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Trust3 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000116",
+          "source": "NDX1",
+          "target": "NDX2",
+          "predicate": "P_NDX1_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX1 = '1'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000117",
+          "source": "NDX1",
+          "target": "Q3",
+          "predicate": "P_NDX1_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX1 = '2'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000118",
+          "source": "NDX2",
+          "target": "NDX3",
+          "predicate": "P_NDX2_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX2 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000119",
+          "source": "NDX3",
+          "target": "NDX4",
+          "predicate": "P_NDX3_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX3 = '1'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000120",
+          "source": "NDX3",
+          "target": "NDX10",
+          "predicate": "P_NDX3_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX3 = '2'",
+            "original_confidence": 0.8,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000121",
+          "source": "NDX4",
+          "target": "NDX5",
+          "predicate": "P_NDX4_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX4 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000122",
+          "source": "NDX5",
+          "target": "NDX6",
+          "predicate": "P_NDX5_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX5 = '*'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000123",
+          "source": "NDX6",
+          "target": "NDX7",
+          "predicate": "P_NDX6_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX6 = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000124",
+          "source": "NDX7",
+          "target": "NDX8",
+          "predicate": "P_NDX7_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX7 = '*'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000125",
+          "source": "NDX8",
+          "target": "NDX10",
+          "predicate": "P_NDX8_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX8 = '*'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000126",
+          "source": "NDX10",
+          "target": "ND5intro",
+          "predicate": "P_NDX10_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX10 = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000127",
+          "source": "ND5intro",
+          "target": "ND5A",
+          "predicate": "P_ND5INTRO_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5intro = 'None'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000128",
+          "source": "ND5A",
+          "target": "ND5B",
+          "predicate": "P_ND5A_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5A = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000129",
+          "source": "ND5A",
+          "target": "ND5AA",
+          "predicate": "P_ND5A_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5A = '2|3|4|5'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000130",
+          "source": "ND5AA",
+          "target": "ND5B",
+          "predicate": "P_ND5AA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5AA = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000131",
+          "source": "ND5B",
+          "target": "ND5C",
+          "predicate": "P_ND5B_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5B = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000132",
+          "source": "ND5B",
+          "target": "ND5BA",
+          "predicate": "P_ND5B_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5B = '2|3|4|5'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000133",
+          "source": "ND5BA",
+          "target": "ND5C",
+          "predicate": "P_ND5BA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5BA = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000134",
+          "source": "ND5C",
+          "target": "ND5D",
+          "predicate": "P_ND5C_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5C = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000135",
+          "source": "ND5C",
+          "target": "ND5CA",
+          "predicate": "P_ND5C_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5C = '2|3|4|5'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000136",
+          "source": "ND5CA",
+          "target": "ND5D",
+          "predicate": "P_ND5CA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5CA = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000137",
+          "source": "ND5D",
+          "target": "ND5E",
+          "predicate": "P_ND5D_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5D = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000138",
+          "source": "ND5D",
+          "target": "ND5DA",
+          "predicate": "P_ND5D_2-5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5D = '2-5'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000139",
+          "source": "ND5DA",
+          "target": "ND5E",
+          "predicate": "P_ND5DA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5DA = '*'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000140",
+          "source": "ND5E",
+          "target": "ND5F",
+          "predicate": "P_ND5E_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5E = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000141",
+          "source": "ND5E",
+          "target": "ND5EA",
+          "predicate": "P_ND5E_2-5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5E = '2-5'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000142",
+          "source": "ND5EA",
+          "target": "ND5F",
+          "predicate": "P_ND5EA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5EA = '*'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000143",
+          "source": "ND5F",
+          "target": "ND5G",
+          "predicate": "P_ND5F_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5F = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000144",
+          "source": "ND5F",
+          "target": "ND5FA",
+          "predicate": "P_ND5F_2-5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5F = '2-5'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000145",
+          "source": "ND5FA",
+          "target": "ND5G",
+          "predicate": "P_ND5FA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5FA = '*'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000146",
+          "source": "ND5G",
+          "target": "ND5H",
+          "predicate": "P_ND5G_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5G = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000147",
+          "source": "ND5G",
+          "target": "ND5GA",
+          "predicate": "P_ND5G_2-5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5G = '2-5'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000148",
+          "source": "ND5GA",
+          "target": "ND5H",
+          "predicate": "P_ND5GA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5GA = '*'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000149",
+          "source": "ND5H",
+          "target": "NDX11intro",
+          "predicate": "P_ND5H_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5H = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000150",
+          "source": "ND5H",
+          "target": "ND5HA",
+          "predicate": "P_ND5H_2-5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5H = '2-5'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000151",
+          "source": "ND5HA",
+          "target": "NDX11intro",
+          "predicate": "P_ND5HA_*",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If ND5HA = '*'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000152",
+          "source": "NDX11intro",
+          "target": "NDX11A",
+          "predicate": "P_NDX11INTRO_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11intro = 'None'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000153",
+          "source": "NDX11A",
+          "target": "NDX11B",
+          "predicate": "P_NDX11A_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11A = '1'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000154",
+          "source": "NDX11A",
+          "target": "NDX11AA",
+          "predicate": "P_NDX11A_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11A = '2|3|4|5'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000155",
+          "source": "NDX11AA",
+          "target": "NDX11B",
+          "predicate": "P_NDX11AA_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11AA = 'ANY'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000156",
+          "source": "NDX11B",
+          "target": "NDX11C",
+          "predicate": "P_NDX11B_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11B = '1'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000157",
+          "source": "NDX11B",
+          "target": "NDX11BA",
+          "predicate": "P_NDX11B_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11B = '2|3|4|5'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000158",
+          "source": "NDX11BA",
+          "target": "NDX11C",
+          "predicate": "P_NDX11BA_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11BA = 'ANY'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000159",
+          "source": "NDX11C",
+          "target": "NDX13",
+          "predicate": "P_NDX11C_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11C = '1'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000160",
+          "source": "NDX11C",
+          "target": "NDX11CA",
+          "predicate": "P_NDX11C_2_OR_3_OR_4_OR_5",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11C = '2|3|4|5'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000161",
+          "source": "NDX11CA",
+          "target": "NDX13",
+          "predicate": "P_NDX11CA_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX11CA = 'ANY'",
+            "original_confidence": 0.96,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000162",
+          "source": "NDX13",
+          "target": "NDX14",
+          "predicate": "P_NDX13_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX13 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000163",
+          "source": "NDX14",
+          "target": "NDX16",
+          "predicate": "P_NDX14_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX14 = 'ANY'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000164",
+          "source": "NDX16",
+          "target": "POC_display",
+          "predicate": "P_NDX16_ANY",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If NDX16 = 'ANY'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000165",
+          "source": "POC_display",
+          "target": "Q3",
+          "predicate": "P_POC_DISPLAY_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If POC_display = 'None'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000166",
+          "source": "Q3",
+          "target": "Q7",
+          "predicate": "P_Q3_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q3 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000167",
+          "source": "Q3",
+          "target": "Q6",
+          "predicate": "P_Q3_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q3 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000168",
+          "source": "Q6",
+          "target": "Q7",
+          "predicate": "P_Q6_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q6 = 'None'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000169",
+          "source": "Q7",
+          "target": "Q8",
+          "predicate": "P_Q7_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q7 = '1'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000170",
+          "source": "Q7",
+          "target": "Q9",
+          "predicate": "P_Q7_2,3",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q7 = '2,3'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000171",
+          "source": "Q8",
+          "target": "Q9",
+          "predicate": "P_Q8_1,2",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q8 = '1,2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000172",
+          "source": "Q9",
+          "target": "Q11_a",
+          "predicate": "P_Q9_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q9 = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000173",
+          "source": "Q9",
+          "target": "Q_11b",
+          "predicate": "P_Q9_1",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q9 = '1'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000174",
+          "source": "Q9",
+          "target": "Q10",
+          "predicate": "P_Q9_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q9 = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000175",
+          "source": "Q10",
+          "target": "Q11_a",
+          "predicate": "P_Q10_NONE",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q10 = 'None'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000176",
+          "source": "Q10",
+          "target": "Q_11b",
+          "predicate": "P_Q10_NONE",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q10 = 'None'",
+            "original_confidence": 0.9,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000177",
+          "source": "Q11_a",
+          "target": "NEXT",
+          "predicate": "P_Q11_A_1",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q11_a = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000178",
+          "source": "Q11_a",
+          "target": "Q12",
+          "predicate": "P_Q11_A_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q11_a = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000179",
+          "source": "Q_11b",
+          "target": "NEXT",
+          "predicate": "P_Q_11B_1",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q_11b = '1'",
+            "original_confidence": 0.92,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000180",
+          "source": "Q_11b",
+          "target": "Q12",
+          "predicate": "P_Q_11B_2",
+          "kind": "branch",
+          "subkind": "skip",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q_11b = '2'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000181",
+          "source": "Q12",
+          "target": "NEXT",
+          "predicate": "P_Q12_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If Q12 = 'None'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000182",
+          "source": "RECONTACT",
+          "target": "SURVEY_COMPLETE",
+          "predicate": "P_RECONTACT_*",
+          "kind": "terminate",
+          "subkind": "terminal_branch",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If RECONTACT = '*'",
+            "original_confidence": 0.95,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000183",
+          "source": "SURVEY_COMPLETE",
+          "target": null,
+          "predicate": "P_SURVEY_COMPLETE_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If SURVEY_COMPLETE = 'None'",
+            "original_confidence": 0.98,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        },
+        {
+          "id": "E_00000184",
+          "source": "FINAL_TERMINATION",
+          "target": null,
+          "predicate": "P_FINAL_TERMINATION_NONE",
+          "kind": "sequence",
+          "subkind": "fallthrough",
+          "priority": 0,
+          "metadata": {
+            "condition_text": "If FINAL_TERMINATION = 'None'",
+            "original_confidence": 0.85,
+            "human_validated": false,
+            "extraction_method": "human_validated"
+          }
+        }
+      ]
+    },
+    "predicates": {
+      "P_INTRO_INCENTIVE_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": true
+      },
+      "P_LANGUAGE_1_OR_2": {
+        "ast": [
+          "in",
+          "Language",
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {1,2}",
+        "depends_on": [
+          "Language"
+        ],
+        "human_validated": true
+      },
+      "P_CONTINUE_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": true
+      },
+      "P_PRA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": true
+      },
+      "P_Q1_1": {
+        "ast": [
+          "==",
+          "Q1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "Q1"
+        ],
+        "human_validated": true
+      },
+      "P_Q1_2": {
+        "ast": [
+          "==",
+          "Q1",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "Q1"
+        ],
+        "human_validated": true
+      },
+      "P_Q1_3": {
+        "ast": [
+          "==",
+          "Q1",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 3",
+        "depends_on": [
+          "Q1"
+        ],
+        "human_validated": true
+      },
+      "P_NAME_CORR_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ADDRESS_CONFIRM_1": {
+        "ast": [
+          "==",
+          "ADDRESS_CONFIRM",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ADDRESS_CONFIRM"
+        ],
+        "human_validated": false
+      },
+      "P_ADDRESS_CONFIRM_2": {
+        "ast": [
+          "==",
+          "ADDRESS_CONFIRM",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "ADDRESS_CONFIRM"
+        ],
+        "human_validated": false
+      },
+      "P_GET_NAME_1": {
+        "ast": [
+          "==",
+          "GET_NAME",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "GET_NAME"
+        ],
+        "human_validated": false
+      },
+      "P_GET_NAME_2": {
+        "ast": [
+          "==",
+          "GET_NAME",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "GET_NAME"
+        ],
+        "human_validated": false
+      },
+      "P_LANG_1": {
+        "ast": [
+          "==",
+          "LANG",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "LANG"
+        ],
+        "human_validated": false
+      },
+      "P_LANG_2": {
+        "ast": [
+          "==",
+          "LANG",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2 AND ${e://Field/LANGfill} != 'English'",
+        "depends_on": [
+          "LANG"
+        ],
+        "human_validated": false
+      },
+      "P_LANG_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "ELSE",
+        "depends_on": [
+          "LANG"
+        ],
+        "human_validated": false
+      },
+      "P_LANG1_R_2": {
+        "ast": [
+          "==",
+          "LANG1_R",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "LANG1_R"
+        ],
+        "human_validated": false
+      },
+      "P_LANG1_R_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "RESPONSE != 2",
+        "depends_on": [
+          "LANG1_R"
+        ],
+        "human_validated": false
+      },
+      "P_HOWWELL_R_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_OECD_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_D11_0": {
+        "ast": [
+          "==",
+          "D11",
+          "0"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 0",
+        "depends_on": [
+          "D11"
+        ],
+        "human_validated": false
+      },
+      "P_D11_>0": {
+        "ast": [
+          "==",
+          "D11",
+          ">0"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE > 0",
+        "depends_on": [
+          "D11"
+        ],
+        "human_validated": false
+      },
+      "P_D12_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_D13_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_EMP7_1": {
+        "ast": [
+          "==",
+          "EMP7",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "EMP7"
+        ],
+        "human_validated": false
+      },
+      "P_EMP7_2": {
+        "ast": [
+          "==",
+          "EMP7",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN (2,3) AND (D12 does NOT include option 1)",
+        "depends_on": [
+          "EMP7"
+        ],
+        "human_validated": false
+      },
+      "P_EMP7_3": {
+        "ast": [
+          "==",
+          "EMP7",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN (2,3) AND (D12 does NOT include option 1)",
+        "depends_on": [
+          "EMP7"
+        ],
+        "human_validated": false
+      },
+      "P_EMP8_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "D12 does NOT include option 1",
+        "depends_on": [
+          "EMP8"
+        ],
+        "human_validated": false
+      },
+      "P_INF2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_INF5_2": {
+        "ast": [
+          "==",
+          "INF5",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "INF5 IN [2,3]",
+        "depends_on": [
+          "INF5"
+        ],
+        "human_validated": false
+      },
+      "P_INF5_3": {
+        "ast": [
+          "==",
+          "INF5",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "INF5 IN [2,3]",
+        "depends_on": [
+          "INF5"
+        ],
+        "human_validated": false
+      },
+      "P_INF5_1": {
+        "ast": [
+          "==",
+          "INF5",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "INF5 == 1",
+        "depends_on": [
+          "INF5"
+        ],
+        "human_validated": false
+      },
+      "P_INF5_4": {
+        "ast": [
+          "==",
+          "INF5",
+          "4"
+        ],
+        "complexity": "moderate",
+        "text": "INF5 == 4",
+        "depends_on": [
+          "INF5"
+        ],
+        "human_validated": false
+      },
+      "P_INF6_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "INF6"
+        ],
+        "human_validated": false
+      },
+      "P_EMP_INTRO_NONE": {
+        "ast": [
+          "==",
+          "EMP_Intro",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "EMP_Intro"
+        ],
+        "human_validated": false
+      },
+      "P_EMP1_1": {
+        "ast": [
+          "==",
+          "EMP1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "EMP1"
+        ],
+        "human_validated": false
+      },
+      "P_EMP1_2": {
+        "ast": [
+          "==",
+          "EMP1",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "EMP1"
+        ],
+        "human_validated": false
+      },
+      "P_EMP2_1": {
+        "ast": [
+          "==",
+          "EMP2",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "EMP2 == 1",
+        "depends_on": [
+          "EMP2"
+        ],
+        "human_validated": false
+      },
+      "P_EMP2_2": {
+        "ast": [
+          "==",
+          "EMP2",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "EMP2 == 2",
+        "depends_on": [
+          "EMP2"
+        ],
+        "human_validated": false
+      },
+      "P_EMP3_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always when shown",
+        "depends_on": [
+          "EMP3"
+        ],
+        "human_validated": false
+      },
+      "P_EMP4_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always when shown",
+        "depends_on": [
+          "EMP4"
+        ],
+        "human_validated": false
+      },
+      "P_SPN5_DAYSTW_2_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always when shown",
+        "depends_on": [
+          "SPN5_DAYSTW_2"
+        ],
+        "human_validated": false
+      },
+      "P_DISPLAY_HLTH_NONE": {
+        "ast": [
+          "==",
+          "display_HLTH",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "display_HLTH"
+        ],
+        "human_validated": false
+      },
+      "P_DIS1_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always",
+        "depends_on": [
+          "DIS1"
+        ],
+        "human_validated": false
+      },
+      "P_DIS2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_DIS4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_DIS3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_DIS5_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_DIS6_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HLTH_INTRO_NONE": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HLTH1_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HLTH2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HLTH3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HLTH4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_MH1_1": {
+        "ast": [
+          "==",
+          "MH1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "D11 > 0 AND MH1 IN {1}",
+        "depends_on": [
+          "MH1"
+        ],
+        "human_validated": false
+      },
+      "P_MH1_2": {
+        "ast": [
+          "==",
+          "MH1",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "D11 > 0 AND MH1 IN {2}",
+        "depends_on": [
+          "MH1"
+        ],
+        "human_validated": false
+      },
+      "P_MH1_3": {
+        "ast": [
+          "==",
+          "MH1",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "D11 > 0 AND MH1 == 3",
+        "depends_on": [
+          "MH1"
+        ],
+        "human_validated": false
+      },
+      "P_MH1_NA": {
+        "ast": [
+          "==",
+          "MH1",
+          "NA"
+        ],
+        "complexity": "moderate",
+        "text": "D11 == 0",
+        "depends_on": [
+          "MH1"
+        ],
+        "human_validated": false
+      },
+      "P_MH2_1": {
+        "ast": [
+          "==",
+          "MH2",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "MH1 IN {1,2} AND MH2 == 1",
+        "depends_on": [
+          "MH2"
+        ],
+        "human_validated": false
+      },
+      "P_MH2_2": {
+        "ast": [
+          "==",
+          "MH2",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "MH1 IN {1,2} AND MH2 == 2",
+        "depends_on": [
+          "MH2"
+        ],
+        "human_validated": false
+      },
+      "P_MH2_3": {
+        "ast": [
+          "==",
+          "MH2",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "MH1 IN {1,2} AND MH2 == 3",
+        "depends_on": [
+          "MH2"
+        ],
+        "human_validated": false
+      },
+      "P_MH3_ANY": {
+        "ast": [
+          "==",
+          "MH3",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "MH2 IN {1,2}",
+        "depends_on": [
+          "MH3"
+        ],
+        "human_validated": false
+      },
+      "P_MH4_ANY": {
+        "ast": [
+          "==",
+          "MH4",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "MH1 IN {1,2}",
+        "depends_on": [
+          "MH4"
+        ],
+        "human_validated": false
+      },
+      "P_HLTH8_ANY": {
+        "ast": [
+          "==",
+          "HLTH8",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached HLTH8",
+        "depends_on": [
+          "HLTH8"
+        ],
+        "human_validated": false
+      },
+      "P_SOC1_FIRST_ANY": {
+        "ast": [
+          "==",
+          "SOC1_first",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached SOC1_first",
+        "depends_on": [
+          "SOC1_first"
+        ],
+        "human_validated": false
+      },
+      "P_SOC2_FIRST_ANY": {
+        "ast": [
+          "==",
+          "SOC2_first",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached SOC2_first",
+        "depends_on": [
+          "SOC2_first"
+        ],
+        "human_validated": false
+      },
+      "P_SOCNEW1_ANY": {
+        "ast": [
+          "==",
+          "SOCnew1",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached SOCnew1",
+        "depends_on": [
+          "SOCnew1"
+        ],
+        "human_validated": false
+      },
+      "P_SOCNEW2_ANY": {
+        "ast": [
+          "==",
+          "SOCnew2",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached SOCnew2",
+        "depends_on": [
+          "SOCnew2"
+        ],
+        "human_validated": false
+      },
+      "P_FALLVAC_ANY": {
+        "ast": [
+          "==",
+          "FALLVAC",
+          "ANY"
+        ],
+        "complexity": "moderate",
+        "text": "Reached FALLVAC",
+        "depends_on": [
+          "FALLVAC"
+        ],
+        "human_validated": false
+      },
+      "P_RSVVAC_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_SHORTAGE1_ANY(1,2,3,4)": {
+        "ast": [
+          "==",
+          "SHORTAGE1",
+          "any(1,2,3,4)"
+        ],
+        "complexity": "moderate",
+        "text": "SELECTED_ANY_OF({1,2,3,4})",
+        "depends_on": [
+          "SHORTAGE1"
+        ],
+        "human_validated": false
+      },
+      "P_SHORTAGE1_5": {
+        "ast": [
+          "==",
+          "SHORTAGE1",
+          "5"
+        ],
+        "complexity": "moderate",
+        "text": "SELECTED_ONLY({5})",
+        "depends_on": [
+          "SHORTAGE1"
+        ],
+        "human_validated": false
+      },
+      "P_SHORTAGE1_NONE": {
+        "ast": [
+          "==",
+          "SHORTAGE1",
+          "none"
+        ],
+        "complexity": "moderate",
+        "text": "ELSE",
+        "depends_on": [
+          "SHORTAGE1"
+        ],
+        "human_validated": false
+      },
+      "P_SHORTAGE2A_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD1_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD6_REV_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_FD7_NEW_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_SPN4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_INFLATE1_1": {
+        "ast": [
+          "==",
+          "INFLATE1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "INFLATE1"
+        ],
+        "human_validated": false
+      },
+      "P_INFLATE1_2_OR_3_OR_4": {
+        "ast": [
+          "in",
+          "INFLATE1",
+          [
+            "2",
+            "3",
+            "4"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {2,3,4}",
+        "depends_on": [
+          "INFLATE1"
+        ],
+        "human_validated": false
+      },
+      "P_INFLATE2_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "TRUE",
+        "depends_on": [
+          "INFLATE2"
+        ],
+        "human_validated": false
+      },
+      "P_INFLATE4_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "TRUE",
+        "depends_on": [
+          "INFLATE4"
+        ],
+        "human_validated": false
+      },
+      "P_HSE1_3": {
+        "ast": [
+          "==",
+          "HSE1",
+          "3"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 3",
+        "depends_on": [
+          "HSE1"
+        ],
+        "human_validated": false
+      },
+      "P_HSE1_2": {
+        "ast": [
+          "==",
+          "HSE1",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "HSE1"
+        ],
+        "human_validated": false
+      },
+      "P_HSE1_1": {
+        "ast": [
+          "==",
+          "HSE1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "HSE1"
+        ],
+        "human_validated": false
+      },
+      "P_HSE1_4": {
+        "ast": [
+          "==",
+          "HSE1",
+          "4"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 4",
+        "depends_on": [
+          "HSE1"
+        ],
+        "human_validated": false
+      },
+      "P_HSE3_1": {
+        "ast": [
+          "==",
+          "HSE3",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "HSE3"
+        ],
+        "human_validated": false
+      },
+      "P_HSE3_2": {
+        "ast": [
+          "==",
+          "HSE3",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "HSE3"
+        ],
+        "human_validated": false
+      },
+      "P_HSE4_1": {
+        "ast": [
+          "==",
+          "HSE4",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "HSE4"
+        ],
+        "human_validated": false
+      },
+      "P_HSE4_2": {
+        "ast": [
+          "==",
+          "HSE4",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "HSE4"
+        ],
+        "human_validated": false
+      },
+      "P_HSE6_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "HSE1 == 2",
+        "depends_on": [
+          "HSE6"
+        ],
+        "human_validated": false
+      },
+      "P_HSE8_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "TRUE",
+        "depends_on": [
+          "HSE8"
+        ],
+        "human_validated": false
+      },
+      "P_HSE9_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "TRUE",
+        "depends_on": [
+          "HSE9"
+        ],
+        "human_validated": false
+      },
+      "P_HSE10_REV_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "TRUE",
+        "depends_on": [
+          "HSE10_rev"
+        ],
+        "human_validated": false
+      },
+      "P_HSE11_REV_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_HSE12_REV_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_TRANS1_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_TRANS2_3_OR_4_OR_5": {
+        "ast": [
+          "in",
+          "TRANS2",
+          [
+            "3",
+            "4",
+            "5"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {3,4,5}",
+        "depends_on": [
+          "TRANS2"
+        ],
+        "human_validated": false
+      },
+      "P_TRANS2_1_OR_2": {
+        "ast": [
+          "in",
+          "TRANS2",
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {1,2}",
+        "depends_on": [
+          "TRANS2"
+        ],
+        "human_validated": false
+      },
+      "P_TRANS3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ARTS_INTRO_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ART1_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ART2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ART3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ART4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ART5_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_TRUST1_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_TRUST2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_TRUST3_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX1_1": {
+        "ast": [
+          "==",
+          "NDX1",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "NDX1"
+        ],
+        "human_validated": false
+      },
+      "P_NDX1_2": {
+        "ast": [
+          "==",
+          "NDX1",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "NDX1"
+        ],
+        "human_validated": false
+      },
+      "P_NDX2_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX3_1": {
+        "ast": [
+          "==",
+          "NDX3",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "NDX3"
+        ],
+        "human_validated": false
+      },
+      "P_NDX3_2": {
+        "ast": [
+          "==",
+          "NDX3",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "NDX3"
+        ],
+        "human_validated": false
+      },
+      "P_NDX4_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX5_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX6_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX7_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (within universe)",
+        "depends_on": [
+          "NDX7"
+        ],
+        "human_validated": false
+      },
+      "P_NDX8_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (within universe)",
+        "depends_on": [
+          "NDX8"
+        ],
+        "human_validated": false
+      },
+      "P_NDX10_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (within universe)",
+        "depends_on": [
+          "NDX10"
+        ],
+        "human_validated": false
+      },
+      "P_ND5INTRO_NONE": {
+        "ast": [
+          "==",
+          "ND5intro",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "Display text then continue",
+        "depends_on": [
+          "ND5intro"
+        ],
+        "human_validated": false
+      },
+      "P_ND5A_1": {
+        "ast": [
+          "==",
+          "ND5A",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "ND5A == 1 (Not affected)",
+        "depends_on": [
+          "ND5A"
+        ],
+        "human_validated": false
+      },
+      "P_ND5A_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "==",
+          "ND5A",
+          "2|3|4|5"
+        ],
+        "complexity": "moderate",
+        "text": "ND5A in {2,3,4,5}",
+        "depends_on": [
+          "ND5A"
+        ],
+        "human_validated": false
+      },
+      "P_ND5AA_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (when shown)",
+        "depends_on": [
+          "ND5AA"
+        ],
+        "human_validated": false
+      },
+      "P_ND5B_1": {
+        "ast": [
+          "==",
+          "ND5B",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "ND5B == 1 (Not affected)",
+        "depends_on": [
+          "ND5B"
+        ],
+        "human_validated": false
+      },
+      "P_ND5B_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "==",
+          "ND5B",
+          "2|3|4|5"
+        ],
+        "complexity": "moderate",
+        "text": "ND5B in {2,3,4,5}",
+        "depends_on": [
+          "ND5B"
+        ],
+        "human_validated": false
+      },
+      "P_ND5BA_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (when shown)",
+        "depends_on": [
+          "ND5BA"
+        ],
+        "human_validated": false
+      },
+      "P_ND5C_1": {
+        "ast": [
+          "==",
+          "ND5C",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "ND5C == 1 (Not affected)",
+        "depends_on": [
+          "ND5C"
+        ],
+        "human_validated": false
+      },
+      "P_ND5C_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "==",
+          "ND5C",
+          "2|3|4|5"
+        ],
+        "complexity": "moderate",
+        "text": "ND5C in {2,3,4,5}",
+        "depends_on": [
+          "ND5C"
+        ],
+        "human_validated": false
+      },
+      "P_ND5CA_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "Always (when shown)",
+        "depends_on": [
+          "ND5CA"
+        ],
+        "human_validated": false
+      },
+      "P_ND5D_1": {
+        "ast": [
+          "==",
+          "ND5D",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ND5D"
+        ],
+        "human_validated": false
+      },
+      "P_ND5D_2-5": {
+        "ast": [
+          "==",
+          "ND5D",
+          "2-5"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE in {2,3,4,5}",
+        "depends_on": [
+          "ND5D"
+        ],
+        "human_validated": false
+      },
+      "P_ND5DA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ND5E_1": {
+        "ast": [
+          "==",
+          "ND5E",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ND5E"
+        ],
+        "human_validated": false
+      },
+      "P_ND5E_2-5": {
+        "ast": [
+          "==",
+          "ND5E",
+          "2-5"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE in {2,3,4,5}",
+        "depends_on": [
+          "ND5E"
+        ],
+        "human_validated": false
+      },
+      "P_ND5EA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ND5F_1": {
+        "ast": [
+          "==",
+          "ND5F",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ND5F"
+        ],
+        "human_validated": false
+      },
+      "P_ND5F_2-5": {
+        "ast": [
+          "==",
+          "ND5F",
+          "2-5"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE in {2,3,4,5}",
+        "depends_on": [
+          "ND5F"
+        ],
+        "human_validated": false
+      },
+      "P_ND5FA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ND5G_1": {
+        "ast": [
+          "==",
+          "ND5G",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ND5G"
+        ],
+        "human_validated": false
+      },
+      "P_ND5G_2-5": {
+        "ast": [
+          "==",
+          "ND5G",
+          "2-5"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE in {2,3,4,5}",
+        "depends_on": [
+          "ND5G"
+        ],
+        "human_validated": false
+      },
+      "P_ND5GA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_ND5H_1": {
+        "ast": [
+          "==",
+          "ND5H",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "ND5H"
+        ],
+        "human_validated": false
+      },
+      "P_ND5H_2-5": {
+        "ast": [
+          "==",
+          "ND5H",
+          "2-5"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE in {2,3,4,5}",
+        "depends_on": [
+          "ND5H"
+        ],
+        "human_validated": false
+      },
+      "P_ND5HA_*": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX11INTRO_NONE": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX11A_1": {
+        "ast": [
+          "==",
+          "NDX11A",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "NDX11A"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11A_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "in",
+          "NDX11A",
+          [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {2,3,4,5}",
+        "depends_on": [
+          "NDX11A"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11AA_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX11B_1": {
+        "ast": [
+          "==",
+          "NDX11B",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "NDX11B"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11B_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "in",
+          "NDX11B",
+          [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {2,3,4,5}",
+        "depends_on": [
+          "NDX11B"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11BA_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX11C_1": {
+        "ast": [
+          "==",
+          "NDX11C",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "NDX11C"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11C_2_OR_3_OR_4_OR_5": {
+        "ast": [
+          "in",
+          "NDX11C",
+          [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {2,3,4,5}",
+        "depends_on": [
+          "NDX11C"
+        ],
+        "human_validated": false
+      },
+      "P_NDX11CA_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX13_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX14_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_NDX16_ANY": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_POC_DISPLAY_NONE": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_Q3_1": {
+        "ast": [
+          "==",
+          "Q3",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "Q3"
+        ],
+        "human_validated": false
+      },
+      "P_Q3_2": {
+        "ast": [
+          "==",
+          "Q3",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "Q3"
+        ],
+        "human_validated": false
+      },
+      "P_Q6_NONE": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_Q7_1": {
+        "ast": [
+          "==",
+          "Q7",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "Q7"
+        ],
+        "human_validated": false
+      },
+      "P_Q7_2,3": {
+        "ast": [
+          "in",
+          "Q7",
+          [
+            "2",
+            "3"
+          ]
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE IN {2,3}",
+        "depends_on": [
+          "Q7"
+        ],
+        "human_validated": false
+      },
+      "P_Q8_1,2": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_Q9_1": {
+        "ast": [
+          "==",
+          "Q9",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1 AND ISBLANK(${e://Field/BestAddress2})",
+        "depends_on": [
+          "Q9"
+        ],
+        "human_validated": false
+      },
+      "P_Q9_2": {
+        "ast": [
+          "==",
+          "Q9",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "Q9"
+        ],
+        "human_validated": false
+      },
+      "P_Q10_NONE": {
+        "ast": [
+          "==",
+          "Q10",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "ISBLANK(${e://Field/BestAddress2})",
+        "depends_on": [
+          "Q10"
+        ],
+        "human_validated": false
+      },
+      "P_Q11_A_1": {
+        "ast": [
+          "==",
+          "Q11_a",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "Q11_a"
+        ],
+        "human_validated": false
+      },
+      "P_Q11_A_2": {
+        "ast": [
+          "==",
+          "Q11_a",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "Q11_a"
+        ],
+        "human_validated": false
+      },
+      "P_Q_11B_1": {
+        "ast": [
+          "==",
+          "Q_11b",
+          "1"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 1",
+        "depends_on": [
+          "Q_11b"
+        ],
+        "human_validated": false
+      },
+      "P_Q_11B_2": {
+        "ast": [
+          "==",
+          "Q_11b",
+          "2"
+        ],
+        "complexity": "moderate",
+        "text": "RESPONSE == 2",
+        "depends_on": [
+          "Q_11b"
+        ],
+        "human_validated": false
+      },
+      "P_Q12_NONE": {
+        "ast": true,
+        "complexity": "simple",
+        "text": "ALWAYS",
+        "depends_on": [],
+        "human_validated": false
+      },
+      "P_RECONTACT_*": {
+        "ast": true,
+        "complexity": "moderate",
+        "text": "ALWAYS (regardless of response)",
+        "depends_on": [
+          "RECONTACT"
+        ],
+        "human_validated": false
+      },
+      "P_SURVEY_COMPLETE_NONE": {
+        "ast": [
+          "==",
+          "SURVEY_COMPLETE",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "Page submit",
+        "depends_on": [
+          "SURVEY_COMPLETE"
+        ],
+        "human_validated": false
+      },
+      "P_FINAL_TERMINATION_NONE": {
+        "ast": [
+          "==",
+          "FINAL_TERMINATION",
+          null
+        ],
+        "complexity": "moderate",
+        "text": "Page load",
+        "depends_on": [
+          "FINAL_TERMINATION"
+        ],
+        "human_validated": false
+      }
+    },
+    "validation": {
+      "status": "HUMAN_VALIDATED",
+      "validation_summary": {
+        "total_questions": 129,
+        "not_reviewed": 124,
+        "flagged_for_review": 0,
+        "validated": 5,
+        "missing_routing": 0,
+        "completion_percentage": 3.875968992248062
+      },
+      "manual_corrections": {},
+      "validation_notes": {
+        "INTRO_INCENTIVE": {
+          "status": "validated",
+          "updated_at": "2025-09-19T21:24:22.387988"
+        },
+        "Language": {
+          "status": "validated",
+          "updated_at": "2025-09-19T21:24:42.777098"
+        },
+        "Continue": {
+          "status": "validated",
+          "updated_at": "2025-09-19T21:24:59.982846"
+        },
+        "PRA": {
+          "status": "validated",
+          "updated_at": "2025-09-19T21:25:15.285293"
+        },
+        "Q1": {
+          "status": "validated",
+          "updated_at": "2025-09-19T21:26:22.065785"
+        }
+      }
+    }
+  }
+}

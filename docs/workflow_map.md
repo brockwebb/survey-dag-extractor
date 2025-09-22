@@ -142,9 +142,65 @@
 
 ---
 
-### Phase 4: Final Export & Analysis 🔄 PLANNED
+### Phase 4: Survey Logic Automation & Export 🔄 IN PROGRESS
 
-### Phase 4: Final Export & Analysis 🔄 IN PROGRESS
+#### NEW: Block 4.0: Survey Automation Agents ✅ BUILT
+- **Input**: `htops_complete_nodes_minimal.json` (133 nodes with basic metadata)
+- **Process**: Automated routing assignment and variable mapping using LLM agents
+- **Technology**: OpenAI GPT-4 for batch analysis + structured JSON output
+- **Batch Size**: 20 questions per LLM call
+
+**Agent Architecture:**
+1. **Routing Agent** (`agents/routing_agent.py`) ✅ BUILT
+   - Analyzes question response patterns in batches of 20
+   - Generates routing assignments (fallthrough, branch, terminate)
+   - Creates edge predicates and universe conditions
+   - Outputs: routing edges, predicates, universe logic
+   - Comparison: Gold standard manual extraction (24 chunks, 5 questions each)
+
+2. **Variable Mapping Agent** (`agents/variable_agent.py`) ✅ BUILT
+   - Maps survey questions to data dictionary variables
+   - Uses question content + data dictionary for context
+   - Assigns variable names with confidence scores
+   - Outputs: variable assignments, data types, descriptions
+   - Integration: Optional data dictionary JSON input
+
+3. **Automation Orchestrator** (`agents/automation_orchestrator.py`) ✅ BUILT
+   - Runs both agents in sequence
+   - Merges routing and variable results
+   - Generates comprehensive automation reports
+   - Timestamped runs with quality metrics
+
+**Usage:**
+```bash
+# Run complete automation
+python agents/automation_orchestrator.py --input data/htops_complete_nodes_minimal.json --batch-size 20
+
+# Run individual agents
+python agents/routing_agent.py --input data/htops_complete_nodes_minimal.json
+python agents/variable_agent.py --input data/htops_complete_nodes_minimal.json --data-dict data_dictionary.json
+```
+
+**Output Structure:**
+- `automation_run_YYYYMMDD_HHMMSS/`
+  - `routing/` - Batch routing assignments
+  - `variables/` - Batch variable mappings  
+  - `complete_automated_survey.json` - Merged results
+  - `automation_summary.json` - Quality metrics & recommendations
+
+**Quality Validation:**
+- Compare automated routing vs manual gold standard (24 chunks)
+- Variable assignment confidence scoring
+- Coverage analysis (routing coverage, variable coverage)
+- Consistency checks across batches
+- Schema v1.1 compliance with new variable field
+
+**Schema Enhancement:** ✅ UPDATED
+- Added optional `variable` field to survey_dag_schema_v1.1.json
+- Supports data dictionary integration for variable mapping
+- Maintains backward compatibility
+
+---
 
 **Input**: Perfect DAG (133 nodes, 154 edges, 100% connectivity)  
 **Goal**: Production-ready exports and comprehensive analysis  
@@ -350,10 +406,20 @@ Generic Tools (80%) + Human + Claude (20%) + Domain Validation = Production Qual
 ```
 data/
   ├── htops_complete_nodes_minimal.json ✅ 133 nodes
-  └── survey_dag_schema_v1.1.json ✅ Schema
+  ├── survey_dag_schema_v1.1.json ✅ Schema (with variable field)
+  └── HTOPS_data_dictionary.xlsx ✅ Data dictionary
 
 surveys_db/
-  └── htops_graph_database.pkl ✅ NetworkX database
+  ├── htops_graph_database.pkl ✅ NetworkX database
+  └── GoldStandardExtraction-9-11-2025/ ✅ Manual routing (24 chunks)
+      ├── rich_extraction_progress_chunk_01.json
+      ├── rich_extraction_progress_chunk_02.json
+      └── ... (24 total chunks)
+
+agents/ ✅ NEW: Automation Agents
+  ├── routing_agent.py ✅ Automated routing assignment
+  ├── variable_agent.py ✅ Automated variable mapping
+  └── automation_orchestrator.py ✅ Combined workflow
 
 graph_analysis/
   ├── schema_compliant_extractor.py ✅ Main tool
@@ -363,3 +429,17 @@ graph_analysis/
 
 setup_graph_database.py ✅ Initialization complete
 ```
+
+## New Automation Capabilities
+
+### Automated Survey Processing
+- **Routing Assignment**: LLM-powered analysis of 133 questions → routing logic
+- **Variable Mapping**: Automated assignment of data dictionary variables
+- **Batch Processing**: Efficient 20-question batches with quality validation
+- **Gold Standard Comparison**: Validate against manual extraction (24 chunks)
+
+### Quality Assurance
+- **Coverage Analysis**: Track routing and variable assignment coverage
+- **Confidence Scoring**: Rate variable mapping quality
+- **Consistency Checks**: Validate across batch boundaries
+- **Schema Compliance**: Updated v1.1 schema with variable support

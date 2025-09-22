@@ -13,6 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from core.database_manager import DatabaseManager
 from core.schema_exporter import SchemaExporter
+from core.dag_validator import MathematicalValidator
 
 def main():
     """Execute Phase 4 Batch 1: Schema export and validation"""
@@ -22,6 +23,10 @@ def main():
     # Initialize components
     db = DatabaseManager()
     exporter = SchemaExporter()
+    
+    # Path to FIXED schema for validation
+    schema_path = Path('../data/survey_dag_schema_v1.1_fixed.json')
+    validator = MathematicalValidator(str(schema_path) if schema_path.exists() else None)
     
     try:
         # Load the perfect DAG from Phase 3B
@@ -35,7 +40,7 @@ def main():
         exports_dir.mkdir(exist_ok=True)
         
         # Export to schema v1.1 format
-        print("\n🔄 Exporting to Schema v1.1 format...")
+        print("\n🔄 PHASE 4A: Exporting to Schema v1.1 format...")
         output_path = exports_dir / 'htops_survey_dag_v1.1.json'
         
         schema_dag = exporter.export_dag_to_schema(graph, str(output_path))
@@ -80,24 +85,48 @@ def main():
             print(f"   ❌ JSON validation failed: {e}")
             return False
         
-        # Summary
-        print("\n🎉 PHASE 4A SCHEMA EXPORT COMPLETE!")
+        print("\n🎉 PHASE 4A COMPLETE!")
+        
+        # PHASE 4B: Mathematical Validation
+        print("\n🔄 PHASE 4B: Mathematical Validation...")
+        
+        validation_result = validator.validate_survey_dag(schema_dag)
+        
+        # Print detailed validation summary
+        validator.print_validation_summary(validation_result)
+        
+        # Save updated schema with validation results
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(schema_dag, f, indent=2, ensure_ascii=False)
+        
+        print(f"\n💾 Updated schema file with validation results: {output_path}")
+        
+        # Final summary
+        print("\n" + "=" * 60)
+        print("🎉 PHASE 4A + 4B COMPLETE! SCHEMA EXPORT + VALIDATION")
+        print("=" * 60)
         print(f"   📄 Output: {output_path}")
         print(f"   📊 Nodes: {exported_nodes}")
         print(f"   🔗 Edges: {exported_edges}")
         print(f"   🧮 Predicates: {len(predicates)}")
         print(f"   🏁 Start: {start_node}")
         print(f"   🎯 Terminals: {len(terminals)}")
+        print(f"   📋 Validation: {validation_result['status']}")
+        print(f"   😨 Gates: {sum(1 for v in validation_result['gates'].values() if v)}/{len(validation_result['gates'])}")
         
-        # Create snapshot for Phase 4B
-        db.create_snapshot("phase4a_schema_export_complete")
+        # Create snapshot for Phase 4C
+        db.create_snapshot("phase4ab_export_and_validation_complete")
         
-        print("\n✅ Ready for Phase 4B: Mathematical Validation")
+        # Check if ready for Phase 4C
+        if validation_result['status'] in ['OK', 'OK_WITH_WARNINGS']:
+            print(f"\n✅ Ready for Phase 4C: Coverage Analysis")
+        else:
+            print(f"\n⚠️  Validation issues found - review before Phase 4C")
         
-        return True
+        return validation_result['status'] != 'FAIL'
         
     except Exception as e:
-        print(f"❌ Phase 4A failed: {e}")
+        print(f"❌ Phase 4A+4B failed: {e}")
         import traceback
         traceback.print_exc()
         return False

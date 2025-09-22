@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Quest - The Routing Adventure</title>
+    <style>
+        body {
+            margin: 0; padding: 0; background: #2c3e50;
+            font-family: 'Courier New', monospace;
+            color: white; overflow: hidden;
+        }
+        
+        .game-container {
+            position: relative; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+        
+        .game-hud {
+            position: absolute; top: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.8); padding: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; border-bottom: 2px solid #f39c12;
+        }
+        
+        .hud-left {
+            display: flex; gap: 20px; align-items: center;
+        }
+        
+        .health-bar {
+            width: 200px; height: 20px; background: #2c3e50;
+            border: 2px solid #ecf0f1; border-radius: 10px;
+            overflow: hidden; position: relative;
+        }
+        
+        .health-fill {
+            height: 100%; background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #27ae60);
+            transition: width 0.5s ease;
+        }
+        
+        .health-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 12px; font-weight: bold; color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+        }
+        
+        .xp-counter {
+            background: #8e44ad; padding: 8px 12px; border-radius: 15px;
+            font-weight: bold; color: white;
+        }
+        
+        .mini-map {
+            position: absolute; top: 80px; right: 20px;
+            width: 200px; height: 180px; background: rgba(0,0,0,0.8);
+            border: 2px solid #3498db; border-radius: 8px;
+            padding: 10px; z-index: 100;
+        }
+        
+        #gameCanvas {
+            display: block; margin: 60px auto 0;
+            border: 3px solid #34495e; border-radius: 8px;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+            background: #7f8c8d;
+        }
+        
+        .node-tooltip {
+            position: absolute; background: rgba(0,0,0,0.9);
+            color: white; padding: 10px; border-radius: 6px;
+            border: 2px solid #3498db; pointer-events: none;
+            z-index: 200; display: none; max-width: 300px;
+        }
+        
+        .validation-panel {
+            position: absolute; top: 280px; right: 20px;
+            width: 350px; height: 320px;
+            background: rgba(0,0,0,0.9); padding: 20px; border-radius: 8px;
+            border: 2px solid #e74c3c; display: none; z-index: 160;
+            overflow-y: auto;
+        }
+        
+        .btn {
+            background: #3498db; color: white; border: none;
+            padding: 8px 16px; border-radius: 4px; cursor: pointer;
+            font-family: inherit; margin: 0 5px;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #2980b9; transform: translateY(-1px);
+        }
+        
+        .btn-validate { background: #27ae60; }
+        .btn-validate:hover { background: #229954; }
+        .btn-flag { background: #f39c12; }
+        .btn-flag:hover { background: #e67e22; }
+        .btn-issue { background: #e74c3c; }
+        .btn-issue:hover { background: #c0392b; }
+        
+        .loading {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px; color: #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="loading" id="loadingScreen">🎮 Loading Survey Quest...</div>
+        
+        <!-- Game HUD -->
+        <div class="game-hud" style="display: none;" id="gameHUD">
+            <div class="hud-left">
+                <div>
+                    <div style="font-size: 18px; font-weight: bold; color: #f39c12;">🗺️ SURVEY QUEST</div>
+                    <div style="font-size: 12px; color: #bdc3c7;" id="surveyTitle">Loading...</div>
+                </div>
+                
+                <div>
+                    <div style="font-size: 12px; margin-bottom: 3px;">Survey Health</div>
+                    <div class="health-bar">
+                        <div class="health-fill" id="healthFill" style="width: 0%"></div>
+                        <div class="health-text" id="healthText">0%</div>
+                    </div>
+                </div>
+                
+                <div class="xp-counter">
+                    ⭐ <span id="xpCount">0</span> XP
+                </div>
+                
+                <div style="color: #ecf0f1; font-size: 12px;">
+                    <div>📍 Current: <span id="currentNode">START</span></div>
+                    <div>🎯 Block: <span id="currentBlock">Loading...</span></div>
+                </div>
+            </div>
+            
+            <div>
+                <button class="btn" onclick="centerView()">🎯 Center View</button>
+                <button class="btn" onclick="showClassicView()">📋 Classic Mode</button>
+                <button class="btn" onclick="exportProgress()">💾 Save Progress</button>
+            </div>
+        </div>
+        
+        <!-- Mini Map -->
+        <div class="mini-map" style="display: none;" id="miniMap">
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #3498db;">📊 Quest Stats</div>
+            <div style="font-size: 11px; line-height: 1.4;">
+                <div>🟢 Validated: <span id="validatedCount">0</span></div>
+                <div>🟡 Flagged: <span id="flaggedCount">0</span></div>
+                <div>🔴 Issues: <span id="issuesCount">0</span></div>
+                <div>⚠️ Need Attention: <span id="needsAttentionCount">0</span></div>
+                <div>💀 Missing Routing: <span id="missingRoutingCount">0</span></div>
+                <div style="margin-top: 8px; color: #f39c12;">🏆 Progress: <span id="progressPercent">0%</span></div>
+            </div>
+        </div>
+        
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="1200" height="580" style="display: none;"></canvas>
+        
+        <!-- Node Tooltip -->
+        <div class="node-tooltip" id="nodeTooltip">
+            <div id="tooltipContent"></div>
+        </div>
+        
+        <!-- Validation Panel -->
+        <div class="validation-panel" id="validationPanel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #f39c12;">🎯 Node Validation</h3>
+                <button class="btn" onclick="closeValidationPanel()">✕</button>
+            </div>
+            
+            <div id="validationContent">
+                <!-- Dynamic content goes here -->
+            </div>
+            
+            <div style="margin-top: 15px; text-align: center;">
+                <button class="btn btn-validate" onclick="validateCurrentNode()">🟢 Validate (+10 XP)</button>
+                <button class="btn btn-flag" onclick="flagCurrentNode()">🟡 Flag for Review (+5 XP)</button>
+                <button class="btn btn-issue" onclick="reportIssue()">🔴 Report Issue (+2 XP)</button>
+                <br><br>
+                <button class="btn" onclick="editCurrentNodeRouting()" style="background: #8e44ad;">✏️ Edit Routing (Classic Mode)</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Game State
+        let gameState = {
+            canvas: null,
+            ctx: null,
+            nodes: [],
+            edges: [],
+            currentNode: null,
+            playerPosition: { x: 100, y: 100 },
+            camera: { x: 0, y: 0 },
+            surveyHealth: 0,
+            xp: 0,
+            stats: {},
+            surveyInfo: {},
+            selectedNodeData: null
+        };
+        
+        // Initialize Game
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGame();
+        });
+        
+        function initializeGame() {
+            gameState.canvas = document.getElementById('gameCanvas');
+            gameState.ctx = gameState.canvas.getContext('2d');
+            
+            // Add event listeners
+            gameState.canvas.addEventListener('click', handleCanvasClick);
+            gameState.canvas.addEventListener('mousemove', handleCanvasMouseMove);
+            gameState.canvas.addEventListener('mouseleave', hideTooltip);
+            
+            // Load real survey data
+            loadRealSurveyData();
+        }
+        
+        function loadRealSurveyData() {
+            console.log('Loading survey data...');
+            fetch('/api/game_data')
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Received data:', data);
+                    if (data.error) {
+                        showError('Failed to load survey data: ' + data.error);
+                        return;
+                    }
+                    
+                    gameState.nodes = data.nodes;
+                    gameState.edges = data.edges;
+                    gameState.stats = data.stats;
+                    gameState.surveyInfo = data.survey_info;
+                    
+                    // Set starting position to first node
+                    if (gameState.nodes.length > 0) {
+                        gameState.currentNode = gameState.nodes[0];
+                        gameState.playerPosition = { x: gameState.currentNode.x, y: gameState.currentNode.y };
+                    }
+                    
+                    // Update UI
+                    document.getElementById('surveyTitle').textContent = `Run: ${gameState.surveyInfo.run_id}`;
+                    updateGameStats();
+                    
+                    // Show game interface
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('gameHUD').style.display = 'flex';
+                    document.getElementById('miniMap').style.display = 'block';
+                    document.getElementById('gameCanvas').style.display = 'block';
+                    
+                    // Start game loop
+                    gameLoop();
+                })
+                .catch(error => {
+                    showError('Network error: ' + error.message);
+                });
+        }
+        
+        function showError(message) {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 20px;">❌ ${message}</div>
+                    <button class="btn" onclick="window.location.href='/'">🏠 Load Survey First</button>
+                    <button class="btn" onclick="loadRealSurveyData()" style="background: #27ae60;">🔄 Retry</button>
+                </div>
+            `;
+        }
+        
+        function gameLoop() {
+            // Clear canvas
+            gameState.ctx.clearRect(0, 0, gameState.canvas.width, gameState.canvas.height);
+            
+            // Draw background
+            drawBackground();
+            
+            // Draw edges (routing paths)
+            drawEdges();
+            
+            // Draw nodes
+            drawNodes();
+            
+            // Draw player
+            drawPlayer();
+            
+            // Continue loop
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function drawBackground() {
+            const ctx = gameState.ctx;
+            
+            // Gray background for better contrast
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fillRect(0, 0, gameState.canvas.width, gameState.canvas.height);
+            
+            // Add subtle texture
+            ctx.fillStyle = '#95a5a6';
+            for (let x = 0; x < gameState.canvas.width; x += 40) {
+                for (let y = 0; y < gameState.canvas.height; y += 40) {
+                    if ((x + y) % 80 === 0) {
+                        ctx.fillRect(x, y, 20, 20);
+                    }
+                }
+            }
+            
+            // Draw block labels
+            const blocks = {};
+            gameState.nodes.forEach(node => {
+                if (!blocks[node.block]) {
+                    blocks[node.block] = { x: node.x, y: node.y - 50, name: node.block };
+                }
+            });
+            
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Courier New';
+            ctx.textAlign = 'center';
+            
+            Object.values(blocks).forEach(block => {
+                ctx.fillText(block.name.toUpperCase(), block.x, block.y);
+            });
+        }
+        
+        function drawEdges() {
+            const ctx = gameState.ctx;
+            
+            gameState.edges.forEach(edge => {
+                const fromNode = gameState.nodes.find(n => n.id === edge.from);
+                const toNode = gameState.nodes.find(n => n.id === edge.to);
+                
+                if (fromNode && toNode) {
+                    // Arrow color based on source node validation status
+                    let pathColor;
+                    if (fromNode.status === 'validated') {
+                        pathColor = '#27ae60'; // Green for validated paths
+                    } else if (fromNode.status === 'flagged_for_review') {
+                        pathColor = '#f39c12'; // Orange for flagged
+                    } else if (fromNode.status === 'issues') {
+                        pathColor = '#e74c3c'; // Red for issues
+                    } else {
+                        pathColor = '#c0392b'; // Dark red for unvalidated
+                    }
+                    
+                    ctx.strokeStyle = pathColor;
+                    ctx.lineWidth = 6;
+                    ctx.lineCap = 'round';
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(fromNode.x, fromNode.y);
+                    ctx.lineTo(toNode.x, toNode.y);
+                    ctx.stroke();
+                    
+                    // Add arrow
+                    drawArrow(ctx, fromNode.x, fromNode.y, toNode.x, toNode.y, pathColor);
+                }
+            });
+        }
+        
+        function drawArrow(ctx, x1, y1, x2, y2, color) {
+            const headlen = 15;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            
+            // Move arrow to edge of target node
+            const nodeRadius = 30;
+            x2 = x2 - nodeRadius * Math.cos(angle);
+            y2 = y2 - nodeRadius * Math.sin(angle);
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+        
+        function drawNodes() {
+            const ctx = gameState.ctx;
+            
+            gameState.nodes.forEach(node => {
+                // Node background colors by type
+                const nodeColors = {
+                    'instruction': '#3498db',
+                    'question': '#e74c3c', 
+                    'terminal': '#f39c12'
+                };
+                
+                // Status ring colors - much more vibrant
+                const statusColors = {
+                    'not_reviewed': '#e74c3c',      // Bright red for unvalidated
+                    'flagged_for_review': '#f39c12', // Orange for flagged
+                    'validated': '#27ae60',          // Bright green for validated
+                    'issues': '#8e44ad',             // Purple for issues
+                    'missing_routing': '#e67e22',    // Dark orange for missing routing
+                    'needs_attention': '#e74c3c'     // Red for needs attention
+                };
+                
+                // Draw node circle
+                ctx.fillStyle = nodeColors[node.type] || '#95a5a6';
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 25, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw status ring - thick and prominent
+                ctx.strokeStyle = statusColors[node.status] || '#e74c3c';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 32, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Node icon - use text instead of emojis
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const icons = {
+                    'instruction': 'I',
+                    'question': 'Q', 
+                    'terminal': 'T'
+                };
+                
+                ctx.fillText(icons[node.type] || 'N', node.x, node.y);
+                
+                // Node label
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 10px Courier New';
+                const label = node.id.length > 12 ? node.id.substring(0, 12) + '...' : node.id;
+                ctx.fillText(label, node.x, node.y + 50);
+            });
+        }
+        
+        function drawPlayer() {
+            const ctx = gameState.ctx;
+            const player = gameState.playerPosition;
+            
+            // Player sprite
+            ctx.fillStyle = '#8e44ad';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y - 15, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Player crown
+            ctx.font = '16px Arial';
+            ctx.fillText('👑', player.x, player.y - 25);
+        }
+        
+        function handleCanvasClick(event) {
+            const rect = gameState.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Check if clicked on a node
+            const clickedNode = gameState.nodes.find(node => {
+                const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
+                return distance <= 35;
+            });
+            
+            if (clickedNode) {
+                selectNode(clickedNode);
+            }
+        }
+        
+        function selectNode(node) {
+            gameState.currentNode = node;
+            gameState.playerPosition = { x: node.x, y: node.y };
+            
+            // Update HUD
+            document.getElementById('currentNode').textContent = node.id;
+            document.getElementById('currentBlock').textContent = node.block;
+            
+            // Get detailed node information
+            loadNodeDetails(node.id);
+            
+            console.log(`Selected node: ${node.id}`);
+        }
+        
+        function loadNodeDetails(nodeId) {
+            fetch(`/api/node_details/${nodeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    gameState.selectedNodeData = data;
+                    showValidationPanel(data);
+                })
+                .catch(error => {
+                    console.error('Error loading node details:', error);
+                    showValidationPanel(gameState.currentNode);
+                });
+        }
+        
+        function handleCanvasMouseMove(event) {
+            const rect = gameState.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Check if hovering over a node
+            const hoveredNode = gameState.nodes.find(node => {
+                const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
+                return distance <= 35;
+            });
+            
+            if (hoveredNode) {
+                showTooltip(event, hoveredNode);
+                gameState.canvas.style.cursor = 'pointer';
+            } else {
+                hideTooltip();
+                gameState.canvas.style.cursor = 'default';
+            }
+        }
+        
+        function showTooltip(event, node) {
+            const tooltip = document.getElementById('nodeTooltip');
+            const content = document.getElementById('tooltipContent');
+            
+            const statusText = node.status.replace('_', ' ').toUpperCase();
+            const confidenceText = node.confidence ? `${Math.round(node.confidence * 100)}%` : 'N/A';
+            
+            content.innerHTML = `
+                <div style="font-weight: bold; color: #f39c12; margin-bottom: 5px;">${node.id}</div>
+                <div style="font-size: 12px;">
+                    <div><strong>Type:</strong> ${node.type}</div>
+                    <div><strong>Block:</strong> ${node.block}</div>
+                    <div><strong>Status:</strong> ${statusText}</div>
+                    <div><strong>Routing:</strong> ${node.routing_count} assignments</div>
+                    <div><strong>Confidence:</strong> ${confidenceText}</div>
+                </div>
+                <div style="font-size: 11px; margin-top: 5px; color: #bdc3c7;">
+                    ${node.text}
+                </div>
+            `;
+            
+            tooltip.style.display = 'block';
+            tooltip.style.left = (event.clientX + 10) + 'px';
+            tooltip.style.top = (event.clientY - 100) + 'px';
+        }
+        
+        function hideTooltip() {
+            document.getElementById('nodeTooltip').style.display = 'none';
+        }
+        
+        function showValidationPanel(nodeData) {
+            const panel = document.getElementById('validationPanel');
+            const content = document.getElementById('validationContent');
+            
+            const routingInfo = nodeData.routing_assignments || [];
+            const routingHtml = routingInfo.length > 0 ? 
+                routingInfo.map(r => {
+                    const condition = r.response_value === '*' ? 'ALWAYS' : `Response = ${r.response_value}`;
+                    const confidence = r.confidence ? `(${Math.round(r.confidence * 100)}%)` : '';
+                    return `<div style="margin: 5px 0; padding: 8px; background: #34495e; border-radius: 4px;">
+                        <strong>${condition}</strong> → <strong>${r.target_question}</strong> ${confidence}
+                        <div style="font-size: 11px; color: #bdc3c7;">Edge: ${r.edge_type}</div>
+                    </div>`;
+                }).join('') :
+                '<div style="color: #e74c3c;">⚠️ No routing assignments found</div>';
+            
+            content.innerHTML = `
+                <div style="margin-bottom: 10px;">
+                    <strong>Node:</strong> ${nodeData.id}<br>
+                    <strong>Type:</strong> ${nodeData.type}<br>
+                    <strong>Block:</strong> ${nodeData.block}<br>
+                    <strong>Variable:</strong> ${nodeData.variable || 'None'}
+                </div>
+                <div style="background: #34495e; padding: 10px; border-radius: 4px; font-size: 12px; margin-bottom: 10px;">
+                    <strong>Text:</strong> ${nodeData.text || 'No text available'}
+                </div>
+                <div style="background: #2c3e50; padding: 10px; border-radius: 4px; font-size: 12px;">
+                    <strong>Routing:</strong><br>
+                    ${routingHtml}
+                </div>
+            `;
+            
+            panel.style.display = 'block';
+        }
+        
+        function closeValidationPanel() {
+            document.getElementById('validationPanel').style.display = 'none';
+        }
+        
+        function validateCurrentNode() {
+            performNodeAction('validate');
+        }
+        
+        function flagCurrentNode() {
+            performNodeAction('flag');
+        }
+        
+        function reportIssue() {
+            performNodeAction('report_issue');
+        }
+        
+        function performNodeAction(action) {
+            if (!gameState.currentNode) return;
+            
+            fetch('/api/game_validate_node', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    node_id: gameState.currentNode.id,
+                    action: action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update node status
+                    gameState.currentNode.status = data.new_status;
+                    
+                    // Award XP
+                    gameState.xp += data.xp_reward;
+                    
+                    // Update stats
+                    refreshGameStats();
+                    
+                    // Close panel
+                    closeValidationPanel();
+                    
+                    // Show success message
+                    console.log(`✅ ${data.message} (+${data.xp_reward} XP)`);
+                    
+                    // Auto-advance logic
+                    if (action === 'validate') {
+                        autoAdvanceToken();
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error performing action:', error);
+                alert('Network error occurred');
+            });
+        }
+        
+        function autoAdvanceToken() {
+            const currentNodeId = gameState.currentNode.id;
+            const outgoingEdges = gameState.edges.filter(edge => edge.from === currentNodeId);
+            
+            if (outgoingEdges.length === 0) {
+                // Dead end - no movement
+                console.log('🏁 Reached end of path (no outgoing edges)');
+                return;
+            }
+            
+            if (outgoingEdges.length === 1) {
+                // Single path - auto advance
+                const nextNodeId = outgoingEdges[0].to;
+                const nextNode = gameState.nodes.find(n => n.id === nextNodeId);
+                
+                if (nextNode) {
+                    console.log(`🚶 Auto-advancing to ${nextNodeId} (single path)`);
+                    setTimeout(() => {
+                        selectNode(nextNode);
+                        
+                        // If next node has simple routing, consider auto-validating
+                        if (shouldAutoValidateNode(nextNode)) {
+                            console.log(`⚡ Auto-validating ${nextNodeId} (simple routing)`);
+                            setTimeout(() => {
+                                validateCurrentNode();
+                            }, 1000); // Brief pause to show the node
+                        }
+                    }, 500); // Smooth animation delay
+                }
+            } else {
+                // Multiple paths - show path selection
+                console.log(`🔀 Multiple paths available from ${currentNodeId}`);
+                showPathSelection(outgoingEdges);
+            }
+        }
+        
+        function shouldAutoValidateNode(node) {
+            // Auto-validate if:
+            // 1. It's an instruction (usually just continues)
+            // 2. It has only one outgoing path with high confidence
+            // 3. It's already been manually corrected
+            
+            if (node.type === 'instruction') {
+                return true;
+            }
+            
+            const outgoingEdges = gameState.edges.filter(edge => edge.from === node.id);
+            if (outgoingEdges.length === 1 && outgoingEdges[0].confidence > 0.9) {
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function showPathSelection(edges) {
+            const panel = document.getElementById('validationPanel');
+            const content = document.getElementById('validationContent');
+            
+            const pathsHtml = edges.map((edge, index) => {
+                const condition = edge.condition === '*' ? 'ALWAYS' : `Response = ${edge.condition}`;
+                const confidence = edge.confidence ? `(${Math.round(edge.confidence * 100)}%)` : '';
+                const targetNode = gameState.nodes.find(n => n.id === edge.to);
+                const targetType = targetNode ? targetNode.type : 'unknown';
+                
+                return `
+                    <div style="margin: 8px 0; padding: 12px; background: #34495e; border-radius: 6px; cursor: pointer; border: 2px solid #3498db;"
+                         onclick="followPath('${edge.to}')" 
+                         onmouseover="this.style.backgroundColor='#4a6278'" 
+                         onmouseout="this.style.backgroundColor='#34495e'">
+                        <strong>Path ${index + 1}:</strong> ${condition}<br>
+                        <strong>→ ${edge.to}</strong> (${targetType}) ${confidence}<br>
+                        <small style="color: #bdc3c7;">Click to follow this path</small>
+                    </div>
+                `;
+            }).join('');
+            
+            content.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: #f39c12; margin: 0;">🔀 Choose Path to Follow</h4>
+                    <p style="margin: 5px 0; color: #bdc3c7; font-size: 12px;">
+                        This node has multiple routing paths. Choose which path to validate:
+                    </p>
+                </div>
+                ${pathsHtml}
+                <div style="margin-top: 15px; text-align: center;">
+                    <button class="btn" onclick="closeValidationPanel()" style="background: #95a5a6;">⏹️ Stay Here</button>
+                </div>
+            `;
+            
+            panel.style.display = 'block';
+        }
+        
+        function followPath(targetNodeId) {
+            const targetNode = gameState.nodes.find(n => n.id === targetNodeId);
+            if (targetNode) {
+                console.log(`🛤️ Following path to ${targetNodeId}`);
+                selectNode(targetNode);
+            }
+        }
+        
+        function refreshGameStats() {
+            fetch('/api/game_data')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error) {
+                        gameState.stats = data.stats;
+                        updateGameStats();
+                    }
+                });
+        }
+        
+        function updateGameStats() {
+            // Update health bar
+            gameState.surveyHealth = gameState.stats.completion_percentage || 0;
+            document.getElementById('healthFill').style.width = gameState.surveyHealth + '%';
+            document.getElementById('healthText').textContent = Math.round(gameState.surveyHealth) + '%';
+            
+            // Update XP
+            document.getElementById('xpCount').textContent = gameState.xp;
+            
+            // Update mini-map stats
+            document.getElementById('validatedCount').textContent = gameState.stats.validated || 0;
+            document.getElementById('flaggedCount').textContent = gameState.stats.flagged_for_review || 0;
+            document.getElementById('issuesCount').textContent = gameState.stats.issues || 0;
+            document.getElementById('needsAttentionCount').textContent = gameState.stats.needs_attention || 0;
+            document.getElementById('missingRoutingCount').textContent = gameState.stats.missing_routing || 0;
+            document.getElementById('progressPercent').textContent = Math.round(gameState.surveyHealth) + '%';
+        }
+        
+        function centerView() {
+            if (gameState.currentNode) {
+                // Could implement camera centering here
+                console.log('Centering view on current node');
+            }
+        }
+        
+        function showClassicView() {
+            window.location.href = '/validate';
+        }
+        
+        function exportProgress() {
+            fetch('/export_dag')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ Survey exported successfully!\n\nFile: ${data.filename}\n\nValidation Summary:\n- Total: ${data.validation_summary.total_questions}\n- Validated: ${data.validation_summary.validated}\n- Progress: ${data.validation_summary.completion_percentage.toFixed(1)}%`);
+                    } else {
+                        alert('❌ Export failed');
+                    }
+                })
+                .catch(error => {
+                    alert('❌ Export error: ' + error.message);
+                });
+        }
+        
+        function editCurrentNodeRouting() {
+            if (gameState.currentNode) {
+                // Find the node index in the original question list
+                const questions = gameState.nodes.filter(n => n.type === 'question' || n.type === 'instruction');
+                const nodeIndex = questions.findIndex(q => q.id === gameState.currentNode.id);
+                
+                if (nodeIndex >= 0) {
+                    // Jump to classic mode at this specific node
+                    window.location.href = `/jump_to/${nodeIndex}`;
+                } else {
+                    // Fallback to regular classic mode
+                    window.location.href = '/validate';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

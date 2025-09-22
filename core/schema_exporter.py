@@ -1,2 +1,322 @@
 #!/usr/bin/env python3
-\"\"\"\nSchema Exporter v1.1 - Convert NetworkX DAG to canonical JSON format\n\"\"\"\n\nimport json\nimport networkx as nx\nfrom datetime import datetime\nfrom typing import Dict, List, Any, Optional\nfrom pathlib import Path\n\nclass SchemaExporter:\n    \"\"\"Exports NetworkX DAG to schema v1.1 compliant JSON format.\"\"\"\n    \n    def __init__(self):\n        self.predicate_counter = 0\n        self.predicates = {}\n        \n    def export_dag_to_schema(self, graph: nx.DiGraph, output_path: str = None) -> Dict[str, Any]:\n        \"\"\"Export NetworkX DAG to schema v1.1 format.\"\"\"\n        \n        print(\"🔄 Exporting DAG to Schema v1.1 format...\")\n        \n        # Build the schema structure\n        schema_dag = {\n            \"survey_dag\": {\n                \"metadata\": self._build_metadata(graph),\n                \"graph\": self._build_graph(graph),\n                \"predicates\": self._build_predicates(graph),\n                \"validation\": self._build_validation_placeholder(),\n                \"analysis\": self._build_analysis(graph),\n                \"coverage\": self._build_coverage_placeholder()\n            }\n        }\n        \n        # Save to file if path provided\n        if output_path:\n            with open(output_path, 'w', encoding='utf-8') as f:\n                json.dump(schema_dag, f, indent=2, ensure_ascii=False)\n            print(f\"✅ Schema exported to: {output_path}\")\n        \n        return schema_dag\n    \n    def _build_metadata(self, graph: nx.DiGraph) -> Dict[str, Any]:\n        \"\"\"Build metadata section.\"\"\"\n        return {\n            \"id\": \"htops_2025_02\",\n            \"title\": \"Household Trends and Outlook Pulse Survey (HTOPS) February 2025\",\n            \"version\": \"1.1\",\n            \"objective\": \"edge\",\n            \"build\": {\n                \"extractor_version\": \"Phase3B_CollaborativeDAG_v1.0\",\n                \"extracted_at\": datetime.now().isoformat(),\n                \"method\": \"hybrid\",\n                \"source_format\": \"PDF_survey_questionnaire\",\n                \"validation_passed\": True,\n                \"post_edit\": True\n            }\n        }\n    \n    def _build_graph(self, graph: nx.DiGraph) -> Dict[str, Any]:\n        \"\"\"Build graph section with nodes and edges.\"\"\"\n        \n        # Find start node (should be INTRO_INCENTIVE)\n        start_node = self._find_start_node(graph)\n        \n        # Find terminal nodes\n        terminals = self._find_terminals(graph)\n        \n        # Build nodes array\n        nodes = self._build_nodes(graph)\n        \n        # Build edges array\n        edges = self._build_edges(graph)\n        \n        return {\n            \"start\": start_node,\n            \"terminals\": terminals,\n            \"nodes\": nodes,\n            \"edges\": edges\n        }\n    \n    def _find_start_node(self, graph: nx.DiGraph) -> str:\n        \"\"\"Find the survey start node.\"\"\"\n        # Look for INTRO_INCENTIVE first (proper start)\n        if graph.has_node('INTRO_INCENTIVE'):\n            return 'INTRO_INCENTIVE'\n        \n        # Fallback: find node with lowest order_index that's not terminal\n        candidates = []\n        for node_id, node_data in graph.nodes(data=True):\n            if node_data.get('type') not in ['terminal', 'ultimate_terminal']:\n                order = node_data.get('order_index', 999)\n                candidates.append((node_id, order))\n        \n        if candidates:\n            return min(candidates, key=lambda x: x[1])[0]\n        \n        # Last resort: any non-terminal node\n        for node_id, node_data in graph.nodes(data=True):\n            if node_data.get('type') not in ['terminal', 'ultimate_terminal']:\n                return node_id\n        \n        raise ValueError(\"No suitable start node found\")\n    \n    def _find_terminals(self, graph: nx.DiGraph) -> List[str]:\n        \"\"\"Find all terminal nodes.\"\"\"\n        terminals = []\n        \n        for node_id, node_data in graph.nodes(data=True):\n            node_type = node_data.get('type', '')\n            if node_type in ['terminal', 'ultimate_terminal']:\n                terminals.append(node_id)\n        \n        # Ensure SURVEY_COMPLETE is included\n        if 'SURVEY_COMPLETE' not in terminals and graph.has_node('SURVEY_COMPLETE'):\n            terminals.append('SURVEY_COMPLETE')\n        \n        return sorted(terminals)\n    \n    def _build_nodes(self, graph: nx.DiGraph) -> List[Dict[str, Any]]:\n        \"\"\"Build nodes array.\"\"\"\n        nodes = []\n        \n        for node_id, node_data in graph.nodes(data=True):\n            node = {\n                \"id\": node_id,\n                \"type\": self._normalize_node_type(node_data.get('type', 'question'))\n            }\n            \n            # Add optional fields if they exist\n            if 'order_index' in node_data:\n                node['order_index'] = node_data['order_index']\n            \n            if 'block' in node_data:\n                node['block'] = node_data['block']\n            \n            # Build domain if it exists\n            domain = self._build_node_domain(node_data)\n            if domain:\n                node['domain'] = domain\n            \n            # Build universe if it exists\n            universe = self._build_node_universe(node_data)\n            if universe:\n                node['universe'] = universe\n            \n            # Build metadata\n            metadata = self._build_node_metadata(node_data)\n            if metadata:\n                node['metadata'] = metadata\n            \n            nodes.append(node)\n        \n        return sorted(nodes, key=lambda x: x.get('order_index', 999))\n    \n    def _normalize_node_type(self, node_type: str) -> str:\n        \"\"\"Normalize node type to schema values.\"\"\"\n        type_map = {\n            'question': 'question',\n            'instruction': 'question',  # Instructions are questions in schema\n            'terminal': 'terminal',\n            'ultimate_terminal': 'ultimate_terminal'\n        }\n        return type_map.get(node_type, 'question')\n    \n    def _build_node_domain(self, node_data: Dict) -> Optional[Dict[str, Any]]:\n        \"\"\"Build domain object from node data.\"\"\"\n        domain_data = node_data.get('domain', {})\n        if not domain_data:\n            return None\n        \n        domain = {\n            \"kind\": domain_data.get('kind', 'unknown')\n        }\n        \n        if 'values' in domain_data:\n            domain['values'] = domain_data['values']\n        \n        if 'range' in domain_data:\n            domain['range'] = domain_data['range']\n        \n        return domain\n    \n    def _build_node_universe(self, node_data: Dict) -> Optional[Dict[str, Any]]:\n        \"\"\"Build universe object from node data.\"\"\"\n        universe_data = node_data.get('universe', {})\n        if not universe_data:\n            return None\n        \n        universe = {\n            \"expression\": universe_data.get('expression', 'always_show')\n        }\n        \n        if 'dependencies' in universe_data:\n            universe['dependencies'] = universe_data['dependencies']\n        \n        return universe\n    \n    def _build_node_metadata(self, node_data: Dict) -> Optional[Dict[str, Any]]:\n        \"\"\"Build metadata object from node data.\"\"\"\n        metadata = {}\n        \n        if 'text' in node_data:\n            metadata['text'] = node_data['text']\n        \n        # Add other metadata fields as needed\n        for field in ['variable_name', 'required', 'display_logic', 'reason', 'message']:\n            if field in node_data:\n                metadata[field] = node_data[field]\n        \n        return metadata if metadata else None\n    \n    def _build_edges(self, graph: nx.DiGraph) -> List[Dict[str, Any]]:\n        \"\"\"Build edges array.\"\"\"\n        edges = []\n        \n        for source, target, edge_data in graph.edges(data=True):\n            # Generate predicate for this edge\n            predicate_id = self._generate_predicate(edge_data)\n            \n            edge = {\n                \"id\": edge_data.get('id', f\"E_{len(edges):08d}\"),\n                \"source\": source,\n                \"target\": target,\n                \"predicate\": predicate_id,\n                \"kind\": edge_data.get('edge_type', 'fallthrough')\n            }\n            \n            # Add optional fields\n            if 'priority' in edge_data:\n                edge['priority'] = edge_data['priority']\n            \n            if 'subkind' in edge_data:\n                edge['subkind'] = edge_data['subkind']\n            \n            edges.append(edge)\n        \n        return edges\n    \n    def _generate_predicate(self, edge_data: Dict) -> str:\n        \"\"\"Generate predicate ID and store predicate definition.\"\"\"\n        condition = edge_data.get('condition', 'always')\n        \n        # Simple predicate generation for now\n        if condition == 'always':\n            predicate_id = 'P_TRUE'\n            if predicate_id not in self.predicates:\n                self.predicates[predicate_id] = {\n                    \"ast\": [\"TRUE\"],\n                    \"complexity\": \"trivial\",\n                    \"text\": \"Always true\"\n                }\n        else:\n            # Generate unique predicate ID\n            self.predicate_counter += 1\n            predicate_id = f\"P_COND_{self.predicate_counter:04d}\"\n            \n            self.predicates[predicate_id] = {\n                \"ast\": [\"TRUE\"],  # Simplified for now\n                \"complexity\": \"simple\",\n                \"text\": condition\n            }\n        \n        return predicate_id\n    \n    def _build_predicates(self, graph: nx.DiGraph) -> Dict[str, Any]:\n        \"\"\"Build predicates section.\"\"\"\n        return self.predicates\n    \n    def _build_validation_placeholder(self) -> Dict[str, Any]:\n        \"\"\"Build validation placeholder (will be filled by validator).\"\"\"\n        return {\n            \"status\": \"OK\",\n            \"issues\": [],\n            \"gates\": {\n                \"acyclic\": True,\n                \"single_start\": True,\n                \"single_ultimate_terminal\": True,\n                \"terminals_connected_to_ultimate\": True,\n                \"all_reachable\": True,\n                \"terminals_reachable\": True,\n                \"predicates_valid\": True\n            }\n        }\n    \n    def _build_analysis(self, graph: nx.DiGraph) -> Dict[str, Any]:\n        \"\"\"Build analysis section.\"\"\"\n        return {\n            \"statistics\": {\n                \"node_count\": graph.number_of_nodes(),\n                \"edge_count\": graph.number_of_edges(),\n                \"predicate_count\": len(self.predicates),\n                \"intermediate_terminal_count\": self._count_intermediate_terminals(graph)\n            }\n        }\n    \n    def _count_intermediate_terminals(self, graph: nx.DiGraph) -> int:\n        \"\"\"Count intermediate terminal nodes (END_*).\"\"\"\n        count = 0\n        for node_id, node_data in graph.nodes(data=True):\n            if (node_data.get('type') == 'terminal' and \n                node_id != 'SURVEY_COMPLETE' and\n                node_id.startswith('END')):\n                count += 1\n        return count\n    \n    def _build_coverage_placeholder(self) -> Dict[str, Any]:\n        \"\"\"Build coverage placeholder (will be filled by coverage analyzer).\"\"\"\n        return {\n            \"universe\": {\n                \"objective\": \"edge\",\n                \"elements\": [],\n                \"total_count\": 0\n            },\n            \"optimal_paths\": [],\n            \"metrics\": {\n                \"coverage_percentage\": 0.0,\n                \"path_count\": 0,\n                \"algorithm\": \"not_calculated\"\n            }\n        }\n
+"""
+Schema Exporter v1.1 - Convert NetworkX DAG to canonical JSON format
+"""
+
+import json
+import networkx as nx
+from datetime import datetime
+from typing import Dict, List, Any, Optional
+from pathlib import Path
+
+class SchemaExporter:
+    """Exports NetworkX DAG to schema v1.1 compliant JSON format."""
+    
+    def __init__(self):
+        self.predicate_counter = 0
+        self.predicates = {}
+        
+    def export_dag_to_schema(self, graph: nx.DiGraph, output_path: str = None) -> Dict[str, Any]:
+        """Export NetworkX DAG to schema v1.1 format."""
+        
+        print("🔄 Exporting DAG to Schema v1.1 format...")
+        
+        # Build the schema structure
+        schema_dag = {
+            "survey_dag": {
+                "metadata": self._build_metadata(graph),
+                "graph": self._build_graph(graph),
+                "predicates": self._build_predicates(graph),
+                "validation": self._build_validation_placeholder(),
+                "analysis": self._build_analysis(graph),
+                "coverage": self._build_coverage_placeholder()
+            }
+        }
+        
+        # Save to file if path provided
+        if output_path:
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(schema_dag, f, indent=2, ensure_ascii=False)
+            print(f"✅ Schema exported to: {output_path}")
+        
+        return schema_dag
+    
+    def _build_metadata(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Build metadata section."""
+        return {
+            "id": "htops_2025_02",
+            "title": "Household Trends and Outlook Pulse Survey (HTOPS) February 2025",
+            "version": "1.1",
+            "objective": "edge",
+            "build": {
+                "extractor_version": "Phase3B_CollaborativeDAG_v1.0",
+                "extracted_at": datetime.now().isoformat(),
+                "method": "hybrid",
+                "source_format": "PDF_survey_questionnaire",
+                "validation_passed": True,
+                "post_edit": True
+            }
+        }
+    
+    def _build_graph(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Build graph section with nodes and edges."""
+        
+        # Find start node (should be INTRO_INCENTIVE)
+        start_node = self._find_start_node(graph)
+        
+        # Find terminal nodes
+        terminals = self._find_terminals(graph)
+        
+        # Build nodes array
+        nodes = self._build_nodes(graph)
+        
+        # Build edges array
+        edges = self._build_edges(graph)
+        
+        return {
+            "start": start_node,
+            "terminals": terminals,
+            "nodes": nodes,
+            "edges": edges
+        }
+    
+    def _find_start_node(self, graph: nx.DiGraph) -> str:
+        """Find the survey start node."""
+        # Look for INTRO_INCENTIVE first (proper start)
+        if graph.has_node('INTRO_INCENTIVE'):
+            return 'INTRO_INCENTIVE'
+        
+        # Fallback: find node with lowest order_index that's not terminal
+        candidates = []
+        for node_id, node_data in graph.nodes(data=True):
+            if node_data.get('type') not in ['terminal', 'ultimate_terminal']:
+                order = node_data.get('order_index', 999)
+                candidates.append((node_id, order))
+        
+        if candidates:
+            return min(candidates, key=lambda x: x[1])[0]
+        
+        # Last resort: any non-terminal node
+        for node_id, node_data in graph.nodes(data=True):
+            if node_data.get('type') not in ['terminal', 'ultimate_terminal']:
+                return node_id
+        
+        raise ValueError("No suitable start node found")
+    
+    def _find_terminals(self, graph: nx.DiGraph) -> List[str]:
+        """Find all terminal nodes."""
+        terminals = []
+        
+        for node_id, node_data in graph.nodes(data=True):
+            node_type = node_data.get('type', '')
+            if node_type in ['terminal', 'ultimate_terminal']:
+                terminals.append(node_id)
+        
+        # Ensure SURVEY_COMPLETE is included
+        if 'SURVEY_COMPLETE' not in terminals and graph.has_node('SURVEY_COMPLETE'):
+            terminals.append('SURVEY_COMPLETE')
+        
+        return sorted(terminals)
+    
+    def _build_nodes(self, graph: nx.DiGraph) -> List[Dict[str, Any]]:
+        """Build nodes array."""
+        nodes = []
+        
+        for node_id, node_data in graph.nodes(data=True):
+            node = {
+                "id": node_id,
+                "type": self._normalize_node_type(node_data.get('type', 'question'))
+            }
+            
+            # Add optional fields if they exist
+            if 'order_index' in node_data:
+                node['order_index'] = node_data['order_index']
+            
+            if 'block' in node_data:
+                node['block'] = node_data['block']
+            
+            # Build domain if it exists
+            domain = self._build_node_domain(node_data)
+            if domain:
+                node['domain'] = domain
+            
+            # Build universe if it exists
+            universe = self._build_node_universe(node_data)
+            if universe:
+                node['universe'] = universe
+            
+            # Build metadata
+            metadata = self._build_node_metadata(node_data)
+            if metadata:
+                node['metadata'] = metadata
+            
+            nodes.append(node)
+        
+        return sorted(nodes, key=lambda x: x.get('order_index', 999))
+    
+    def _normalize_node_type(self, node_type: str) -> str:
+        """Normalize node type to schema values."""
+        type_map = {
+            'question': 'question',
+            'instruction': 'question',  # Instructions are questions in schema
+            'terminal': 'terminal',
+            'ultimate_terminal': 'ultimate_terminal'
+        }
+        return type_map.get(node_type, 'question')
+    
+    def _build_node_domain(self, node_data: Dict) -> Optional[Dict[str, Any]]:
+        """Build domain object from node data."""
+        domain_data = node_data.get('domain', {})
+        if not domain_data:
+            return None
+        
+        domain = {
+            "kind": domain_data.get('kind', 'unknown')
+        }
+        
+        if 'values' in domain_data:
+            domain['values'] = domain_data['values']
+        
+        if 'range' in domain_data:
+            domain['range'] = domain_data['range']
+        
+        return domain
+    
+    def _build_node_universe(self, node_data: Dict) -> Optional[Dict[str, Any]]:
+        """Build universe object from node data."""
+        universe_data = node_data.get('universe', {})
+        if not universe_data:
+            return None
+        
+        universe = {
+            "expression": universe_data.get('expression', 'always_show')
+        }
+        
+        if 'dependencies' in universe_data:
+            universe['dependencies'] = universe_data['dependencies']
+        
+        return universe
+    
+    def _build_node_metadata(self, node_data: Dict) -> Optional[Dict[str, Any]]:
+        """Build metadata object from node data."""
+        metadata = {}
+        
+        if 'text' in node_data:
+            metadata['text'] = node_data['text']
+        
+        # Add other metadata fields as needed
+        for field in ['variable_name', 'required', 'display_logic', 'reason', 'message']:
+            if field in node_data:
+                metadata[field] = node_data[field]
+        
+        return metadata if metadata else None
+    
+    def _build_edges(self, graph: nx.DiGraph) -> List[Dict[str, Any]]:
+        """Build edges array."""
+        edges = []
+        
+        for source, target, edge_data in graph.edges(data=True):
+            # Generate predicate for this edge
+            predicate_id = self._generate_predicate(edge_data)
+            
+            edge = {
+                "id": edge_data.get('id', f"E_{len(edges):08d}"),
+                "source": source,
+                "target": target,
+                "predicate": predicate_id,
+                "kind": edge_data.get('edge_type', 'fallthrough')
+            }
+            
+            # Add optional fields
+            if 'priority' in edge_data:
+                edge['priority'] = edge_data['priority']
+            
+            if 'subkind' in edge_data:
+                edge['subkind'] = edge_data['subkind']
+            
+            edges.append(edge)
+        
+        return edges
+    
+    def _generate_predicate(self, edge_data: Dict) -> str:
+        """Generate predicate ID and store predicate definition."""
+        condition = edge_data.get('condition', 'always')
+        
+        # Simple predicate generation for now
+        if condition == 'always':
+            predicate_id = 'P_TRUE'
+            if predicate_id not in self.predicates:
+                self.predicates[predicate_id] = {
+                    "ast": ["TRUE"],
+                    "complexity": "trivial",
+                    "text": "Always true"
+                }
+        else:
+            # Generate unique predicate ID
+            self.predicate_counter += 1
+            predicate_id = f"P_COND_{self.predicate_counter:04d}"
+            
+            self.predicates[predicate_id] = {
+                "ast": ["TRUE"],  # Simplified for now
+                "complexity": "simple",
+                "text": condition
+            }
+        
+        return predicate_id
+    
+    def _build_predicates(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Build predicates section."""
+        return self.predicates
+    
+    def _build_validation_placeholder(self) -> Dict[str, Any]:
+        """Build validation placeholder (will be filled by validator)."""
+        return {
+            "status": "OK",
+            "issues": [],
+            "gates": {
+                "acyclic": True,
+                "single_start": True,
+                "single_ultimate_terminal": True,
+                "terminals_connected_to_ultimate": True,
+                "all_reachable": True,
+                "terminals_reachable": True,
+                "predicates_valid": True
+            }
+        }
+    
+    def _build_analysis(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Build analysis section."""
+        return {
+            "statistics": {
+                "node_count": graph.number_of_nodes(),
+                "edge_count": graph.number_of_edges(),
+                "predicate_count": len(self.predicates),
+                "intermediate_terminal_count": self._count_intermediate_terminals(graph)
+            }
+        }
+    
+    def _count_intermediate_terminals(self, graph: nx.DiGraph) -> int:
+        """Count intermediate terminal nodes (END_*)."""
+        count = 0
+        for node_id, node_data in graph.nodes(data=True):
+            if (node_data.get('type') == 'terminal' and 
+                node_id != 'SURVEY_COMPLETE' and
+                node_id.startswith('END')):
+                count += 1
+        return count
+    
+    def _build_coverage_placeholder(self) -> Dict[str, Any]:
+        """Build coverage placeholder (will be filled by coverage analyzer)."""
+        return {
+            "universe": {
+                "objective": "edge",
+                "elements": [],
+                "total_count": 0
+            },
+            "optimal_paths": [],
+            "metrics": {
+                "coverage_percentage": 0.0,
+                "path_count": 0,
+                "algorithm": "not_calculated"
+            }
+        }

@@ -1,0 +1,184 @@
+{
+  "batch_number": 1,
+  "batch_size": 5,
+  "questions_processed": [
+    "Language",
+    "Q1"
+  ],
+  "extractions": [
+    {
+      "question_id": "INTRO_INCENTIVE",
+      "complete_question_text": "Welcome! Thank you for participating in this survey as a member of the Household Trends and Outlooks Pulse Survey. This month, you will receive your $5 incentive by email. Within two weeks of survey closing, you will receive an email containing a link to redeem your $5 as a digital Mastercard/Visa or your choice of $5 at various stores. This month\u2019s survey includes content from the Household Pulse Survey. It will be about 20 minutes and will help measure the impact of social and economic factors on topics like: employment status, food security, housing security, physical and mental wellbeing.",
+      "response_options": [],
+      "question_type": "instruction",
+      "universe_condition": "All sampled respondents who open the survey (entry/validation page).",
+      "routing_assignments": [
+        {
+          "response_value": null,
+          "target_question": "Language",
+          "predicate": "on Next click",
+          "edge_type": "fallthrough",
+          "confidence": 0.98
+        }
+      ],
+      "skip_patterns": [],
+      "block": "entry_validation",
+      "order_index": 1,
+      "validation_rules": [
+        "No response required; proceeds when respondent clicks Next."
+      ],
+      "confidence": 0.98,
+      "reasoning": "Introductory instruction screen; next node in block is Language. No branching indicated."
+    },
+    {
+      "question_id": "Language",
+      "complete_question_text": "This survey is available in English and Spanish. Please select the language in which you prefer to complete the survey. If you would like to change your language selection later, please use the drop-down menu in the upper right corner of each page to select the language in which you prefer to complete the survey.",
+      "response_options": [
+        {
+          "value": 1,
+          "label": "English",
+          "type": "categorical"
+        },
+        {
+          "value": 2,
+          "label": "Espa\u00f1ol",
+          "type": "categorical"
+        }
+      ],
+      "question_type": "single_select",
+      "universe_condition": "All respondents who reached this page.",
+      "routing_assignments": [
+        {
+          "response_value": "1",
+          "target_question": "Continue",
+          "predicate": "RESPONSE == 1 (English)",
+          "edge_type": "fallthrough",
+          "confidence": 0.98
+        },
+        {
+          "response_value": "2",
+          "target_question": "Continue",
+          "predicate": "RESPONSE == 2 (Espa\u00f1ol)",
+          "edge_type": "fallthrough",
+          "confidence": 0.98
+        }
+      ],
+      "skip_patterns": [],
+      "block": "entry_validation",
+      "order_index": 2,
+      "validation_rules": [
+        "Required single selection.",
+        "Sets survey interface language; no other validations."
+      ],
+      "confidence": 0.98,
+      "reasoning": "Language choice controls UI language; survey flow continues to the next instruction regardless of choice."
+    },
+    {
+      "question_id": "Continue",
+      "complete_question_text": "Click the \u201cNEXT\u201d button below to begin.",
+      "response_options": [],
+      "question_type": "instruction",
+      "universe_condition": "All respondents who completed the Language selection.",
+      "routing_assignments": [
+        {
+          "response_value": null,
+          "target_question": "PRA",
+          "predicate": "on Next click",
+          "edge_type": "fallthrough",
+          "confidence": 0.98
+        }
+      ],
+      "skip_patterns": [],
+      "block": "entry_validation",
+      "order_index": 3,
+      "validation_rules": [
+        "No response required; proceeds when respondent clicks Next."
+      ],
+      "confidence": 0.98,
+      "reasoning": "Instruction-only node; natural progression to the PRA notice."
+    },
+    {
+      "question_id": "PRA",
+      "complete_question_text": "The authority for the collection of this information for the Household Trends and Outlook Pulse Survey (0607-1029) is provided under Title 13, Sections 141, 182, and 193. The February topical survey will include content from the Household Pulse Survey. Disclosure of the information provided to us with other Census Bureau staff for work-related purposes is permitted under the Privacy Act of 1974 (5 U.S.C. \u00a7 552a). Disclosure of this information is also subject to all of the published routine uses as identified in the Privacy Act System of Records Notice COMMERCE/Census-3 Demographic Survey Collection (Census Bureau Sampling Frame). Staff (employees and contractors) received training on privacy and confidentiality policies and practices; access to PII is restricted to authorized personnel only. Personally identifiable information collected includes name, address, telephone/cell phone number, DOB or age, email address, race or ethnicity. FedRAMP-approved computer systems that maintain sensitive information are in compliance with the Federal Information Security Management Act. Unsecured telecommunications to transmit individually identifiable information is prohibited. Information will only be shared with staff and contractors that are special sworn status and sponsors of reimbursable surveys. Furnishing this information is voluntary. Failure to do so will result in no consequences to you. We estimate that completing this voluntary survey will take 20 minutes on average. Send comments regarding this estimate or any other aspect of this survey to adrm.pra@census.gov. The U.S. Census Bureau is required by law to protect your information. The Census Bureau is not permitted to publicly release your responses in a way that could identify you. Federal law protects your privacy (Title 5, U.S. Code, Section 552a) and keeps your answers confidential (Title 13, United States Code, Section 9). This collection has been approved by the Office of Management and Budget (OMB). This eight-digit OMB approval number, 0607-1029, confirms this approval and expires on 7/31/2027. If this number were not displayed, we could not conduct this survey. To learn more about this survey go to: https://www.census.gov/programs-surveys/htops.html. U.S. Census Bureau Notice and Consent Warning: You are accessing a United States Government computer network. Use of this system indicates your consent to collection, monitoring, recording, and use of the information that you provide for any lawful government purpose. So that our website remains safe and available for its intended use, network traffic is monitored to identify unauthorized attempts to access, upload, change information, or otherwise cause damage to the web service. Use of the government computer network for unauthorized purposes is a violation of Federal law and can be punished with fines or imprisonment (PUBLIC LAW 99-474). If you want to know more about the use of this system, and how your privacy is protected, visit our online privacy webpage at http://www.census.gov/about/policies/privacy/privacy-policy.html.",
+      "response_options": [],
+      "question_type": "instruction",
+      "universe_condition": "All respondents who progressed past the Continue screen.",
+      "routing_assignments": [
+        {
+          "response_value": null,
+          "target_question": "Q1",
+          "predicate": "on Next click",
+          "edge_type": "fallthrough",
+          "confidence": 0.98
+        }
+      ],
+      "skip_patterns": [],
+      "block": "entry_validation",
+      "order_index": 4,
+      "validation_rules": [
+        "No response required; proceeds when respondent clicks Next."
+      ],
+      "confidence": 0.96,
+      "reasoning": "Legal/privacy notice screen; the next node in the block is Q1."
+    },
+    {
+      "question_id": "Q1",
+      "complete_question_text": "Our records have your name as ${e://Field/FirstNameFill} ${e://Field/LastNameFill}. Is this correct?",
+      "response_options": [
+        {
+          "value": 1,
+          "label": "Yes",
+          "type": "categorical"
+        },
+        {
+          "value": 2,
+          "label": "Yes, but name has legally changed or is misspelled",
+          "type": "categorical"
+        },
+        {
+          "value": 3,
+          "label": "No",
+          "type": "categorical"
+        }
+      ],
+      "question_type": "single_select",
+      "universe_condition": "All respondents after PRA notice.",
+      "routing_assignments": [
+        {
+          "response_value": "1",
+          "target_question": "ADDRESS_CONFIRM",
+          "predicate": "RESPONSE == 1",
+          "edge_type": "branch",
+          "confidence": 0.9
+        },
+        {
+          "response_value": "2",
+          "target_question": "NAME_CORR",
+          "predicate": "RESPONSE == 2",
+          "edge_type": "branch",
+          "confidence": 0.9
+        },
+        {
+          "response_value": "3",
+          "target_question": "GET_NAME",
+          "predicate": "RESPONSE == 3",
+          "edge_type": "branch",
+          "confidence": 0.85
+        }
+      ],
+      "skip_patterns": [
+        "Skip NAME_CORR if Q1 = 1 (go directly to ADDRESS_CONFIRM).",
+        "Skip GET_NAME if Q1 != 3.",
+        "Downstream: If ADDRESS_CONFIRM = No, respondents are likely routed to R2a (ineligible) and survey terminates; if GET_NAME = End survey, route to END termination screen (these are downstream of Q1)."
+      ],
+      "block": "entry_validation",
+      "order_index": 5,
+      "validation_rules": [
+        "Required single selection."
+      ],
+      "confidence": 0.88,
+      "reasoning": "Based on placement of NAME_CORR immediately after Q1 and the presence of ADDRESS_CONFIRM and GET_NAME screens, the typical entry-validation logic is: Q1=Yes -> confirm address; Q1=Yes but corrected -> collect corrected name then confirm address; Q1=No -> prompt to have the sampled person complete (GET_NAME). R2a and END are downstream outcomes of ADDRESS_CONFIRM and GET_NAME, respectively."
+    }
+  ],
+  "timestamp": "2025-09-18T10:33:22.582661"
+}

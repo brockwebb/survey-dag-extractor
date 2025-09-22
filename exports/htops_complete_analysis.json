@@ -1,0 +1,317 @@
+{
+  "structure": {
+    "total_nodes": 133,
+    "total_edges": 156,
+    "node_types": {
+      "instruction": 10,
+      "question": 119,
+      "terminal": 3,
+      "ultimate_terminal": 1
+    },
+    "total_questions": 119
+  },
+  "sections": {
+    "arts_entertainment": {
+      "question_count": 5,
+      "first_question": "ART1",
+      "last_question": "ART5"
+    },
+    "childcare_employment": {
+      "question_count": 10,
+      "first_question": "EMP7",
+      "last_question": "SPN5_DAYSTW_2"
+    },
+    "contact_information": {
+      "question_count": 10,
+      "first_question": "Q3",
+      "last_question": "RECONTACT"
+    },
+    "demographics": {
+      "question_count": 3,
+      "first_question": "D11",
+      "last_question": "D13"
+    },
+    "entry_validation": {
+      "question_count": 5,
+      "first_question": "Language",
+      "last_question": "GET_NAME"
+    },
+    "financial_stress": {
+      "question_count": 4,
+      "first_question": "SPN4",
+      "last_question": "INFLATE4"
+    },
+    "food_security": {
+      "question_count": 6,
+      "first_question": "FD1",
+      "last_question": "FD7_new"
+    },
+    "health_disability": {
+      "question_count": 6,
+      "first_question": "DIS1",
+      "last_question": "DIS6"
+    },
+    "health_insurance": {
+      "question_count": 1,
+      "first_question": "HLTH8",
+      "last_question": "HLTH8"
+    },
+    "housing": {
+      "question_count": 9,
+      "first_question": "HSE1",
+      "last_question": "HSE12_rev"
+    },
+    "language_satisfaction": {
+      "question_count": 4,
+      "first_question": "LANG",
+      "last_question": "OECD"
+    },
+    "medical_shortages": {
+      "question_count": 2,
+      "first_question": "SHORTAGE1",
+      "last_question": "SHORTAGE2A"
+    },
+    "mental_health": {
+      "question_count": 8,
+      "first_question": "HLTH1",
+      "last_question": "MH4"
+    },
+    "natural_disasters": {
+      "question_count": 34,
+      "first_question": "NDX1",
+      "last_question": "NDX16"
+    },
+    "social_support": {
+      "question_count": 4,
+      "first_question": "SOC1_first",
+      "last_question": "SOCnew2"
+    },
+    "transportation": {
+      "question_count": 3,
+      "first_question": "TRANS1",
+      "last_question": "TRANS3"
+    },
+    "trust_government": {
+      "question_count": 3,
+      "first_question": "Trust1",
+      "last_question": "Trust3"
+    },
+    "vaccination": {
+      "question_count": 2,
+      "first_question": "FALLVAC",
+      "last_question": "RSVVAC"
+    }
+  },
+  "decision_points": [
+    {
+      "node": "GET_NAME",
+      "type": "question",
+      "block": "entry_validation",
+      "branches": [
+        {
+          "target": "END",
+          "condition": "== 2"
+        },
+        {
+          "target": "LANG",
+          "condition": "always"
+        },
+        {
+          "target": "R2a",
+          "condition": "GET_NAME == 2"
+        }
+      ]
+    },
+    {
+      "node": "D11",
+      "type": "question",
+      "block": "demographics",
+      "branches": [
+        {
+          "target": "D12",
+          "condition": "always"
+        },
+        {
+          "target": "D13",
+          "condition": "> 0"
+        },
+        {
+          "target": "EMP7",
+          "condition": "> 0"
+        },
+        {
+          "target": "MH1",
+          "condition": "> 0"
+        },
+        {
+          "target": "FD2",
+          "condition": "> 0"
+        }
+      ]
+    },
+    {
+      "node": "D12",
+      "type": "question",
+      "block": "demographics",
+      "branches": [
+        {
+          "target": "INF2",
+          "condition": "> 1"
+        },
+        {
+          "target": "D13",
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "node": "EMP2",
+      "type": "question",
+      "block": "childcare_employment",
+      "branches": [
+        {
+          "target": "EMP3",
+          "condition": "always"
+        },
+        {
+          "target": "EMP4",
+          "condition": "== 2"
+        }
+      ]
+    },
+    {
+      "node": "FD1",
+      "type": "question",
+      "block": "food_security",
+      "branches": [
+        {
+          "target": "FD3",
+          "condition": "> 1"
+        },
+        {
+          "target": "FD2",
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "node": "HSE1",
+      "type": "question",
+      "block": "housing",
+      "branches": [
+        {
+          "target": "HSE3",
+          "condition": "always"
+        },
+        {
+          "target": "HSE4",
+          "condition": "== 2"
+        }
+      ]
+    },
+    {
+      "node": "HSE3",
+      "type": "question",
+      "block": "housing",
+      "branches": [
+        {
+          "target": "HSE6",
+          "condition": "== 2"
+        },
+        {
+          "target": "HSE8",
+          "condition": "== 2"
+        },
+        {
+          "target": "HSE4",
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "node": "HSE4",
+      "type": "question",
+      "block": "housing",
+      "branches": [
+        {
+          "target": "HSE9",
+          "condition": "== 2"
+        },
+        {
+          "target": "HSE6",
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "node": "NDX1",
+      "type": "question",
+      "block": "natural_disasters",
+      "branches": [
+        {
+          "target": "NDX2",
+          "condition": "always"
+        },
+        {
+          "target": "NDX13",
+          "condition": "== 1"
+        },
+        {
+          "target": "NDX14",
+          "condition": "== 1"
+        },
+        {
+          "target": "NDX16",
+          "condition": "== 1"
+        }
+      ]
+    },
+    {
+      "node": "Q11_a",
+      "type": "question",
+      "block": "contact_information",
+      "branches": [
+        {
+          "target": "Q12",
+          "condition": "== 2"
+        },
+        {
+          "target": "Q_11b",
+          "condition": "always"
+        }
+      ]
+    }
+  ],
+  "pathways": {
+    "completion": {
+      "total_nodes": 10,
+      "questions": 5,
+      "estimated_time_minutes": 2.5
+    },
+    "early_exits": {
+      "END": {
+        "total_nodes": 9,
+        "questions": 5,
+        "estimated_time_minutes": 2.5
+      },
+      "R2a": {
+        "total_nodes": 9,
+        "questions": 5,
+        "estimated_time_minutes": 2.5
+      },
+      "END_INELIGIBLE": {
+        "total_nodes": 10,
+        "questions": 5,
+        "estimated_time_minutes": 2.5
+      }
+    }
+  },
+  "coverage": {
+    "total_possible_paths": 44018,
+    "analyzed_paths": 1000,
+    "avg_questions": 100.113,
+    "min_questions": 5,
+    "max_questions": 116,
+    "avg_completion_time": 50.0565
+  }
+}
