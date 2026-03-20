@@ -5,8 +5,15 @@
 output/*
 pipeline*
 
-#legacy folder
+#legacy folders
 legacy/
+restart/
+
+# handoff folder
+handoffs/
+cc_scripts/
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

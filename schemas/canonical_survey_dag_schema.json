@@ -1,0 +1,314 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Canonical Survey DAG Schema",
+  "description": "Schema for survey definition with explicit DAG routing. Version 2.0",
+  "type": "object",
+  "required": ["survey"],
+  "properties": {
+    "survey": {
+      "type": "object",
+      "required": ["id", "title", "version", "metadata", "blocks", "questions", "terminal_nodes", "dag"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique survey identifier",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable survey title"
+        },
+        "version": {
+          "type": "string",
+          "description": "Survey version identifier"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "blocks": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Block"
+          }
+        },
+        "questions": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Question"
+          }
+        },
+        "terminal_nodes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/TerminalNode"
+          }
+        },
+        "dag": {
+          "$ref": "#/definitions/DAG"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Metadata": {
+      "type": "object",
+      "required": ["created_date", "total_questions", "total_blocks"],
+      "properties": {
+        "created_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_file": {
+          "type": "string"
+        },
+        "extraction_method": {
+          "type": "string"
+        },
+        "extraction_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "total_questions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_blocks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "estimated_duration_minutes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "Block": {
+      "type": "object",
+      "required": ["id", "title", "order", "questions"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": ["id", "type", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["radio", "checkbox", "number", "text", "instruction", "table", "multi_field"]
+        },
+        "text": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Option"
+          }
+        },
+        "validation": {
+          "$ref": "#/definitions/Validation"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Field"
+          },
+          "description": "For multi_field questions"
+        }
+      }
+    },
+    "Option": {
+      "type": "object",
+      "required": ["value", "text"],
+      "properties": {
+        "value": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "exclusive": {
+          "type": "boolean",
+          "default": false,
+          "description": "For checkbox: selecting this deselects others"
+        },
+        "has_text_input": {
+          "type": "boolean",
+          "default": false
+        },
+        "input_type": {
+          "type": "string",
+          "enum": ["text", "number", "email", "phone"]
+        }
+      }
+    },
+    "Validation": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "max_length": {
+          "type": "integer"
+        }
+      }
+    },
+    "Field": {
+      "type": "object",
+      "required": ["id", "type", "label"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "number", "email", "phone"]
+        },
+        "label": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "TerminalNode": {
+      "type": "object",
+      "required": ["id", "type", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "type": {
+          "type": "string",
+          "const": "terminal"
+        },
+        "text": {
+          "type": "string"
+        },
+        "is_final": {
+          "type": "boolean",
+          "default": false,
+          "description": "True for SURVEY_COMPLETE"
+        }
+      }
+    },
+    "DAG": {
+      "type": "object",
+      "required": ["entry_node", "terminal_nodes", "edges"],
+      "properties": {
+        "entry_node": {
+          "type": "string",
+          "description": "ID of first question/node"
+        },
+        "terminal_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "IDs of all terminal nodes"
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Edge"
+          }
+        }
+      }
+    },
+    "Edge": {
+      "type": "object",
+      "required": ["id", "source", "target", "condition", "condition_text", "priority", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique edge identifier"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source node ID"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target node ID"
+        },
+        "condition": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/definitions/ConditionAST"}
+          ],
+          "description": "AST condition or null for fallthrough"
+        },
+        "condition_text": {
+          "type": "string",
+          "description": "Human-readable condition"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Evaluation order (lower = first)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["branch", "fallthrough", "terminal"]
+        }
+      }
+    },
+    "ConditionAST": {
+      "type": "array",
+      "description": "Prefix-notation condition: [operator, operand1, operand2, ...]",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {"type": "string"},
+          {"type": "number"},
+          {"type": "boolean"},
+          {"type": "array"},
+          {"type": "null"}
+        ]
+      },
+      "examples": [
+        [">", "D11", 0],
+        ["=", "EMP1", 2],
+        ["AND", [">", "D11", 0], ["=", "EMP1", 2]],
+        ["in", "STATE", [1, 2, 3]]
+      ]
+    }
+  }
+}
