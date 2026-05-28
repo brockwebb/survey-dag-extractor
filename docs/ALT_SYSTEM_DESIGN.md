@@ -353,8 +353,8 @@ Suggested command surface:
 
 ```bash
 survey-dag validate data/extracted/htops_2025_02.json
-survey-dag heal data/extracted/htops_2025_02.json --report data/extracted/htops_2025_02_validation.md
-survey-dag apply data/extracted/htops_2025_02.json decisions.json
+survey-dag heal data/extracted/htops_2025_02.json --output data/extracted/recommendations.json
+survey-dag apply data/extracted/htops_2025_02.json decisions.json --output data/extracted/htops_2025_02_patched.json
 survey-dag test data/extracted/htops_2025_02.json --coverage edge
 ```
 
