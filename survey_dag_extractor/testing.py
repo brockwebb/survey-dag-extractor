@@ -21,6 +21,9 @@ def evaluate_condition(condition: Any, state: dict[str, Any]) -> bool:
         return any(evaluate_condition(part, state) for part in condition[1:])
     if op == "NOT":
         return not evaluate_condition(condition[1], state)
+    binary_ops = {"=", "!=", ">", "<", ">=", "<=", "contains", "in", "not_in"}
+    if op not in binary_ops:
+        raise ValueError(f"Unknown condition operator: {op}")
     left = state.get(condition[1])
     right = condition[2]
     if op == "=":
@@ -35,11 +38,13 @@ def evaluate_condition(condition: Any, state: dict[str, Any]) -> bool:
         return left is not None and left >= right
     if op == "<=":
         return left is not None and left <= right
-    if op in {"contains", "in"}:
+    if op == "contains":
         return right in left if isinstance(left, list) else left == right
+    if op == "in":
+        return left in right if isinstance(right, list) else left == right
     if op == "not_in":
-        return right not in left if isinstance(left, list) else left != right
-    raise ValueError(f"Unknown condition operator: {op}")
+        return left not in right if isinstance(right, list) else left != right
+    raise AssertionError(f"Unhandled condition operator: {op}")
 
 
 def simulate_route(model: SurveyModel, responses: dict[str, Any], max_steps: int = 1000) -> dict[str, Any]:

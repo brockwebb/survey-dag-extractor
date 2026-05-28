@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from survey_dag_extractor.model import SurveyModel
 from survey_dag_extractor.testing import evaluate_condition, generate_coverage_tests, simulate_route
 
@@ -15,6 +17,19 @@ def test_evaluate_condition_supports_basic_operators():
     assert evaluate_condition(["contains", "Q3", 4], state)
     assert evaluate_condition(["AND", ["=", "Q1", 1], [">", "Q2", 2]], state)
     assert not evaluate_condition(["FALSE"], state)
+
+
+def test_evaluate_condition_uses_canonical_in_not_in_semantics():
+    state = {"STATE": 2, "CHOICES": [1, 3]}
+
+    assert evaluate_condition(["in", "STATE", [1, 2, 3]], state)
+    assert not evaluate_condition(["not_in", "STATE", [1, 2, 3]], state)
+    assert evaluate_condition(["contains", "CHOICES", 3], state)
+
+
+def test_evaluate_condition_unknown_operator_raises_value_error_without_operands():
+    with pytest.raises(ValueError, match="Unknown condition operator: UNKNOWN"):
+        evaluate_condition(["UNKNOWN"], {})
 
 
 def test_simulate_route_follows_valid_minimal_path():
