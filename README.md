@@ -51,6 +51,7 @@ survey-dag test tests/fixtures/valid_minimal_survey.json --coverage edge --outpu
 
 **Healing**
 - Generates deterministic repair recommendations for supported structural issues
+- Supports missing fallthrough and orphan reconnect recommendations
 - Keeps repairs human-reviewable before they are applied
 - Supports approved recommendation application through the `survey-dag apply` command
 

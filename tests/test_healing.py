@@ -60,6 +60,88 @@ def test_approved_fallthrough_patch_resolves_missing_fallthrough():
     assert "missing_fallthrough" not in issue_types
 
 
+def test_orphan_question_gets_reconnect_recommendation():
+    document = load_fixture("orphan_node_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E002",
+            "source": "Q2",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "complete",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert len(recommendations) == 1
+    recommendation = recommendations[0]
+    assert recommendation.type == "connect_orphan_node"
+    assert recommendation.confidence == "low"
+    assert recommendation.requires_approval
+    assert recommendation.patch[0]["op"] == "add_edge"
+    assert recommendation.patch[0]["edge"] == {
+        "id": "E_AUTO_0001",
+        "source": "Q1",
+        "target": "Q2",
+        "condition": None,
+        "condition_text": "orphan reconnect",
+        "priority": 998,
+        "type": "fallthrough",
+    }
+
+
+def test_approved_orphan_reconnect_patch_resolves_orphan_issue():
+    document = load_fixture("orphan_node_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E002",
+            "source": "Q2",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "complete",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    patched = apply_approved_recommendations(
+        model.document,
+        recommendations,
+        [approved_decision(recommendations[0].id)],
+    )
+
+    patched_issues = validate_model(SurveyModel(patched))
+    assert "orphan_node" not in {issue.type for issue in patched_issues}
+
+
+def test_orphan_recommendation_is_not_generated_without_reachable_predecessor():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["id"] = "orphan_entry"
+    document["survey"]["dag"]["entry_node"] = "Q2"
+    document["survey"]["dag"]["edges"] = [
+        {
+            "id": "E001",
+            "source": "Q2",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "complete",
+            "priority": 999,
+            "type": "terminal",
+        }
+    ]
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert all(recommendation.type != "connect_orphan_node" for recommendation in recommendations)
+
+
 @pytest.mark.parametrize(
     "edge_item",
     [
