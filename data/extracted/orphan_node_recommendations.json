@@ -1,0 +1,28 @@
+{
+  "survey_id": "orphan_node",
+  "recommendation_count": 1,
+  "recommendations": [
+    {
+      "id": "REC_0001",
+      "issue_id": "ISSUE_0002",
+      "type": "connect_orphan_node",
+      "confidence": "low",
+      "rationale": "Q2 is unreachable; connect it from nearest reachable prior node Q1 for human review.",
+      "patch": [
+        {
+          "op": "add_edge",
+          "edge": {
+            "id": "E_AUTO_0001",
+            "source": "Q1",
+            "target": "Q2",
+            "condition": null,
+            "condition_text": "orphan reconnect",
+            "priority": 998,
+            "type": "fallthrough"
+          }
+        }
+      ],
+      "requires_approval": true
+    }
+  ]
+}

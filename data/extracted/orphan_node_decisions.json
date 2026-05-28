@@ -1,0 +1,8 @@
+[
+  {
+    "recommendation_id": "REC_0001",
+    "decision": "approved",
+    "approver": "human",
+    "rationale": "Approved orphan reconnect repair: make Q2 reachable from nearest prior reachable node Q1 for review."
+  }
+]
