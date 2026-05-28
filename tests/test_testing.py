@@ -32,6 +32,11 @@ def test_evaluate_condition_unknown_operator_raises_value_error_without_operands
         evaluate_condition(["UNKNOWN"], {})
 
 
+def test_evaluate_condition_list_operator_raises_value_error():
+    with pytest.raises(ValueError, match="Unknown condition operator"):
+        evaluate_condition([["BAD"], "Q1", 1], {"Q1": 1})
+
+
 def test_simulate_route_follows_valid_minimal_path():
     model = SurveyModel.from_path(FIXTURES / "valid_minimal_survey.json")
 

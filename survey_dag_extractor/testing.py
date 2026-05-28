@@ -11,6 +11,8 @@ def evaluate_condition(condition: Any, state: dict[str, Any]) -> bool:
     if not isinstance(condition, list) or not condition:
         return bool(condition)
     op = condition[0]
+    if not isinstance(op, str):
+        raise ValueError(f"Unknown condition operator: {op}")
     if op == "TRUE":
         return True
     if op == "FALSE":
