@@ -4,9 +4,17 @@ from survey_dag_extractor.issues import ValidationIssue
 from survey_dag_extractor.model import SurveyModel
 
 
+UNKNOWN_SURVEY_ID = "<unknown>"
+
+
+def safe_survey_id(model: SurveyModel) -> str:
+    survey_id = model.survey.get("id")
+    return survey_id if isinstance(survey_id, str) and survey_id else UNKNOWN_SURVEY_ID
+
+
 def format_markdown_report(model: SurveyModel, issues: list[ValidationIssue]) -> str:
     lines = [
-        f"# Validation Report: {model.survey_id}",
+        f"# Validation Report: {safe_survey_id(model)}",
         "",
         f"- Entry node: `{model.entry_node}`",
         f"- Questions: {len(model.questions)}",

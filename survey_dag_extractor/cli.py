@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Sequence
 
 from survey_dag_extractor.model import SurveyModel
-from survey_dag_extractor.reports import format_markdown_report
+from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
 from survey_dag_extractor.validation import validate_model
 
 
@@ -45,7 +45,7 @@ def _validate(args: argparse.Namespace) -> int:
     if args.report:
         args.report.write_text(format_markdown_report(model, issues), encoding="utf-8")
     payload = {
-        "survey_id": model.survey_id,
+        "survey_id": safe_survey_id(model),
         "status": "valid" if not issues else "invalid",
         "issue_count": len(issues),
         "issues": [issue.to_dict() for issue in issues],
