@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 from survey_dag_extractor.issues import Recommendation, ValidationIssue
 from survey_dag_extractor.model import SurveyModel
 
@@ -26,6 +28,19 @@ def recommend_repairs(model: SurveyModel, issues: list[ValidationIssue]) -> list
             if recommendation:
                 recommendations.append(recommendation)
     return recommendations
+
+
+def link_recommendations_to_issues(
+    issues: list[ValidationIssue],
+    recommendations: list[Recommendation],
+) -> list[ValidationIssue]:
+    recommendation_ids_by_issue: dict[str, list[str]] = {}
+    for recommendation in recommendations:
+        recommendation_ids_by_issue.setdefault(recommendation.issue_id, []).append(recommendation.id)
+    return [
+        replace(issue, recommendation_ids=recommendation_ids_by_issue.get(issue.id, []))
+        for issue in issues
+    ]
 
 
 def _recommend_fallthrough(model: SurveyModel, issue: ValidationIssue, index: int) -> Recommendation | None:

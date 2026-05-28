@@ -460,6 +460,24 @@ def test_heal_cli_prints_recommendations(capsys):
     assert payload["recommendations"][0]["type"] == "add_fallthrough_edge"
 
 
+def test_heal_cli_links_recommendations_to_issues(capsys):
+    exit_code = main(["heal", str(FIXTURES / "orphan_node_survey.json")])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    recommendations_by_issue = {
+        recommendation["issue_id"]: recommendation["id"]
+        for recommendation in payload["recommendations"]
+    }
+
+    assert exit_code == 0
+    assert payload["issue_count"] == 2
+    for issue in payload["issues"]:
+        recommendation_id = recommendations_by_issue.get(issue["id"])
+        if recommendation_id:
+            assert issue["recommendation_ids"] == [recommendation_id]
+
+
 def test_apply_cli_writes_patched_survey(tmp_path, capsys):
     survey_path = FIXTURES / "missing_fallthrough_survey.json"
     model = SurveyModel.from_path(survey_path)

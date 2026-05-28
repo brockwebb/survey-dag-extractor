@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from survey_dag_extractor.healing import recommend_repairs
+from survey_dag_extractor.healing import link_recommendations_to_issues, recommend_repairs
 from survey_dag_extractor.model import SurveyModel
 from survey_dag_extractor.patching import apply_approved_recommendations_with_summary
 from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
@@ -61,8 +61,11 @@ def _heal(args: argparse.Namespace) -> int:
     model = SurveyModel.from_path(args.survey_path)
     issues = validate_model(model)
     recommendations = recommend_repairs(model, issues)
+    linked_issues = link_recommendations_to_issues(issues, recommendations)
     payload = {
         "survey_id": model.survey_id,
+        "issue_count": len(linked_issues),
+        "issues": [issue.to_dict() for issue in linked_issues],
         "recommendation_count": len(recommendations),
         "recommendations": [recommendation.to_dict() for recommendation in recommendations],
     }

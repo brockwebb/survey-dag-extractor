@@ -1,5 +1,37 @@
 {
   "survey_id": "orphan_node",
+  "issue_count": 2,
+  "issues": [
+    {
+      "id": "ISSUE_0001",
+      "severity": "error",
+      "type": "missing_outgoing_edge",
+      "node_id": "Q2",
+      "edge_id": null,
+      "message": "Question Q2 has no outgoing edge.",
+      "evidence": {},
+      "recommendation_ids": [
+        "REC_0002"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "ISSUE_0002",
+      "severity": "error",
+      "type": "orphan_node",
+      "node_id": "Q2",
+      "edge_id": null,
+      "message": "Q2 is not reachable from the entry node.",
+      "evidence": {
+        "entry_node": "Q1",
+        "incoming_edges": []
+      },
+      "recommendation_ids": [
+        "REC_0001"
+      ],
+      "status": "open"
+    }
+  ],
   "recommendation_count": 2,
   "recommendations": [
     {
