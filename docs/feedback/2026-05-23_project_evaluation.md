@@ -1,8 +1,10 @@
 # Project Evaluation
 
 **Date:** 2026-05-23
-**Status:** Active
+**Status:** Historical Reference
 **Scope:** Repository structure, documentation, schema assets, conversion helper, and lightweight verification.
+
+This evaluation predates the workbench MVP implementation and is retained as historical pre-MVP feedback.
 
 ---
 
