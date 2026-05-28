@@ -74,11 +74,14 @@ def simulate_route(model: SurveyModel, responses: dict[str, Any], max_steps: int
     for _ in range(max_steps):
         if model.is_terminal(current):
             return {"path": path, "edge_ids": edge_ids, "terminated": True, "reason": "terminal"}
-        matching = [edge for edge in model.outgoing_edges(current) if evaluate_condition(edge.get("condition"), responses)]
-        if not matching:
+        edge = None
+        for candidate in model.outgoing_edges(current):
+            if evaluate_condition(candidate.get("condition"), responses):
+                edge = candidate
+                break
+        if edge is None:
             return {"path": path, "edge_ids": edge_ids, "terminated": False, "reason": "no_matching_edge"}
-        edge = matching[0]
-        edge_ids.append(edge["id"])
+        edge_ids.append(_edge_id(edge))
         current = edge["target"]
         path.append(current)
     return {"path": path, "edge_ids": edge_ids, "terminated": False, "reason": "max_steps"}
@@ -328,6 +331,9 @@ def _synthesize_condition_false(condition: Any, responses: dict[str, Any]) -> bo
     if op == "OR":
         if len(condition) < 2:
             return False
+        synthesized = _synthesize_or_equalities_false(condition, responses)
+        if synthesized is not None:
+            return synthesized
         return all(_synthesize_condition_false(part, responses) for part in condition[1:])
     if op == "NOT":
         return len(condition) == 2 and _synthesize_condition(condition[1], responses)
@@ -374,6 +380,27 @@ def _assign_response(responses: dict[str, Any], variable: str, value: Any) -> bo
         responses[variable] = value
         return True
     return responses[variable] == value
+
+
+def _synthesize_or_equalities_false(condition: list[Any], responses: dict[str, Any]) -> bool | None:
+    variable = None
+    disallowed_values = []
+    for part in condition[1:]:
+        if not isinstance(part, list) or len(part) != 3 or part[0] != "=" or not isinstance(part[1], str):
+            return None
+        if variable is None:
+            variable = part[1]
+        elif variable != part[1]:
+            return None
+        disallowed_values.append(part[2])
+    if variable is None:
+        return None
+    if variable in responses:
+        try:
+            return not evaluate_condition(condition, responses)
+        except ValueError:
+            return False
+    return _assign_response(responses, variable, _different_value(disallowed_values))
 
 
 def _numeric_offset(value: Any, offset: int) -> int | float | None:

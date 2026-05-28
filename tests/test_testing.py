@@ -56,6 +56,92 @@ def _branchy_model() -> SurveyModel:
     )
 
 
+def _or_branchy_model() -> SurveyModel:
+    return SurveyModel(
+        {
+            "survey": {
+                "id": "or_branchy",
+                "questions": {
+                    "Q1": {"id": "Q1", "type": "radio", "text": "Branch?", "options": []},
+                    "Q2": {"id": "Q2", "type": "text", "text": "Follow-up"},
+                },
+                "terminal_nodes": {
+                    "SURVEY_COMPLETE": {"id": "SURVEY_COMPLETE", "type": "terminal", "is_final": True}
+                },
+                "dag": {
+                    "entry_node": "Q1",
+                    "terminal_nodes": ["SURVEY_COMPLETE"],
+                    "edges": [
+                        {
+                            "id": "E_OR_BRANCH",
+                            "source": "Q1",
+                            "target": "Q2",
+                            "condition": ["OR", ["=", "Q1", 1], ["=", "Q1", 2]],
+                            "priority": 1,
+                            "type": "branch",
+                        },
+                        {
+                            "id": "E_OR_FALLTHROUGH",
+                            "source": "Q1",
+                            "target": "SURVEY_COMPLETE",
+                            "condition": None,
+                            "priority": 999,
+                            "type": "fallthrough",
+                        },
+                        {
+                            "id": "E_OR_COMPLETE",
+                            "source": "Q2",
+                            "target": "SURVEY_COMPLETE",
+                            "condition": None,
+                            "priority": 999,
+                            "type": "terminal",
+                        },
+                    ],
+                },
+            }
+        }
+    )
+
+
+def _priority_short_circuit_model() -> SurveyModel:
+    return SurveyModel(
+        {
+            "survey": {
+                "id": "priority_short_circuit",
+                "questions": {
+                    "Q1": {"id": "Q1", "type": "radio", "text": "Start", "options": []},
+                    "Q2": {"id": "Q2", "type": "text", "text": "Lower-priority path"},
+                },
+                "terminal_nodes": {
+                    "SURVEY_COMPLETE": {"id": "SURVEY_COMPLETE", "type": "terminal", "is_final": True}
+                },
+                "dag": {
+                    "entry_node": "Q1",
+                    "terminal_nodes": ["SURVEY_COMPLETE"],
+                    "edges": [
+                        {
+                            "id": "E_TRUE",
+                            "source": "Q1",
+                            "target": "SURVEY_COMPLETE",
+                            "condition": ["TRUE"],
+                            "priority": 1,
+                            "type": "terminal",
+                        },
+                        {
+                            "id": "E_MALFORMED",
+                            "source": "Q1",
+                            "target": "Q2",
+                            "condition": ["=", "Q1"],
+                            "priority": 2,
+                            "type": "branch",
+                        },
+                    ],
+                },
+            }
+        }
+    )
+
+
 def test_evaluate_condition_supports_basic_operators():
     state = {"Q1": 1, "Q2": 3, "Q3": [2, 4]}
 
@@ -106,6 +192,16 @@ def test_simulate_route_follows_valid_minimal_path():
     assert result["terminated"]
 
 
+def test_simulate_route_short_circuits_after_first_matching_priority_edge():
+    model = _priority_short_circuit_model()
+
+    result = simulate_route(model, {})
+
+    assert result["path"] == ["Q1", "SURVEY_COMPLETE"]
+    assert result["edge_ids"] == ["E_TRUE"]
+    assert result["terminated"]
+
+
 def test_generate_coverage_tests_for_valid_fixture():
     model = SurveyModel.from_path(FIXTURES / "valid_minimal_survey.json")
 
@@ -115,6 +211,21 @@ def test_generate_coverage_tests_for_valid_fixture():
     assert payload["coverage"]["node_percent"] == 100
     assert payload["coverage"]["edge_percent"] == 100
     assert payload["tests"][0]["expected_path"] == ["Q1", "Q2", "SURVEY_COMPLETE"]
+
+
+def test_generate_coverage_tests_synthesizes_or_equality_fallthrough():
+    model = _or_branchy_model()
+
+    payload = generate_coverage_tests(model, coverage_target="edge")
+
+    fallthrough_tests = [
+        test for test in payload["tests"] if test["covered_edges"] == ["E_OR_FALLTHROUGH"]
+    ]
+    assert len(fallthrough_tests) == 1
+    fallthrough_test = fallthrough_tests[0]
+    assert fallthrough_test["responses"]["Q1"] not in {1, 2}
+    assert simulate_route(model, fallthrough_test["responses"])["path"] == fallthrough_test["expected_path"]
+    assert "E_OR_FALLTHROUGH" not in payload["uncovered_edges"]
 
 
 def test_generate_coverage_tests_synthesizes_responses_and_counts_simulated_edges():
