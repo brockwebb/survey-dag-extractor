@@ -1,9 +1,18 @@
+import json
+from copy import deepcopy
 from pathlib import Path
+
+import pytest
 
 from survey_dag_extractor.model import SurveyModel
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def load_fixture(path: str) -> dict:
+    with (FIXTURES / path).open("r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def test_model_loads_valid_fixture_and_indexes_nodes():
@@ -22,3 +31,38 @@ def test_condition_variables_extracts_question_references():
     condition = ["AND", [">", "Q2", 0], ["=", "Q1", 1]]
 
     assert SurveyModel.condition_variables(condition) == {"Q1", "Q2"}
+
+
+@pytest.mark.parametrize("edge_item", [None, 123, "source", []])
+def test_model_ignores_non_dict_edges_when_indexing(edge_item):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0] = edge_item
+
+    model = SurveyModel(document)
+
+    assert model.edges[0] == edge_item
+    assert model.outgoing_edges("Q1") == []
+    assert [edge["id"] for edge in model.incoming_edges("SURVEY_COMPLETE")] == ["E002"]
+
+
+@pytest.mark.parametrize("field", ["source", "target"])
+def test_model_ignores_non_string_edge_endpoints_when_indexing(field):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0][field] = []
+
+    model = SurveyModel(document)
+
+    assert model.outgoing_edges("Q1") == ([] if field == "source" else [document["survey"]["dag"]["edges"][0]])
+    assert model.incoming_edges("Q2") == ([] if field == "target" else [document["survey"]["dag"]["edges"][0]])
+
+
+def test_model_sorts_malformed_priorities_deterministically():
+    document = load_fixture("valid_minimal_survey.json")
+    malformed_priority_edge = deepcopy(document["survey"]["dag"]["edges"][0])
+    malformed_priority_edge["id"] = "E000_BAD_PRIORITY"
+    malformed_priority_edge["priority"] = []
+    document["survey"]["dag"]["edges"].insert(0, malformed_priority_edge)
+
+    model = SurveyModel(document)
+
+    assert [edge["id"] for edge in model.outgoing_edges("Q1")] == ["E000_BAD_PRIORITY", "E001"]

@@ -204,9 +204,20 @@ def test_malformed_edge_priority_does_not_crash_routing_validation():
     assert "schema_invalid" in types
 
 
-def test_non_object_edge_item_does_not_crash_validation_traversal():
+@pytest.mark.parametrize("edge_item", [None, 123, "source", []])
+def test_non_object_edge_item_does_not_crash_validation_traversal(edge_item):
     document = load_fixture("valid_minimal_survey.json")
-    document["survey"]["dag"]["edges"][0] = []
+    document["survey"]["dag"]["edges"][0] = edge_item
+
+    types = issue_types_from_document(document)
+
+    assert "schema_invalid" in types
+
+
+@pytest.mark.parametrize("field", ["source", "target"])
+def test_non_string_edge_endpoint_does_not_crash_validation(field):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0][field] = []
 
     types = issue_types_from_document(document)
 

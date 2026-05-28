@@ -45,10 +45,10 @@ class SurveyModel:
         return node_id in self.terminals
 
     def outgoing_edges(self, node_id: str) -> list[dict[str, Any]]:
-        return sorted(self._outgoing.get(node_id, []), key=lambda edge: (edge.get("priority", 999), edge.get("id", "")))
+        return sorted(self._outgoing.get(node_id, []), key=lambda edge: (self._priority_sort_value(edge), self._edge_id(edge)))
 
     def incoming_edges(self, node_id: str) -> list[dict[str, Any]]:
-        return sorted(self._incoming.get(node_id, []), key=lambda edge: edge.get("id", ""))
+        return sorted(self._incoming.get(node_id, []), key=self._edge_id)
 
     def block_order(self) -> list[str]:
         ordered_blocks = sorted(self.survey.get("blocks", {}).values(), key=lambda block: block.get("order", 999))
@@ -72,9 +72,22 @@ class SurveyModel:
     def _index_edges(self, key: str) -> dict[str, list[dict[str, Any]]]:
         index: dict[str, list[dict[str, Any]]] = defaultdict(list)
         for edge in self.edges:
-            if key in edge:
-                index[edge[key]].append(edge)
+            if not isinstance(edge, dict):
+                continue
+            node_id = edge.get(key)
+            if isinstance(node_id, str):
+                index[node_id].append(edge)
         return dict(index)
+
+    @staticmethod
+    def _edge_id(edge: dict[str, Any]) -> str:
+        edge_id = edge.get("id", "")
+        return edge_id if isinstance(edge_id, str) else str(edge_id)
+
+    @staticmethod
+    def _priority_sort_value(edge: dict[str, Any]) -> int:
+        priority = edge.get("priority", 999)
+        return priority if type(priority) is int else 999
 
     @staticmethod
     def condition_variables(condition: Any) -> set[str]:
