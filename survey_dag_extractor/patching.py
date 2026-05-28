@@ -73,6 +73,11 @@ def _validate_decision(decision: Any) -> None:
     missing = sorted(required_fields - set(decision))
     if missing:
         raise ValueError(f"Decision is missing required fields: {', '.join(missing)}")
+    if decision["decision"] not in {"approved", "rejected"}:
+        raise ValueError("Decision must be approved or rejected before apply")
+    for field in ["recommendation_id", "approver", "rationale"]:
+        if not isinstance(decision[field], str) or not decision[field].strip():
+            raise ValueError(f"Decision field {field} must be a non-empty string")
 
 
 def _apply_operation(document: dict[str, Any], operation: dict[str, Any]) -> bool:

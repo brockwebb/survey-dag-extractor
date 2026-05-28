@@ -567,3 +567,32 @@ def test_apply_cli_reports_no_changes_for_stale_decision(tmp_path, capsys):
     assert payload["skipped_count"] == 1
     assert payload["post_validation_status"] == "invalid"
     assert output_path.exists()
+
+
+def test_apply_cli_rejects_pending_decision_template(tmp_path, capsys):
+    survey_path = FIXTURES / "orphan_node_survey.json"
+    decisions_path = tmp_path / "decisions_template.json"
+    output_path = tmp_path / "patched.json"
+    decisions_path.write_text(
+        json.dumps(
+            [
+                {
+                    "recommendation_id": "REC_0001",
+                    "decision": "pending",
+                    "approver": "",
+                    "rationale": "Review recommendation REC_0001: approve or reject with rationale.",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    exit_code = main(["apply", str(survey_path), str(decisions_path), "--output", str(output_path)])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 2
+    assert payload["status"] == "error"
+    assert payload["error"]["type"] == "input_error"
+    assert "approved or rejected" in payload["error"]["message"]
+    assert not output_path.exists()
