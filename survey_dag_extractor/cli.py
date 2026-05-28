@@ -5,7 +5,9 @@ import json
 from pathlib import Path
 from typing import Sequence
 
+from survey_dag_extractor.healing import recommend_repairs
 from survey_dag_extractor.model import SurveyModel
+from survey_dag_extractor.patching import apply_approved_recommendations
 from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
 from survey_dag_extractor.validation import validate_model
 
@@ -22,13 +24,13 @@ def build_parser() -> argparse.ArgumentParser:
     heal = subcommands.add_parser("heal", help="Generate deterministic repair recommendations")
     heal.add_argument("survey_path", type=Path)
     heal.add_argument("--output", type=Path)
-    heal.set_defaults(func=_not_implemented)
+    heal.set_defaults(func=_heal)
 
     apply_cmd = subcommands.add_parser("apply", help="Apply approved recommendations")
     apply_cmd.add_argument("survey_path", type=Path)
     apply_cmd.add_argument("decisions_path", type=Path)
     apply_cmd.add_argument("--output", type=Path, required=True)
-    apply_cmd.set_defaults(func=_not_implemented)
+    apply_cmd.set_defaults(func=_apply)
 
     test_cmd = subcommands.add_parser("test", help="Generate and simulate coverage tests")
     test_cmd.add_argument("survey_path", type=Path)
@@ -52,6 +54,34 @@ def _validate(args: argparse.Namespace) -> int:
     }
     print(json.dumps(payload, indent=2))
     return 0 if not issues else 1
+
+
+def _heal(args: argparse.Namespace) -> int:
+    model = SurveyModel.from_path(args.survey_path)
+    issues = validate_model(model)
+    recommendations = recommend_repairs(model, issues)
+    payload = {
+        "survey_id": model.survey_id,
+        "recommendation_count": len(recommendations),
+        "recommendations": [recommendation.to_dict() for recommendation in recommendations],
+    }
+    text = json.dumps(payload, indent=2)
+    if args.output:
+        args.output.write_text(text, encoding="utf-8")
+    print(text)
+    return 0
+
+
+def _apply(args: argparse.Namespace) -> int:
+    model = SurveyModel.from_path(args.survey_path)
+    issues = validate_model(model)
+    recommendations = recommend_repairs(model, issues)
+    with args.decisions_path.open("r", encoding="utf-8") as file:
+        decisions = json.load(file)
+    patched = apply_approved_recommendations(model.document, recommendations, decisions)
+    args.output.write_text(json.dumps(patched, indent=2), encoding="utf-8")
+    print(json.dumps({"status": "applied", "output": str(args.output)}, indent=2))
+    return 0
 
 
 def _not_implemented(args: argparse.Namespace) -> int:
