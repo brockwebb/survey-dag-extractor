@@ -11,6 +11,7 @@ from survey_dag_extractor.issues import ValidationIssue
 from survey_dag_extractor.model import SurveyModel
 
 KNOWN_OPERATORS = {"=", "!=", ">", "<", ">=", "<=", "in", "not_in", "contains", "AND", "OR", "NOT", "TRUE", "FALSE"}
+LOGICAL_OPERATORS = {"AND", "OR", "NOT"}
 
 
 def validate_model(model: SurveyModel, schema_path: Path | None = None) -> list[ValidationIssue]:
@@ -68,26 +69,29 @@ def _reference_issues(model: SurveyModel) -> list[ValidationIssue]:
                 )
             )
     for edge in model.edges:
-        if not model.node_exists(edge["source"]):
+        edge_id = _edge_id(edge)
+        source = _edge_node_id(edge, "source")
+        target = _edge_node_id(edge, "target")
+        if source is not None and not model.node_exists(source):
             issues.append(
                 ValidationIssue(
                     "ISSUE_PENDING",
                     "error",
                     "missing_edge_source",
-                    f"Edge {edge['id']} source {edge['source']} does not exist.",
-                    node_id=edge["source"],
-                    edge_id=edge["id"],
+                    f"Edge {edge_id} source {source} does not exist.",
+                    node_id=source,
+                    edge_id=edge_id,
                 )
             )
-        if not model.node_exists(edge["target"]):
+        if target is not None and not model.node_exists(target):
             issues.append(
                 ValidationIssue(
                     "ISSUE_PENDING",
                     "error",
                     "missing_edge_target",
-                    f"Edge {edge['id']} target {edge['target']} does not exist.",
-                    node_id=edge["target"],
-                    edge_id=edge["id"],
+                    f"Edge {edge_id} target {target} does not exist.",
+                    node_id=target,
+                    edge_id=edge_id,
                 )
             )
     return issues
@@ -96,6 +100,7 @@ def _reference_issues(model: SurveyModel) -> list[ValidationIssue]:
 def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     for edge in model.edges:
+        edge_id = _edge_id(edge)
         condition = edge.get("condition")
         for op in _condition_operators(condition):
             if op == "UNPARSED":
@@ -104,8 +109,8 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
                         "ISSUE_PENDING",
                         "error",
                         "unparsed_condition",
-                        f"Edge {edge['id']} has an unparsed condition.",
-                        edge_id=edge["id"],
+                        f"Edge {edge_id} has an unparsed condition.",
+                        edge_id=edge_id,
                         evidence={"condition": condition},
                     )
                 )
@@ -115,8 +120,8 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
                         "ISSUE_PENDING",
                         "error",
                         "unknown_condition_operator",
-                        f"Edge {edge['id']} uses unknown condition operator {op}.",
-                        edge_id=edge["id"],
+                        f"Edge {edge_id} uses unknown condition operator {op}.",
+                        edge_id=edge_id,
                         evidence={"operator": op, "condition": condition},
                     )
                 )
@@ -127,9 +132,9 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
                         "ISSUE_PENDING",
                         "error",
                         "missing_condition_variable",
-                        f"Edge {edge['id']} condition references missing question {variable}.",
+                        f"Edge {edge_id} condition references missing question {variable}.",
                         node_id=variable,
-                        edge_id=edge["id"],
+                        edge_id=edge_id,
                     )
                 )
     return issues
@@ -138,9 +143,12 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
 def _condition_operators(condition: Any) -> list[str]:
     if condition is None or not isinstance(condition, list) or not condition:
         return []
-    operators = [condition[0]] if isinstance(condition[0], str) else []
-    for item in condition[1:]:
-        operators.extend(_condition_operators(item))
+    if not isinstance(condition[0], str):
+        return []
+    operators = [condition[0]]
+    if condition[0] in LOGICAL_OPERATORS:
+        for item in condition[1:]:
+            operators.extend(_condition_operators(item))
     return operators
 
 
@@ -148,7 +156,11 @@ def _priority_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     by_source: dict[str, dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
     for edge in model.edges:
-        by_source[edge["source"]][edge["priority"]].append(edge["id"])
+        source = _edge_node_id(edge, "source")
+        priority = edge.get("priority")
+        if source is None or type(priority) is not int:
+            continue
+        by_source[source][priority].append(_edge_id(edge))
     for source, priorities in by_source.items():
         for priority, edge_ids in priorities.items():
             if len(edge_ids) > 1:
@@ -202,8 +214,9 @@ def _reachable_nodes(model: SurveyModel) -> set[str]:
             continue
         visited.add(node_id)
         for edge in model.outgoing_edges(node_id):
-            if model.node_exists(edge["target"]):
-                stack.append(edge["target"])
+            target = _edge_node_id(edge, "target")
+            if target is not None and model.node_exists(target):
+                stack.append(target)
     return visited
 
 
@@ -220,7 +233,7 @@ def _reachability_issues(model: SurveyModel) -> list[ValidationIssue]:
                 "orphan_node",
                 f"{node_id} is not reachable from the entry node.",
                 node_id=node_id,
-                evidence={"entry_node": model.entry_node, "incoming_edges": [edge["id"] for edge in model.incoming_edges(node_id)]},
+                evidence={"entry_node": model.entry_node, "incoming_edges": [_edge_id(edge) for edge in model.incoming_edges(node_id)]},
             )
         )
     return issues
@@ -240,13 +253,15 @@ def _cycle_issues(model: SurveyModel) -> list[ValidationIssue]:
             return
         visiting.add(node_id)
         for edge in model.outgoing_edges(node_id):
-            if model.node_exists(edge["target"]):
-                visit(edge["target"], path + [edge["target"]])
+            target = _edge_node_id(edge, "target")
+            if target is not None and model.node_exists(target):
+                visit(target, path + [target])
         visiting.remove(node_id)
         visited.add(node_id)
 
-    if model.entry_node and model.node_exists(model.entry_node):
-        visit(model.entry_node, [model.entry_node])
+    for node_id in sorted(model.node_ids):
+        if node_id not in visited and not model.is_terminal(node_id):
+            visit(node_id, [node_id])
 
     return [
         ValidationIssue(
@@ -273,11 +288,15 @@ def _dead_end_issues(model: SurveyModel) -> list[ValidationIssue]:
         if node_id in path:
             memo[node_id] = False
             return False
-        outgoing = [edge for edge in model.outgoing_edges(node_id) if model.node_exists(edge["target"])]
+        outgoing = [
+            edge
+            for edge in model.outgoing_edges(node_id)
+            if (target := _edge_node_id(edge, "target")) is not None and model.node_exists(target)
+        ]
         if not outgoing:
             memo[node_id] = False
             return False
-        memo[node_id] = any(reaches_terminal(edge["target"], path | {node_id}) for edge in outgoing)
+        memo[node_id] = any(reaches_terminal(_edge_node_id(edge, "target"), path | {node_id}) for edge in outgoing)
         return memo[node_id]
 
     issues = []
@@ -297,7 +316,7 @@ def _dead_end_issues(model: SurveyModel) -> list[ValidationIssue]:
 
 def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues = []
-    for source in sorted({edge["source"] for edge in model.edges}):
+    for source in sorted({source for edge in model.edges if (source := _edge_node_id(edge, "source")) is not None}):
         outgoing = model.outgoing_edges(source)
         has_branch = any(edge.get("type") == "branch" for edge in outgoing)
         has_fallthrough = any(edge.get("type") == "fallthrough" and edge.get("condition") is None for edge in outgoing)
@@ -309,10 +328,20 @@ def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
                     "missing_fallthrough",
                     f"Branching source {source} has no fallthrough edge.",
                     node_id=source,
-                    evidence={"outgoing_edges": [edge["id"] for edge in outgoing]},
+                    evidence={"outgoing_edges": [_edge_id(edge) for edge in outgoing]},
                 )
             )
     return issues
+
+
+def _edge_id(edge: dict[str, Any]) -> str:
+    edge_id = edge.get("id", "<unknown>")
+    return edge_id if isinstance(edge_id, str) else str(edge_id)
+
+
+def _edge_node_id(edge: dict[str, Any], key: str) -> str | None:
+    node_id = edge.get(key)
+    return node_id if isinstance(node_id, str) else None
 
 
 def _renumber(issues: list[ValidationIssue]) -> list[ValidationIssue]:
