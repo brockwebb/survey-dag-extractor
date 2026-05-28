@@ -140,11 +140,11 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
     return issues
 
 
-def _condition_operators(condition: Any) -> list[str]:
+def _condition_operators(condition: Any) -> list[Any]:
     if condition is None or not isinstance(condition, list) or not condition:
         return []
     if not isinstance(condition[0], str):
-        return []
+        return [condition[0]]
     operators = [condition[0]]
     if condition[0] in LOGICAL_OPERATORS:
         for item in condition[1:]:
@@ -277,31 +277,11 @@ def _cycle_issues(model: SurveyModel) -> list[ValidationIssue]:
 
 
 def _dead_end_issues(model: SurveyModel) -> list[ValidationIssue]:
-    terminal_ids = set(model.terminal_ids)
-    memo: dict[str, bool] = {}
-
-    def reaches_terminal(node_id: str, path: set[str]) -> bool:
-        if node_id in terminal_ids:
-            return True
-        if node_id in memo:
-            return memo[node_id]
-        if node_id in path:
-            memo[node_id] = False
-            return False
-        outgoing = [
-            edge
-            for edge in model.outgoing_edges(node_id)
-            if (target := _edge_node_id(edge, "target")) is not None and model.node_exists(target)
-        ]
-        if not outgoing:
-            memo[node_id] = False
-            return False
-        memo[node_id] = any(reaches_terminal(_edge_node_id(edge, "target"), path | {node_id}) for edge in outgoing)
-        return memo[node_id]
-
     issues = []
+    terminal_ids = set(model.terminal_ids)
+    can_reach_terminal = _nodes_that_can_reach_terminal(model)
     for node_id in sorted(_reachable_nodes(model)):
-        if node_id not in terminal_ids and not reaches_terminal(node_id, set()):
+        if node_id not in terminal_ids and node_id not in can_reach_terminal:
             issues.append(
                 ValidationIssue(
                     "ISSUE_PENDING",
@@ -312,6 +292,25 @@ def _dead_end_issues(model: SurveyModel) -> list[ValidationIssue]:
                 )
             )
     return issues
+
+
+def _nodes_that_can_reach_terminal(model: SurveyModel) -> set[str]:
+    reverse_edges: dict[str, set[str]] = defaultdict(set)
+    for edge in model.edges:
+        source = _edge_node_id(edge, "source")
+        target = _edge_node_id(edge, "target")
+        if source is not None and target is not None and model.node_exists(source) and model.node_exists(target):
+            reverse_edges[target].add(source)
+
+    visited: set[str] = set()
+    stack = [terminal_id for terminal_id in model.terminal_ids if model.node_exists(terminal_id)]
+    while stack:
+        node_id = stack.pop()
+        if node_id in visited:
+            continue
+        visited.add(node_id)
+        stack.extend(reverse_edges.get(node_id, set()) - visited)
+    return visited
 
 
 def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:

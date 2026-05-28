@@ -25,6 +25,10 @@ def issue_types_from_document(document: dict) -> set[str]:
     return {issue.type for issue in validate_model(SurveyModel(document))}
 
 
+def issues_from_document(document: dict):
+    return validate_model(SurveyModel(document))
+
+
 def test_valid_minimal_survey_has_no_issues():
     assert issue_types("valid_minimal_survey.json") == set()
 
@@ -120,3 +124,69 @@ def test_in_condition_literal_list_is_not_treated_as_nested_expression():
     types = issue_types_from_document(document)
 
     assert "unknown_condition_operator" not in types
+
+
+def test_non_string_condition_operator_is_reported():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0] = {
+        "id": "E001",
+        "source": "Q1",
+        "target": "Q2",
+        "condition": [123, "Q1", 1],
+        "condition_text": "malformed operator",
+        "priority": 1,
+        "type": "branch",
+    }
+    document["survey"]["dag"]["edges"].insert(
+        1,
+        {
+            "id": "E001_FALLTHROUGH",
+            "source": "Q1",
+            "target": "Q2",
+            "condition": None,
+            "condition_text": "fallthrough",
+            "priority": 999,
+            "type": "fallthrough",
+        },
+    )
+
+    types = issue_types_from_document(document)
+
+    assert "unknown_condition_operator" in types
+
+
+def test_cycle_with_exit_path_to_terminal_is_not_a_dead_end():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"] = [
+        {
+            "id": "E001",
+            "source": "Q1",
+            "target": "Q2",
+            "condition": None,
+            "condition_text": "fallthrough",
+            "priority": 1,
+            "type": "fallthrough",
+        },
+        {
+            "id": "E002",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "complete",
+            "priority": 2,
+            "type": "terminal",
+        },
+        {
+            "id": "E003",
+            "source": "Q2",
+            "target": "Q1",
+            "condition": None,
+            "condition_text": "loop",
+            "priority": 1,
+            "type": "fallthrough",
+        },
+    ]
+
+    dead_end_nodes = {issue.node_id for issue in issues_from_document(document) if issue.type == "dead_end"}
+
+    assert "Q2" not in dead_end_nodes
