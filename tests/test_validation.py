@@ -204,6 +204,15 @@ def test_malformed_edge_priority_does_not_crash_routing_validation():
     assert "schema_invalid" in types
 
 
+def test_non_object_edge_item_does_not_crash_validation_traversal():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0] = []
+
+    types = issue_types_from_document(document)
+
+    assert "schema_invalid" in types
+
+
 def test_cycle_with_exit_path_to_terminal_is_not_a_dead_end():
     document = load_fixture("valid_minimal_survey.json")
     document["survey"]["dag"]["edges"] = [

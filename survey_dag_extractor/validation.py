@@ -68,7 +68,7 @@ def _reference_issues(model: SurveyModel) -> list[ValidationIssue]:
                     node_id=terminal_id,
                 )
             )
-    for edge in model.edges:
+    for edge in _safe_edges(model):
         edge_id = _edge_id(edge)
         source = _edge_node_id(edge, "source")
         target = _edge_node_id(edge, "target")
@@ -99,7 +99,7 @@ def _reference_issues(model: SurveyModel) -> list[ValidationIssue]:
 
 def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
-    for edge in model.edges:
+    for edge in _safe_edges(model):
         edge_id = _edge_id(edge)
         condition = edge.get("condition")
         for op in _condition_operators(condition):
@@ -169,7 +169,7 @@ def _condition_variables(condition: Any) -> set[str]:
 def _priority_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
     by_source: dict[str, dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
-    for edge in model.edges:
+    for edge in _safe_edges(model):
         source = _edge_node_id(edge, "source")
         priority = edge.get("priority")
         if source is None or type(priority) is not int:
@@ -310,7 +310,7 @@ def _dead_end_issues(model: SurveyModel) -> list[ValidationIssue]:
 
 def _nodes_that_can_reach_terminal(model: SurveyModel) -> set[str]:
     reverse_edges: dict[str, set[str]] = defaultdict(set)
-    for edge in model.edges:
+    for edge in _safe_edges(model):
         source = _edge_node_id(edge, "source")
         target = _edge_node_id(edge, "target")
         if source is not None and target is not None and model.node_exists(source) and model.node_exists(target):
@@ -329,7 +329,7 @@ def _nodes_that_can_reach_terminal(model: SurveyModel) -> set[str]:
 
 def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues = []
-    for source in sorted({source for edge in model.edges if (source := _edge_node_id(edge, "source")) is not None}):
+    for source in sorted({source for edge in _safe_edges(model) if (source := _edge_node_id(edge, "source")) is not None}):
         outgoing = _outgoing_edges(model, source)
         has_branch = any(edge.get("type") == "branch" for edge in outgoing)
         has_fallthrough = any(edge.get("type") == "fallthrough" and edge.get("condition") is None for edge in outgoing)
@@ -349,16 +349,20 @@ def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
 
 def _outgoing_edges(model: SurveyModel, node_id: str) -> list[dict[str, Any]]:
     return sorted(
-        (edge for edge in model.edges if _edge_node_id(edge, "source") == node_id),
+        (edge for edge in _safe_edges(model) if _edge_node_id(edge, "source") == node_id),
         key=lambda edge: (_priority_sort_value(edge), _edge_id(edge)),
     )
 
 
 def _incoming_edges(model: SurveyModel, node_id: str) -> list[dict[str, Any]]:
     return sorted(
-        (edge for edge in model.edges if _edge_node_id(edge, "target") == node_id),
+        (edge for edge in _safe_edges(model) if _edge_node_id(edge, "target") == node_id),
         key=_edge_id,
     )
+
+
+def _safe_edges(model: SurveyModel) -> list[dict[str, Any]]:
+    return [edge for edge in model.edges if isinstance(edge, dict)]
 
 
 def _priority_sort_value(edge: dict[str, Any]) -> int:
