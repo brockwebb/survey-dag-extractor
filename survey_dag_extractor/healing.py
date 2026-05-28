@@ -37,10 +37,17 @@ def link_recommendations_to_issues(
     recommendation_ids_by_issue: dict[str, list[str]] = {}
     for recommendation in recommendations:
         recommendation_ids_by_issue.setdefault(recommendation.issue_id, []).append(recommendation.id)
-    return [
-        replace(issue, recommendation_ids=recommendation_ids_by_issue.get(issue.id, []))
-        for issue in issues
-    ]
+    linked_issues = []
+    for issue in issues:
+        recommendation_ids = recommendation_ids_by_issue.get(issue.id, [])
+        linked_issues.append(
+            replace(
+                issue,
+                recommendation_ids=recommendation_ids,
+                status="recommended" if recommendation_ids else issue.status,
+            )
+        )
+    return linked_issues
 
 
 def _recommend_fallthrough(model: SurveyModel, issue: ValidationIssue, index: int) -> Recommendation | None:

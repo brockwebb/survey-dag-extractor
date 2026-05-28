@@ -476,6 +476,7 @@ def test_heal_cli_links_recommendations_to_issues(capsys):
         recommendation_id = recommendations_by_issue.get(issue["id"])
         if recommendation_id:
             assert issue["recommendation_ids"] == [recommendation_id]
+            assert issue["status"] == "recommended"
 
 
 def test_apply_cli_writes_patched_survey(tmp_path, capsys):

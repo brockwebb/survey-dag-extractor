@@ -13,7 +13,7 @@
       "recommendation_ids": [
         "REC_0002"
       ],
-      "status": "open"
+      "status": "recommended"
     },
     {
       "id": "ISSUE_0002",
@@ -29,7 +29,7 @@
       "recommendation_ids": [
         "REC_0001"
       ],
-      "status": "open"
+      "status": "recommended"
     }
   ],
   "recommendation_count": 2,
