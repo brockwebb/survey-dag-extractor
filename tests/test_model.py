@@ -27,6 +27,15 @@ def test_model_loads_valid_fixture_and_indexes_nodes():
     assert [edge["id"] for edge in model.incoming_edges("Q2")] == ["E001"]
 
 
+def test_model_uses_unknown_survey_id_when_missing():
+    document = load_fixture("valid_minimal_survey.json")
+    del document["survey"]["id"]
+
+    model = SurveyModel(document)
+
+    assert model.survey_id == "<unknown>"
+
+
 def test_condition_variables_extracts_question_references():
     condition = ["AND", [">", "Q2", 0], ["=", "Q1", 1]]
 

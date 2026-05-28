@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Any
 
 
+UNKNOWN_SURVEY_ID = "<unknown>"
+
+
 class SurveyModel:
     def __init__(self, document: dict[str, Any]):
         self.document = document
@@ -24,7 +27,8 @@ class SurveyModel:
 
     @property
     def survey_id(self) -> str:
-        return self.survey["id"]
+        survey_id = self.survey.get("id")
+        return survey_id if isinstance(survey_id, str) and survey_id else UNKNOWN_SURVEY_ID
 
     @property
     def entry_node(self) -> str | None:

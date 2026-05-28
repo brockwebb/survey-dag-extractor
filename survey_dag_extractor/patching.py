@@ -1,10 +1,20 @@
 from __future__ import annotations
 
 import copy
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 
 from survey_dag_extractor.issues import Recommendation
+
+
+@dataclass(frozen=True)
+class PatchResult:
+    document: dict[str, Any]
+    decision_count: int
+    applied_count: int
+    skipped_count: int
+    logged_count: int
 
 
 def apply_approved_recommendations(
@@ -12,24 +22,68 @@ def apply_approved_recommendations(
     recommendations: list[Recommendation],
     decisions: list[dict[str, Any]],
 ) -> dict[str, Any]:
+    return apply_approved_recommendations_with_summary(document, recommendations, decisions).document
+
+
+def apply_approved_recommendations_with_summary(
+    document: dict[str, Any],
+    recommendations: list[Recommendation],
+    decisions: list[dict[str, Any]],
+) -> PatchResult:
+    if not isinstance(decisions, list):
+        raise ValueError("Decisions must be a list")
+
     patched = copy.deepcopy(document)
     recommendation_by_id = {recommendation.id: recommendation for recommendation in recommendations}
     applied_recommendation_ids: set[str] = set()
+    applied_count = 0
+    skipped_count = 0
+    logged_count = 0
     for decision in decisions:
+        _validate_decision(decision)
         recommendation_id = decision["recommendation_id"]
         recommendation = recommendation_by_id.get(recommendation_id)
         if decision.get("decision") == "approved" and recommendation is not None and recommendation_id not in applied_recommendation_ids:
+            applied_operations = 0
             for operation in recommendation.patch:
-                _apply_operation(patched, operation)
+                if _apply_operation(patched, operation):
+                    applied_operations += 1
             applied_recommendation_ids.add(recommendation_id)
+            if applied_operations:
+                applied_count += 1
+            else:
+                skipped_count += 1
+        else:
+            skipped_count += 1
         _append_decision(patched, recommendation, decision)
-    return patched
+        logged_count += 1
+    return PatchResult(
+        document=patched,
+        decision_count=len(decisions),
+        applied_count=applied_count,
+        skipped_count=skipped_count,
+        logged_count=logged_count,
+    )
 
 
-def _apply_operation(document: dict[str, Any], operation: dict[str, Any]) -> None:
+def _validate_decision(decision: Any) -> None:
+    if not isinstance(decision, dict):
+        raise ValueError("Each decision must be an object")
+    required_fields = {"recommendation_id", "decision", "approver", "rationale"}
+    missing = sorted(required_fields - set(decision))
+    if missing:
+        raise ValueError(f"Decision is missing required fields: {', '.join(missing)}")
+
+
+def _apply_operation(document: dict[str, Any], operation: dict[str, Any]) -> bool:
     if operation["op"] == "add_edge":
-        document["survey"]["dag"]["edges"].append(copy.deepcopy(operation["edge"]))
-        return
+        edge = operation["edge"]
+        edges = document["survey"]["dag"]["edges"]
+        edge_id = edge.get("id")
+        if any(isinstance(existing, dict) and existing.get("id") == edge_id for existing in edges):
+            return False
+        edges.append(copy.deepcopy(edge))
+        return True
     raise ValueError(f"Unsupported patch operation: {operation['op']}")
 
 

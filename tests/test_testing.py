@@ -248,3 +248,24 @@ def test_generate_coverage_tests_synthesizes_responses_and_counts_simulated_edge
     assert payload["coverage"]["edge_percent"] == round((len(simulated_edges) / len(model.edges)) * 100)
     assert payload["coverage"]["node_percent"] == 100
     assert payload["coverage"]["edge_percent"] == 100
+    assert payload["uncovered_nodes"] == []
+
+
+def test_node_coverage_generates_only_paths_needed_for_nodes():
+    model = _branchy_model()
+
+    payload = generate_coverage_tests(model, coverage_target="node")
+
+    assert len(payload["tests"]) == 1
+    assert payload["tests"][0]["expected_path"] == ["Q1", "Q2", "SURVEY_COMPLETE"]
+    assert payload["coverage"]["node_percent"] == 100
+    assert payload["coverage"]["edge_percent"] < 100
+    assert payload["uncovered_nodes"] == []
+    assert payload["uncovered_edges"] == ["E_FALLTHROUGH"]
+
+
+def test_generate_coverage_tests_rejects_unknown_coverage_target():
+    model = _branchy_model()
+
+    with pytest.raises(ValueError, match="Unknown coverage target"):
+        generate_coverage_tests(model, coverage_target="path")

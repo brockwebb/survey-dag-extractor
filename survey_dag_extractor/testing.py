@@ -88,12 +88,12 @@ def simulate_route(model: SurveyModel, responses: dict[str, Any], max_steps: int
 
 
 def generate_coverage_tests(model: SurveyModel, coverage_target: str = "edge") -> dict[str, Any]:
+    if coverage_target not in {"node", "edge"}:
+        raise ValueError(f"Unknown coverage target: {coverage_target}")
     paths = _enumerate_paths(model)
-    tests = []
-    covered_nodes: set[str] = set()
-    covered_edges: set[str] = set()
+    candidate_tests = []
     unverified_paths = []
-    for index, path_info in enumerate(paths, start=1):
+    for path_info in paths:
         try:
             responses = _synthesize_path_responses(model, path_info)
         except ValueError as error:
@@ -124,30 +124,56 @@ def generate_coverage_tests(model: SurveyModel, coverage_target: str = "edge") -
                 }
             )
             continue
-        covered_nodes.update(simulation["path"])
-        covered_edges.update(simulation["edge_ids"])
-        tests.append(
+        candidate_tests.append(
             {
-                "id": f"TEST_{index:04d}",
                 "responses": responses,
                 "expected_path": simulation["path"],
                 "covered_edges": simulation["edge_ids"],
             }
         )
-    total_nodes = len(model.node_ids)
-    total_edges = len(model.edges)
     edge_ids = {_edge_id(edge) for edge in model.edges if isinstance(edge, dict)}
+    selected_tests = _select_coverage_tests(candidate_tests, model, coverage_target)
+    tests = []
+    covered_nodes: set[str] = set()
+    covered_edges: set[str] = set()
+    for index, test in enumerate(selected_tests, start=1):
+        covered_nodes.update(test["expected_path"])
+        covered_edges.update(test["covered_edges"])
+        tests.append({"id": f"TEST_{index:04d}", **test})
     return {
         "survey_id": model.survey_id,
         "coverage_target": coverage_target,
         "tests": tests,
         "unverified_paths": unverified_paths,
+        "uncovered_nodes": sorted(model.node_ids - covered_nodes),
         "uncovered_edges": sorted(edge_ids - covered_edges),
         "coverage": {
-            "node_percent": _percent(len(covered_nodes), total_nodes),
-            "edge_percent": _percent(len(covered_edges), total_edges),
+            "node_percent": _percent(len(covered_nodes), len(model.node_ids)),
+            "edge_percent": _percent(len(covered_edges), len(edge_ids)),
         },
     }
+
+
+def _select_coverage_tests(
+    candidate_tests: list[dict[str, Any]],
+    model: SurveyModel,
+    coverage_target: str,
+) -> list[dict[str, Any]]:
+    if coverage_target == "node":
+        remaining = set(model.node_ids)
+        coverage_key = "expected_path"
+    else:
+        remaining = {_edge_id(edge) for edge in model.edges if isinstance(edge, dict)}
+        coverage_key = "covered_edges"
+    selected = []
+    for test in candidate_tests:
+        covered = set(test[coverage_key])
+        if covered & remaining:
+            selected.append(test)
+            remaining -= covered
+        if not remaining:
+            break
+    return selected
 
 
 def _enumerate_paths(model: SurveyModel) -> list[dict[str, Any]]:

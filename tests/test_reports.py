@@ -69,3 +69,40 @@ def test_validate_cli_writes_report_when_survey_id_missing(tmp_path):
     report = report_path.read_text(encoding="utf-8")
     assert "# Validation Report: <unknown>" in report
     assert "schema_invalid" in report
+
+
+def test_heal_cli_handles_missing_survey_id(tmp_path, capsys):
+    survey_path = _write_survey_without_id(tmp_path)
+
+    exit_code = main(["heal", str(survey_path)])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 0
+    assert payload["survey_id"] == "<unknown>"
+    assert "recommendations" in payload
+
+
+def test_test_cli_handles_missing_survey_id(tmp_path, capsys):
+    survey_path = _write_survey_without_id(tmp_path)
+
+    exit_code = main(["test", str(survey_path)])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 0
+    assert payload["survey_id"] == "<unknown>"
+    assert "tests" in payload
+
+
+def test_cli_reports_invalid_json_without_traceback(tmp_path, capsys):
+    survey_path = tmp_path / "broken.json"
+    survey_path.write_text("{not json", encoding="utf-8")
+
+    exit_code = main(["validate", str(survey_path)])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 2
+    assert payload["status"] == "error"
+    assert payload["error"]["type"] == "invalid_json"

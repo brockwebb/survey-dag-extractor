@@ -33,6 +33,15 @@ def test_valid_minimal_survey_has_no_issues():
     assert issue_types("valid_minimal_survey.json") == set()
 
 
+def test_schema_format_errors_are_reported():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["metadata"]["created_date"] = "not-a-date"
+
+    issues = issues_from_document(document)
+
+    assert any(issue.type == "schema_invalid" and issue.evidence["path"] == ["survey", "metadata", "created_date"] for issue in issues)
+
+
 def test_orphan_node_is_detected():
     assert "orphan_node" in issue_types("orphan_node_survey.json")
 
@@ -279,3 +288,23 @@ def test_cycle_with_exit_path_to_terminal_is_not_a_dead_end():
     dead_end_nodes = {issue.node_id for issue in issues_from_document(document) if issue.type == "dead_end"}
 
     assert "Q2" not in dead_end_nodes
+
+
+def test_unreachable_terminal_is_reported_separately_from_orphan_question():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["terminal_nodes"]["EARLY_EXIT"] = {
+        "id": "EARLY_EXIT",
+        "type": "terminal",
+        "label": "Early exit",
+        "description": "A defined but unreachable terminal.",
+        "is_final": True,
+    }
+    document["survey"]["dag"]["terminal_nodes"].append("EARLY_EXIT")
+
+    terminal_issues = [
+        issue
+        for issue in issues_from_document(document)
+        if issue.node_id == "EARLY_EXIT"
+    ]
+
+    assert {issue.type for issue in terminal_issues} == {"unreachable_terminal"}

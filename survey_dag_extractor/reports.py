@@ -1,10 +1,7 @@
 from __future__ import annotations
 
 from survey_dag_extractor.issues import ValidationIssue
-from survey_dag_extractor.model import SurveyModel
-
-
-UNKNOWN_SURVEY_ID = "<unknown>"
+from survey_dag_extractor.model import UNKNOWN_SURVEY_ID, SurveyModel
 
 
 def safe_survey_id(model: SurveyModel) -> str:

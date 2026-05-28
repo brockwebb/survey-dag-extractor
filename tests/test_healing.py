@@ -218,6 +218,19 @@ def test_duplicate_approved_decisions_apply_patch_once_and_log_both_decisions():
     assert [entry["rationale"] for entry in logged_decisions] == [decision["rationale"], duplicate_decision["rationale"]]
 
 
+def test_reapplying_same_recommendation_to_patched_document_does_not_duplicate_edge():
+    model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
+    recommendations = recommend_repairs(model, validate_model(model))
+    decision = approved_decision(recommendations[0].id)
+    patched_once = apply_approved_recommendations(model.document, recommendations, [decision])
+
+    patched_twice = apply_approved_recommendations(patched_once, recommendations, [decision])
+
+    applied_edge_id = recommendations[0].patch[0]["edge"]["id"]
+    applied_edges = [edge for edge in patched_twice["survey"]["dag"]["edges"] if edge["id"] == applied_edge_id]
+    assert len(applied_edges) == 1
+
+
 def test_heal_cli_prints_recommendations(capsys):
     exit_code = main(["heal", str(FIXTURES / "missing_fallthrough_survey.json")])
 
@@ -259,5 +272,37 @@ def test_apply_cli_writes_patched_survey(tmp_path, capsys):
 
     assert exit_code == 0
     assert payload["status"] == "applied"
+    assert payload["applied_count"] == 1
+    assert payload["post_validation_status"] == "valid"
     assert payload["output"] == str(output_path)
     assert "missing_fallthrough" not in issue_types
+
+
+def test_apply_cli_reports_no_changes_for_stale_decision(tmp_path, capsys):
+    survey_path = FIXTURES / "missing_fallthrough_survey.json"
+    decisions_path = tmp_path / "decisions.json"
+    output_path = tmp_path / "patched.json"
+    decisions_path.write_text(
+        json.dumps(
+            [
+                {
+                    "recommendation_id": "REC_STALE",
+                    "decision": "approved",
+                    "approver": "human",
+                    "rationale": "Stale decisions should not look applied.",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    exit_code = main(["apply", str(survey_path), str(decisions_path), "--output", str(output_path)])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 1
+    assert payload["status"] == "no_changes"
+    assert payload["applied_count"] == 0
+    assert payload["skipped_count"] == 1
+    assert payload["post_validation_status"] == "invalid"
+    assert output_path.exists()

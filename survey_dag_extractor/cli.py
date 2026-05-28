@@ -7,7 +7,7 @@ from typing import Sequence
 
 from survey_dag_extractor.healing import recommend_repairs
 from survey_dag_extractor.model import SurveyModel
-from survey_dag_extractor.patching import apply_approved_recommendations
+from survey_dag_extractor.patching import apply_approved_recommendations_with_summary
 from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
 from survey_dag_extractor.testing import generate_coverage_tests
 from survey_dag_extractor.validation import validate_model
@@ -79,10 +79,22 @@ def _apply(args: argparse.Namespace) -> int:
     recommendations = recommend_repairs(model, issues)
     with args.decisions_path.open("r", encoding="utf-8") as file:
         decisions = json.load(file)
-    patched = apply_approved_recommendations(model.document, recommendations, decisions)
+    result = apply_approved_recommendations_with_summary(model.document, recommendations, decisions)
+    patched = result.document
+    post_issues = validate_model(SurveyModel(patched))
     args.output.write_text(json.dumps(patched, indent=2), encoding="utf-8")
-    print(json.dumps({"status": "applied", "output": str(args.output)}, indent=2))
-    return 0
+    payload = {
+        "status": "applied" if result.applied_count else "no_changes",
+        "output": str(args.output),
+        "decision_count": result.decision_count,
+        "applied_count": result.applied_count,
+        "skipped_count": result.skipped_count,
+        "logged_count": result.logged_count,
+        "post_validation_status": "valid" if not post_issues else "invalid",
+        "post_issue_count": len(post_issues),
+    }
+    print(json.dumps(payload, indent=2))
+    return 0 if not post_issues else 1
 
 
 def _test(args: argparse.Namespace) -> int:
@@ -103,7 +115,32 @@ def _not_implemented(args: argparse.Namespace) -> int:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except json.JSONDecodeError as error:
+        _print_error("invalid_json", f"{error.msg} at line {error.lineno}, column {error.colno}")
+        return 2
+    except OSError as error:
+        _print_error("file_error", str(error))
+        return 2
+    except ValueError as error:
+        _print_error("input_error", str(error))
+        return 2
+
+
+def _print_error(error_type: str, message: str) -> None:
+    print(
+        json.dumps(
+            {
+                "status": "error",
+                "error": {
+                    "type": error_type,
+                    "message": message,
+                },
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

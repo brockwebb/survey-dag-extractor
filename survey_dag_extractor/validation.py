@@ -5,7 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from jsonschema import Draft7Validator
+from jsonschema import Draft7Validator, FormatChecker
 
 from survey_dag_extractor.issues import ValidationIssue
 from survey_dag_extractor.model import SurveyModel
@@ -28,7 +28,7 @@ def _schema_issues(model: SurveyModel, schema_path: Path | None) -> list[Validat
     schema_file = schema_path or Path(__file__).resolve().parents[1] / "schemas" / "canonical_survey_dag_schema.json"
     with schema_file.open("r", encoding="utf-8") as file:
         schema = json.load(file)
-    validator = Draft7Validator(schema)
+    validator = Draft7Validator(schema, format_checker=FormatChecker())
     issues = []
     for error in sorted(validator.iter_errors(model.document), key=lambda err: list(err.path)):
         issues.append(
@@ -240,12 +240,19 @@ def _reachability_issues(model: SurveyModel) -> list[ValidationIssue]:
     for node_id in sorted(model.node_ids - reachable):
         if node_id == model.entry_node:
             continue
+        is_terminal = model.is_terminal(node_id)
+        issue_type = "unreachable_terminal" if is_terminal else "orphan_node"
+        message = (
+            f"Terminal node {node_id} is not reachable from the entry node."
+            if is_terminal
+            else f"{node_id} is not reachable from the entry node."
+        )
         issues.append(
             ValidationIssue(
                 "ISSUE_PENDING",
                 "error",
-                "orphan_node",
-                f"{node_id} is not reachable from the entry node.",
+                issue_type,
+                message,
                 node_id=node_id,
                 evidence={"entry_node": model.entry_node, "incoming_edges": [_edge_id(edge) for edge in _incoming_edges(model, node_id)]},
             )
