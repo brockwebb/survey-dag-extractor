@@ -270,6 +270,89 @@ def test_recommendation_priority_avoids_duplicate_source_priorities():
     assert recommendations[0].patch[0]["edge"]["priority"] == 1000
 
 
+def test_duplicate_priority_gets_adjustment_recommendation():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E_DUP",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "duplicate priority terminal exit",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert len(recommendations) == 1
+    recommendation = recommendations[0]
+    assert recommendation.type == "adjust_duplicate_priority"
+    assert recommendation.confidence == "high"
+    assert recommendation.patch == [
+        {
+            "op": "update_edge",
+            "edge_id": "E_DUP",
+            "changes": {"priority": 1000},
+        }
+    ]
+
+
+def test_approved_duplicate_priority_patch_resolves_duplicate_priority():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E_DUP",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "duplicate priority terminal exit",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    patched = apply_approved_recommendations(
+        model.document,
+        recommendations,
+        [approved_decision(recommendations[0].id)],
+    )
+
+    patched_issues = validate_model(SurveyModel(patched))
+    updated_edge = next(edge for edge in patched["survey"]["dag"]["edges"] if edge["id"] == "E_DUP")
+    assert updated_edge["priority"] == 1000
+    assert "duplicate_priority" not in {issue.type for issue in patched_issues}
+
+
+def test_reapplying_update_edge_patch_is_idempotent():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E_DUP",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "duplicate priority terminal exit",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+    recommendations = recommend_repairs(model, validate_model(model))
+    decision = approved_decision(recommendations[0].id)
+    patched_once = apply_approved_recommendations(model.document, recommendations, [decision])
+
+    patched_twice = apply_approved_recommendations(patched_once, recommendations, [decision])
+
+    updated_edges = [edge for edge in patched_twice["survey"]["dag"]["edges"] if edge["id"] == "E_DUP"]
+    assert len(updated_edges) == 1
+    assert updated_edges[0]["priority"] == 1000
+
+
 def test_rejected_decision_is_logged_without_applying_patch():
     model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
     recommendations = recommend_repairs(model, validate_model(model))

@@ -20,6 +20,11 @@ def recommend_repairs(model: SurveyModel, issues: list[ValidationIssue]) -> list
             recommendation = _recommend_terminal_exit(model, issue, len(recommendations) + 1)
             if recommendation:
                 recommendations.append(recommendation)
+    for issue in issues:
+        if issue.type == "duplicate_priority" and issue.node_id:
+            recommendation = _recommend_duplicate_priority_adjustment(model, issue, len(recommendations) + 1)
+            if recommendation:
+                recommendations.append(recommendation)
     return recommendations
 
 
@@ -111,6 +116,56 @@ def _recommend_terminal_exit(model: SurveyModel, issue: ValidationIssue, index: 
                 },
             }
         ],
+    )
+
+
+def _recommend_duplicate_priority_adjustment(
+    model: SurveyModel,
+    issue: ValidationIssue,
+    index: int,
+) -> Recommendation | None:
+    source = issue.node_id
+    edge_ids = issue.evidence.get("edge_ids")
+    duplicate_priority = issue.evidence.get("priority")
+    if not isinstance(edge_ids, list) or len(edge_ids) < 2 or type(duplicate_priority) is not int:
+        return None
+
+    edge_by_id = {
+        str(edge.get("id")): edge
+        for edge in model.outgoing_edges(source)
+        if isinstance(edge.get("id"), str)
+    }
+    used_priorities = {
+        edge.get("priority")
+        for edge in model.outgoing_edges(source)
+        if type(edge.get("priority")) is int
+    }
+    patch = []
+    next_priority = duplicate_priority + 1
+    for edge_id in edge_ids[1:]:
+        if not isinstance(edge_id, str) or edge_id not in edge_by_id:
+            continue
+        while next_priority in used_priorities:
+            next_priority += 1
+        patch.append(
+            {
+                "op": "update_edge",
+                "edge_id": edge_id,
+                "changes": {"priority": next_priority},
+            }
+        )
+        used_priorities.add(next_priority)
+        next_priority += 1
+    if not patch:
+        return None
+
+    return Recommendation(
+        id=f"REC_{index:04d}",
+        issue_id=issue.id,
+        type="adjust_duplicate_priority",
+        confidence="high",
+        rationale=f"Source {source} has duplicate priority {duplicate_priority}; assign unique priorities to later edges.",
+        patch=patch,
     )
 
 

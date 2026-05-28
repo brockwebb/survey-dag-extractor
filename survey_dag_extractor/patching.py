@@ -84,7 +84,25 @@ def _apply_operation(document: dict[str, Any], operation: dict[str, Any]) -> boo
             return False
         edges.append(copy.deepcopy(edge))
         return True
+    if operation["op"] == "update_edge":
+        edge = _find_edge(document, operation["edge_id"])
+        if edge is None:
+            return False
+        changes = operation["changes"]
+        changed = False
+        for key, value in changes.items():
+            if edge.get(key) != value:
+                edge[key] = copy.deepcopy(value)
+                changed = True
+        return changed
     raise ValueError(f"Unsupported patch operation: {operation['op']}")
+
+
+def _find_edge(document: dict[str, Any], edge_id: str) -> dict[str, Any] | None:
+    for edge in document["survey"]["dag"]["edges"]:
+        if isinstance(edge, dict) and edge.get("id") == edge_id:
+            return edge
+    return None
 
 
 def _append_decision(document: dict[str, Any], recommendation: Recommendation | None, decision: dict[str, Any]) -> None:
