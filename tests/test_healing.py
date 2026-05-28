@@ -479,6 +479,31 @@ def test_heal_cli_links_recommendations_to_issues(capsys):
             assert issue["status"] == "recommended"
 
 
+def test_heal_cli_writes_decisions_template(tmp_path, capsys):
+    template_path = tmp_path / "decisions_template.json"
+
+    exit_code = main(
+        [
+            "heal",
+            str(FIXTURES / "orphan_node_survey.json"),
+            "--decisions-template",
+            str(template_path),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    template = json.loads(template_path.read_text(encoding="utf-8"))
+    assert exit_code == 0
+    assert payload["decisions_template"] == str(template_path)
+    assert [decision["recommendation_id"] for decision in template] == [
+        recommendation["id"] for recommendation in payload["recommendations"]
+    ]
+    assert all(decision["decision"] == "pending" for decision in template)
+    assert all(decision["approver"] == "" for decision in template)
+    assert all("Review recommendation" in decision["rationale"] for decision in template)
+
+
 def test_apply_cli_writes_patched_survey(tmp_path, capsys):
     survey_path = FIXTURES / "missing_fallthrough_survey.json"
     model = SurveyModel.from_path(survey_path)

@@ -33,7 +33,7 @@ survey-dag validate tests/fixtures/orphan_node_survey.json --report data/extract
 Generate repair recommendations:
 
 ```bash
-survey-dag heal tests/fixtures/missing_fallthrough_survey.json --output data/extracted/recommendations.json
+survey-dag heal tests/fixtures/missing_fallthrough_survey.json --output data/extracted/recommendations.json --decisions-template data/extracted/decisions.json
 ```
 
 Generate coverage tests:
@@ -70,7 +70,7 @@ Fixture surveys in `/tests/fixtures/` provide compact examples for valid and inv
 
 ```bash
 survey-dag validate <survey.json> [--report report.md]
-survey-dag heal <survey.json> [--output recommendations.json]
+survey-dag heal <survey.json> [--output recommendations.json] [--decisions-template decisions.json]
 survey-dag apply <survey.json> <decisions.json> --output patched.json
 survey-dag test <survey.json> [--coverage node|edge] [--output coverage_tests.json]
 ```

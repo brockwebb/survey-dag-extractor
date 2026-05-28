@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Sequence
 
 from survey_dag_extractor.healing import link_recommendations_to_issues, recommend_repairs
+from survey_dag_extractor.issues import Recommendation
 from survey_dag_extractor.model import SurveyModel
 from survey_dag_extractor.patching import apply_approved_recommendations_with_summary
 from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
@@ -25,6 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
     heal = subcommands.add_parser("heal", help="Generate deterministic repair recommendations")
     heal.add_argument("survey_path", type=Path)
     heal.add_argument("--output", type=Path)
+    heal.add_argument("--decisions-template", type=Path)
     heal.set_defaults(func=_heal)
 
     apply_cmd = subcommands.add_parser("apply", help="Apply approved recommendations")
@@ -69,6 +71,9 @@ def _heal(args: argparse.Namespace) -> int:
         "recommendation_count": len(recommendations),
         "recommendations": [recommendation.to_dict() for recommendation in recommendations],
     }
+    if args.decisions_template:
+        args.decisions_template.write_text(json.dumps(_decision_template(recommendations), indent=2), encoding="utf-8")
+        payload["decisions_template"] = str(args.decisions_template)
     text = json.dumps(payload, indent=2)
     if args.output:
         args.output.write_text(text, encoding="utf-8")
@@ -108,6 +113,18 @@ def _test(args: argparse.Namespace) -> int:
         args.output.write_text(text, encoding="utf-8")
     print(text)
     return 0
+
+
+def _decision_template(recommendations: list[Recommendation]) -> list[dict[str, str]]:
+    return [
+        {
+            "recommendation_id": recommendation.id,
+            "decision": "pending",
+            "approver": "",
+            "rationale": f"Review recommendation {recommendation.id}: approve or reject with rationale.",
+        }
+        for recommendation in recommendations
+    ]
 
 
 def _not_implemented(args: argparse.Namespace) -> int:
