@@ -4,5 +4,11 @@
     "decision": "approved",
     "approver": "human",
     "rationale": "Approved orphan reconnect repair: make Q2 reachable from nearest prior reachable node Q1 for review."
+  },
+  {
+    "recommendation_id": "REC_0002",
+    "decision": "approved",
+    "approver": "human",
+    "rationale": "Approved terminal exit repair: give Q2 an explicit path to SURVEY_COMPLETE for review."
   }
 ]

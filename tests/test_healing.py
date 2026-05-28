@@ -60,6 +60,58 @@ def test_approved_fallthrough_patch_resolves_missing_fallthrough():
     assert "missing_fallthrough" not in issue_types
 
 
+def test_missing_outgoing_question_gets_terminal_exit_recommendation():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"] = [document["survey"]["dag"]["edges"][0]]
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert len(recommendations) == 1
+    recommendation = recommendations[0]
+    assert recommendation.type == "add_terminal_exit"
+    assert recommendation.confidence == "low"
+    assert recommendation.requires_approval
+    assert recommendation.patch[0]["op"] == "add_edge"
+    assert recommendation.patch[0]["edge"] == {
+        "id": "E_AUTO_0001",
+        "source": "Q2",
+        "target": "SURVEY_COMPLETE",
+        "condition": None,
+        "condition_text": "terminal exit",
+        "priority": 999,
+        "type": "terminal",
+    }
+
+
+def test_approved_terminal_exit_patch_resolves_missing_outgoing_and_dead_end():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"] = [document["survey"]["dag"]["edges"][0]]
+    model = SurveyModel(document)
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    patched = apply_approved_recommendations(
+        model.document,
+        recommendations,
+        [approved_decision(recommendations[0].id)],
+    )
+
+    patched_issue_types = {issue.type for issue in validate_model(SurveyModel(patched))}
+    assert "missing_outgoing_edge" not in patched_issue_types
+    assert "dead_end" not in patched_issue_types
+
+
+def test_orphan_reconnect_id_stays_before_terminal_exit_for_original_fixture():
+    model = SurveyModel.from_path(FIXTURES / "orphan_node_survey.json")
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert [(recommendation.id, recommendation.type) for recommendation in recommendations] == [
+        ("REC_0001", "connect_orphan_node"),
+        ("REC_0002", "add_terminal_exit"),
+    ]
+
+
 def test_orphan_question_gets_reconnect_recommendation():
     document = load_fixture("orphan_node_survey.json")
     document["survey"]["dag"]["edges"].append(

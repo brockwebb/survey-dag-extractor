@@ -1,6 +1,6 @@
 {
   "survey_id": "orphan_node",
-  "recommendation_count": 1,
+  "recommendation_count": 2,
   "recommendations": [
     {
       "id": "REC_0001",
@@ -19,6 +19,28 @@
             "condition_text": "orphan reconnect",
             "priority": 998,
             "type": "fallthrough"
+          }
+        }
+      ],
+      "requires_approval": true
+    },
+    {
+      "id": "REC_0002",
+      "issue_id": "ISSUE_0001",
+      "type": "add_terminal_exit",
+      "confidence": "low",
+      "rationale": "Question Q2 has no outgoing path; add terminal exit to SURVEY_COMPLETE for human review.",
+      "patch": [
+        {
+          "op": "add_edge",
+          "edge": {
+            "id": "E_AUTO_0002",
+            "source": "Q2",
+            "target": "SURVEY_COMPLETE",
+            "condition": null,
+            "condition_text": "terminal exit",
+            "priority": 999,
+            "type": "terminal"
           }
         }
       ],

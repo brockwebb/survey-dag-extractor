@@ -13,12 +13,20 @@
       "estimated_duration_minutes": 1,
       "decision_log": [
         {
-          "timestamp": "2026-05-28T09:43:08Z",
+          "timestamp": "2026-05-28T10:40:16Z",
           "approver": "human",
           "issue_id": "ISSUE_0002",
           "recommendation_id": "REC_0001",
           "decision": "approved",
           "rationale": "Approved orphan reconnect repair: make Q2 reachable from nearest prior reachable node Q1 for review."
+        },
+        {
+          "timestamp": "2026-05-28T10:40:16Z",
+          "approver": "human",
+          "issue_id": "ISSUE_0001",
+          "recommendation_id": "REC_0002",
+          "decision": "approved",
+          "rationale": "Approved terminal exit repair: give Q2 an explicit path to SURVEY_COMPLETE for review."
         }
       ]
     },
@@ -93,6 +101,15 @@
           "condition_text": "orphan reconnect",
           "priority": 998,
           "type": "fallthrough"
+        },
+        {
+          "id": "E_AUTO_0002",
+          "source": "Q2",
+          "target": "SURVEY_COMPLETE",
+          "condition": null,
+          "condition_text": "terminal exit",
+          "priority": 999,
+          "type": "terminal"
         }
       ]
     }

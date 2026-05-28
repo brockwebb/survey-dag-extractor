@@ -15,6 +15,11 @@ def recommend_repairs(model: SurveyModel, issues: list[ValidationIssue]) -> list
             recommendation = _recommend_orphan_reconnect(model, issue, len(recommendations) + 1)
             if recommendation:
                 recommendations.append(recommendation)
+    for issue in issues:
+        if issue.type == "missing_outgoing_edge" and issue.node_id:
+            recommendation = _recommend_terminal_exit(model, issue, len(recommendations) + 1)
+            if recommendation:
+                recommendations.append(recommendation)
     return recommendations
 
 
@@ -73,6 +78,36 @@ def _recommend_orphan_reconnect(model: SurveyModel, issue: ValidationIssue, inde
                     "condition_text": "orphan reconnect",
                     "priority": _orphan_reconnect_priority(model, source),
                     "type": edge_type,
+                },
+            }
+        ],
+    )
+
+
+def _recommend_terminal_exit(model: SurveyModel, issue: ValidationIssue, index: int) -> Recommendation | None:
+    source = issue.node_id
+    if model.outgoing_edges(source):
+        return None
+    target = _first_valid_terminal_id(model)
+    if target is None:
+        return None
+    return Recommendation(
+        id=f"REC_{index:04d}",
+        issue_id=issue.id,
+        type="add_terminal_exit",
+        confidence="low",
+        rationale=f"Question {source} has no outgoing path; add terminal exit to {target} for human review.",
+        patch=[
+            {
+                "op": "add_edge",
+                "edge": {
+                    "id": _next_edge_id(model, index),
+                    "source": source,
+                    "target": target,
+                    "condition": None,
+                    "condition_text": "terminal exit",
+                    "priority": _next_fallthrough_priority(model, source),
+                    "type": "terminal",
                 },
             }
         ],
