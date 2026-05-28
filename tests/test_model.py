@@ -66,3 +66,15 @@ def test_model_sorts_malformed_priorities_deterministically():
     model = SurveyModel(document)
 
     assert [edge["id"] for edge in model.outgoing_edges("Q1")] == ["E000_BAD_PRIORITY", "E001"]
+
+
+@pytest.mark.parametrize("edges", [None, 123, "edges", {}])
+def test_model_tolerates_malformed_dag_edges_container(edges):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"] = edges
+
+    model = SurveyModel(document)
+
+    assert model.edges == []
+    assert model.outgoing_edges("Q1") == []
+    assert model.incoming_edges("Q2") == []

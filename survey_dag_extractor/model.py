@@ -9,11 +9,11 @@ from typing import Any
 class SurveyModel:
     def __init__(self, document: dict[str, Any]):
         self.document = document
-        self.survey = document["survey"]
-        self.questions = self.survey.get("questions", {})
-        self.terminals = self.survey.get("terminal_nodes", {})
-        self.dag = self.survey.get("dag", {})
-        self.edges = list(self.dag.get("edges", []))
+        self.survey = self._dict_or_empty(document.get("survey") if isinstance(document, dict) else None)
+        self.questions = self._dict_or_empty(self.survey.get("questions"))
+        self.terminals = self._dict_or_empty(self.survey.get("terminal_nodes"))
+        self.dag = self._dict_or_empty(self.survey.get("dag"))
+        self.edges = self._list_or_empty(self.dag.get("edges"))
         self._outgoing = self._index_edges("source")
         self._incoming = self._index_edges("target")
 
@@ -78,6 +78,14 @@ class SurveyModel:
             if isinstance(node_id, str):
                 index[node_id].append(edge)
         return dict(index)
+
+    @staticmethod
+    def _dict_or_empty(value: Any) -> dict[str, Any]:
+        return value if isinstance(value, dict) else {}
+
+    @staticmethod
+    def _list_or_empty(value: Any) -> list[Any]:
+        return list(value) if isinstance(value, list) else []
 
     @staticmethod
     def _edge_id(edge: dict[str, Any]) -> str:
