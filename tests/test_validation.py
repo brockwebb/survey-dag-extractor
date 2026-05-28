@@ -234,6 +234,16 @@ def test_malformed_dag_edges_container_does_not_crash_validation(edges):
     assert "schema_invalid" in types
 
 
+@pytest.mark.parametrize("terminal_nodes", [None, 123, [[]], [{"id": "x"}]])
+def test_malformed_dag_terminal_nodes_do_not_crash_validation(terminal_nodes):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["terminal_nodes"] = terminal_nodes
+
+    types = issue_types_from_document(document)
+
+    assert "schema_invalid" in types
+
+
 def test_cycle_with_exit_path_to_terminal_is_not_a_dead_end():
     document = load_fixture("valid_minimal_survey.json")
     document["survey"]["dag"]["edges"] = [

@@ -78,3 +78,13 @@ def test_model_tolerates_malformed_dag_edges_container(edges):
     assert model.edges == []
     assert model.outgoing_edges("Q1") == []
     assert model.incoming_edges("Q2") == []
+
+
+@pytest.mark.parametrize("terminal_nodes", [None, 123, [[]], [{"id": "x"}]])
+def test_model_tolerates_malformed_dag_terminal_nodes(terminal_nodes):
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["terminal_nodes"] = terminal_nodes
+
+    model = SurveyModel(document)
+
+    assert model.terminal_ids == []

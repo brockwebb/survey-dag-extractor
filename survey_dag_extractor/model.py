@@ -32,7 +32,8 @@ class SurveyModel:
 
     @property
     def terminal_ids(self) -> list[str]:
-        return list(self.dag.get("terminal_nodes", []))
+        terminal_nodes = self._list_or_empty(self.dag.get("terminal_nodes"))
+        return [node_id for node_id in terminal_nodes if isinstance(node_id, str)]
 
     @property
     def node_ids(self) -> set[str]:
