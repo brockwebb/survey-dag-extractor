@@ -9,6 +9,7 @@ from survey_dag_extractor.healing import recommend_repairs
 from survey_dag_extractor.model import SurveyModel
 from survey_dag_extractor.patching import apply_approved_recommendations
 from survey_dag_extractor.reports import format_markdown_report, safe_survey_id
+from survey_dag_extractor.testing import generate_coverage_tests
 from survey_dag_extractor.validation import validate_model
 
 
@@ -36,7 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
     test_cmd.add_argument("survey_path", type=Path)
     test_cmd.add_argument("--coverage", choices=["node", "edge"], default="edge")
     test_cmd.add_argument("--output", type=Path)
-    test_cmd.set_defaults(func=_not_implemented)
+    test_cmd.set_defaults(func=_test)
 
     return parser
 
@@ -81,6 +82,16 @@ def _apply(args: argparse.Namespace) -> int:
     patched = apply_approved_recommendations(model.document, recommendations, decisions)
     args.output.write_text(json.dumps(patched, indent=2), encoding="utf-8")
     print(json.dumps({"status": "applied", "output": str(args.output)}, indent=2))
+    return 0
+
+
+def _test(args: argparse.Namespace) -> int:
+    model = SurveyModel.from_path(args.survey_path)
+    payload = generate_coverage_tests(model, args.coverage)
+    text = json.dumps(payload, indent=2)
+    if args.output:
+        args.output.write_text(text, encoding="utf-8")
+    print(text)
     return 0
 
 
