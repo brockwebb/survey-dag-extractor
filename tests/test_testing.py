@@ -1,7 +1,9 @@
+import json
 from pathlib import Path
 
 import pytest
 
+from survey_dag_extractor.cli import main
 from survey_dag_extractor.model import SurveyModel
 from survey_dag_extractor.testing import evaluate_condition, generate_coverage_tests, simulate_route
 
@@ -269,3 +271,26 @@ def test_generate_coverage_tests_rejects_unknown_coverage_target():
 
     with pytest.raises(ValueError, match="Unknown coverage target"):
         generate_coverage_tests(model, coverage_target="path")
+
+
+def test_test_cli_returns_zero_when_requested_coverage_is_complete(capsys):
+    exit_code = main(["test", str(FIXTURES / "valid_minimal_survey.json"), "--coverage", "edge"])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 0
+    assert payload["coverage_status"] == "complete"
+
+
+def test_test_cli_returns_nonzero_when_edge_coverage_is_incomplete(tmp_path, capsys):
+    survey_path = tmp_path / "incomplete_edge_coverage.json"
+    survey_path.write_text(json.dumps(_priority_short_circuit_model().document), encoding="utf-8")
+
+    exit_code = main(["test", str(survey_path), "--coverage", "edge"])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert exit_code == 1
+    assert payload["coverage_status"] == "incomplete"
+    assert payload["uncovered_edges"] == ["E_MALFORMED"]
+    assert payload["unverified_paths"]

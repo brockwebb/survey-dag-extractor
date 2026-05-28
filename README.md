@@ -59,6 +59,7 @@ survey-dag test tests/fixtures/valid_minimal_survey.json --coverage edge --outpu
 - Enumerates survey routes through the DAG
 - Synthesizes response sets for supported edge conditions
 - Reports node and edge coverage plus paths that could not be verified
+- Exits nonzero when the requested coverage target is incomplete
 
 ## Canonical Input
 

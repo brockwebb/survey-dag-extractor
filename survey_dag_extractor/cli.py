@@ -108,11 +108,13 @@ def _apply(args: argparse.Namespace) -> int:
 def _test(args: argparse.Namespace) -> int:
     model = SurveyModel.from_path(args.survey_path)
     payload = generate_coverage_tests(model, args.coverage)
+    coverage_complete = _coverage_complete(payload)
+    payload["coverage_status"] = "complete" if coverage_complete else "incomplete"
     text = json.dumps(payload, indent=2)
     if args.output:
         args.output.write_text(text, encoding="utf-8")
     print(text)
-    return 0
+    return 0 if coverage_complete else 1
 
 
 def _decision_template(recommendations: list[Recommendation]) -> list[dict[str, str]]:
@@ -125,6 +127,16 @@ def _decision_template(recommendations: list[Recommendation]) -> list[dict[str, 
         }
         for recommendation in recommendations
     ]
+
+
+def _coverage_complete(payload: dict) -> bool:
+    if payload["coverage_target"] == "node":
+        return payload["coverage"]["node_percent"] == 100 and not payload["uncovered_nodes"]
+    return (
+        payload["coverage"]["edge_percent"] == 100
+        and not payload["uncovered_edges"]
+        and not payload["unverified_paths"]
+    )
 
 
 def _not_implemented(args: argparse.Namespace) -> int:
