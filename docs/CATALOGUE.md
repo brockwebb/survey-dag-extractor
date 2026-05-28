@@ -1,6 +1,6 @@
 # Document Catalogue
 
-**Last Updated:** 2026-01-27
+**Last Updated:** 2026-05-28
 
 ---
 
@@ -8,9 +8,12 @@
 
 | Document | Path | Status | Description |
 |----------|------|--------|-------------|
-| README | `/README.md` | Needs update | Project overview and vision |
+| README | `/README.md` | Active | Project overview and runnable workbench quick start |
 | Requirements | `/docs/REQUIREMENTS.md` | Active | System requirements and goals |
+| Alternative System Design | `/docs/ALT_SYSTEM_DESIGN.md` | Draft | Validation, healing, editing, and test automation first design |
+| Alternative System MVP Plan | `/docs/superpowers/plans/2026-05-27-alt-system-mvp.md` | Draft | MVP implementation plan for the alternate survey DAG workbench |
 | Catalogue | `/docs/CATALOGUE.md` | Active | This file |
+| Project Evaluation | `/docs/feedback/2026-05-23_project_evaluation.md` | Active | Current project assessment and recommended roadmap |
 | Agents | `/AGENTS.md` | Active | Agent instructions and automation rules |
 | Schema Redesign | `/handoffs/2026-01-27_schema-redesign.md` | Reference | Analysis of failed approach |
 

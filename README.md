@@ -1,202 +1,120 @@
 # Survey DAG Extractor
 
-Automated extraction of survey PDFs into mathematical directed acyclic graphs (DAGs) for comprehensive logic analysis and validation.
+Survey DAG validation, healing, and test automation workbench for canonical survey routing graphs.
+
+> Current status: the repo is building a validation, healing, and test automation workbench first. PDF extraction is planned as a draft-input importer after the canonical DAG validator is stable.
 
 ## Overview
 
-Transform any survey instrument—even legacy paper-based PDFs—into machine-readable JSON format that's highly portable and mathematically analyzable.
+This project turns canonical survey DAG JSON into something teams can validate, repair with human approval, and exercise with generated route coverage tests. The current MVP focuses on the graph workbench: schema checks, routing checks, Markdown validation reports, deterministic repair recommendations, approved patch application, and coverage test generation.
 
-## Key Benefits
-
-**Universal Survey Digitization**
-- Convert any survey PDF into standardized, portable JSON format
-- Recover logic from legacy instruments lacking digital documentation
-- Enable cross-survey comparison through consistent data structure
-
-**Mathematical Survey Analysis**
-- **Complete survey verification** - ensure no orphaned questions or unreachable blocks
-- **Path analysis** - identify all possible routes through survey logic  
-- **Universe enumeration** - catalog all conditional logic and dependencies
-- **Optimal test coverage** - generate minimal test paths for 100% question coverage
-- **Logic debugging** - quickly identify circular dependencies or impossible conditions
-
-**Visual Analysis**
-- **D3 force-directed network graphs** with interactive filtering
-- **Survey documentation** - auto-generate comprehensive logic documentation
-- **Survey archaeology** - recover and visualize complex legacy survey flows
-
-## Architecture
-
-```
-PDF Survey → LangExtract → Canonical DAG → Mathematical Analysis → Visualization
-```
-
-- **Input**: Survey questionnaire PDFs (any format, any age)
-- **Processing**: LLM-based extraction with semantic pattern recognition
-- **Output**: `survey_dag_schema.json` compliant mathematical graph
-- **Analysis**: Graph theory algorithms for completeness and optimization
-- **Visualization**: Interactive D3 network diagrams
-
-## Installation
-
-```bash
-pip install langextract
-git clone https://github.com/your-org/survey-dag-extractor
-cd survey-dag-extractor
-```
+PDF extraction remains part of the roadmap, but it is intentionally downstream of the canonical DAG validator. For now, the most reliable input is a JSON file that follows `/schemas/canonical_survey_dag_schema.json`.
 
 ## Quick Start
 
-```python
-from survey_dag_extractor import SchemaCompliantDAGExtractor
-
-# Initialize extractor
-extractor = SchemaCompliantDAGExtractor(model="gpt-4o")
-
-# Extract survey to canonical DAG format
-dag = extractor.extract_to_dag(
-    pdf_path="survey_questionnaire.pdf",
-    output_path="survey_dag.json"
-)
-
-# Validate survey completeness
-validation_report = dag.validate_survey_logic()
-print(f"Survey completeness: {validation_report['coverage_percentage']}%")
-```
-
-## Output Format
-
-The extractor produces a canonical JSON structure following the `survey_dag_schema.json`:
-
-```json
-{
-  "survey_dag": {
-    "metadata": {
-      "id": "survey_2025_01",
-      "title": "Example Survey",
-      "version": "1.0"
-    },
-    "graph": {
-      "start": "Q1",
-      "terminals": ["END_SURVEY", "END_INELIGIBLE"],
-      "nodes": [
-        {
-          "id": "Q1",
-          "type": "question",
-          "domain": {"kind": "enum", "values": [1, 2, 3]},
-          "universe": {"expression": "always_show"},
-          "metadata": {"text": "What is your age group?"}
-        }
-      ],
-      "edges": [
-        {
-          "id": "E_Q1_TO_Q2",
-          "source": "Q1",
-          "target": "Q2", 
-          "predicate": "P_Q1_EQ_1",
-          "kind": "branch"
-        }
-      ]
-    },
-    "predicates": {
-      "P_Q1_EQ_1": {
-        "ast": ["==", "Q1", 1],
-        "text": "Q1 == 1 (Age group 18-25)"
-      }
-    }
-  }
-}
-```
-
-## Mathematical Analysis
-
-Once extracted, the DAG enables powerful mathematical analysis:
-
-### Path Coverage Analysis
-```python
-from survey_analyzer import PathAnalyzer
-
-analyzer = PathAnalyzer(dag)
-
-# Find minimal test paths for 100% coverage
-optimal_paths = analyzer.find_minimal_covering_set()
-print(f"Complete coverage with {len(optimal_paths)} test paths")
-
-# Identify unreachable questions
-orphans = analyzer.find_orphaned_nodes()
-if orphans:
-    print(f"Warning: {len(orphans)} unreachable questions found")
-```
-
-### Logic Validation
-```python
-# Check for circular dependencies
-cycles = analyzer.detect_cycles()
-
-# Validate all universe conditions
-universe_validation = analyzer.validate_universes()
-
-# Generate survey documentation
-documentation = analyzer.generate_logic_documentation()
-```
-
-### Interactive Visualization
-```python
-from survey_visualizer import D3NetworkGraph
-
-# Create interactive force-directed graph
-visualizer = D3NetworkGraph(dag)
-visualizer.generate_interactive_html("survey_network.html")
-
-# Filter by question type, block, or universe conditions
-visualizer.add_filters(['question_type', 'block', 'universe'])
-```
-
-## Use Cases
-
-**Survey Quality Assurance**
-- Validate survey logic before field deployment
-- Ensure all questions are reachable through some path
-- Identify redundant or impossible conditional logic
-
-**Survey Documentation** 
-- Auto-generate comprehensive routing documentation
-- Create visual survey flow diagrams for stakeholders
-- Document universe conditions and dependencies
-
-**Survey Methodology Research**
-- Compare survey structures across studies
-- Analyze routing complexity and respondent burden
-- Study question ordering effects through path analysis
-
-**Legacy Survey Recovery**
-- Digitize paper-based survey instruments
-- Recover logic from PDFs lacking source documentation
-- Convert proprietary formats to open, portable JSON
-
-## Schema Compliance
-
-All output strictly follows the `survey_dag_schema.json` specification, ensuring:
-- **Mathematical rigor** - Proper DAG structure with validated nodes/edges
-- **Semantic preservation** - Original variable names and conditions maintained
-- **Provenance tracking** - Full extraction audit trail
-- **Portability** - Standard JSON format for any downstream tool
-
-## Contributing
-
-We welcome contributions! The extractor is designed to be survey-agnostic while capturing survey-specific semantics.
+Install the workbench in editable mode:
 
 ```bash
-# Run tests
-python -m pytest tests/
+python3 -m pip install -e ".[dev]"
+```
 
-# Validate against schema
-python validate_schema.py survey_output.json
+Validate a canonical survey DAG:
 
-# Generate test coverage report
-python analyze_coverage.py survey_dag.json
+```bash
+survey-dag validate tests/fixtures/valid_minimal_survey.json
+```
+
+Generate a Markdown validation report:
+
+```bash
+survey-dag validate tests/fixtures/orphan_node_survey.json --report data/extracted/orphan_validation.md
+```
+
+Generate repair recommendations:
+
+```bash
+survey-dag heal tests/fixtures/missing_fallthrough_survey.json --output data/extracted/recommendations.json
+```
+
+Generate coverage tests:
+
+```bash
+survey-dag test tests/fixtures/valid_minimal_survey.json --coverage edge --output data/extracted/coverage_tests.json
+```
+
+## Workbench Capabilities
+
+**Validation**
+- Validates canonical JSON against the project schema
+- Checks graph references, entry nodes, terminal nodes, reachability, cycles, priorities, dead ends, and missing fallthrough paths
+- Emits JSON summaries and optional Markdown reports
+
+**Healing**
+- Generates deterministic repair recommendations for supported structural issues
+- Keeps repairs human-reviewable before they are applied
+- Supports approved recommendation application through the `survey-dag apply` command
+
+**Coverage Testing**
+- Enumerates survey routes through the DAG
+- Synthesizes response sets for supported edge conditions
+- Reports node and edge coverage plus paths that could not be verified
+
+## Canonical Input
+
+The workbench expects a canonical JSON document with survey metadata, DAG nodes, edges, terminal nodes, and edge conditions. See `/schemas/canonical_survey_dag_schema.json` for the formal schema and `/docs/CANONICAL_SURVEY_DAG_SCHEMA.md` for the human-readable schema guide.
+
+Fixture surveys in `/tests/fixtures/` provide compact examples for valid and invalid routing graphs.
+
+## CLI Commands
+
+```bash
+survey-dag validate <survey.json> [--report report.md]
+survey-dag heal <survey.json> [--output recommendations.json]
+survey-dag apply <survey.json> <decisions.json> --output patched.json
+survey-dag test <survey.json> [--coverage node|edge] [--output coverage_tests.json]
+```
+
+## Validation Workflow
+
+Human validation is mandatory for repair decisions:
+
+1. Run `survey-dag validate` to identify schema and routing issues.
+2. Run `survey-dag heal` to generate recommendations for supported issue types.
+3. Review recommendations and record approved decisions.
+4. Run `survey-dag apply` to produce a patched survey JSON.
+5. Re-run validation and generate coverage tests.
+
+## Project Layout
+
+| Path | Purpose |
+|------|---------|
+| `/survey_dag_extractor/` | Python package and CLI implementation |
+| `/schemas/` | Canonical survey DAG schema |
+| `/docs/` | Project documentation and design notes |
+| `/tests/fixtures/` | Minimal canonical survey fixtures |
+| `/data/` | Source survey files |
+| `/data/extracted/` | Generated validation reports, recommendations, and test outputs |
+
+## Development
+
+Install development dependencies:
+
+```bash
+python3 -m pip install -e ".[dev]"
+```
+
+Run the test suite:
+
+```bash
+python3 -m pytest -v
+```
+
+Validate the schema file is well-formed JSON:
+
+```bash
+python3 -m json.tool schemas/canonical_survey_dag_schema.json >/dev/null
 ```
 
 ## License
 
-MIT License - See LICENSE file for details
+MIT License - See LICENSE file for details.
