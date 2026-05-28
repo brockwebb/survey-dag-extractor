@@ -155,6 +155,55 @@ def test_non_string_condition_operator_is_reported():
     assert "unknown_condition_operator" in types
 
 
+def test_list_condition_operator_is_reported_without_crashing():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"][0] = {
+        "id": "E001",
+        "source": "Q1",
+        "target": "Q2",
+        "condition": [["BAD"], "Q1", 1],
+        "condition_text": "malformed list operator",
+        "priority": 1,
+        "type": "branch",
+    }
+    document["survey"]["dag"]["edges"].insert(
+        1,
+        {
+            "id": "E001_FALLTHROUGH",
+            "source": "Q1",
+            "target": "Q2",
+            "condition": None,
+            "condition_text": "fallthrough",
+            "priority": 999,
+            "type": "fallthrough",
+        },
+    )
+
+    types = issue_types_from_document(document)
+
+    assert "unknown_condition_operator" in types
+
+
+def test_malformed_edge_priority_does_not_crash_routing_validation():
+    document = load_fixture("valid_minimal_survey.json")
+    document["survey"]["dag"]["edges"].insert(
+        1,
+        {
+            "id": "E001_BAD_PRIORITY",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "complete",
+            "priority": [],
+            "type": "terminal",
+        },
+    )
+
+    types = issue_types_from_document(document)
+
+    assert "schema_invalid" in types
+
+
 def test_cycle_with_exit_path_to_terminal_is_not_a_dead_end():
     document = load_fixture("valid_minimal_survey.json")
     document["survey"]["dag"]["edges"] = [

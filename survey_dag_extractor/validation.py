@@ -114,7 +114,7 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
                         evidence={"condition": condition},
                     )
                 )
-            elif op not in KNOWN_OPERATORS:
+            elif not isinstance(op, str) or op not in KNOWN_OPERATORS:
                 issues.append(
                     ValidationIssue(
                         "ISSUE_PENDING",
@@ -125,7 +125,7 @@ def _condition_issues(model: SurveyModel) -> list[ValidationIssue]:
                         evidence={"operator": op, "condition": condition},
                     )
                 )
-        for variable in model.condition_variables(condition):
+        for variable in _condition_variables(condition):
             if variable not in model.questions:
                 issues.append(
                     ValidationIssue(
@@ -150,6 +150,20 @@ def _condition_operators(condition: Any) -> list[Any]:
         for item in condition[1:]:
             operators.extend(_condition_operators(item))
     return operators
+
+
+def _condition_variables(condition: Any) -> set[str]:
+    if condition is None or not isinstance(condition, list) or not condition:
+        return set()
+    op = condition[0]
+    if isinstance(op, str) and op in {"=", "!=", ">", "<", ">=", "<=", "in", "not_in", "contains"} and len(condition) >= 2:
+        return {condition[1]} if isinstance(condition[1], str) else set()
+    if not isinstance(op, str) or op not in LOGICAL_OPERATORS:
+        return set()
+    variables: set[str] = set()
+    for item in condition[1:]:
+        variables |= _condition_variables(item)
+    return variables
 
 
 def _priority_issues(model: SurveyModel) -> list[ValidationIssue]:
@@ -190,7 +204,7 @@ def _routing_issues(model: SurveyModel) -> list[ValidationIssue]:
 def _missing_outgoing_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues = []
     for node_id in model.questions:
-        if not model.outgoing_edges(node_id):
+        if not _outgoing_edges(model, node_id):
             issues.append(
                 ValidationIssue(
                     "ISSUE_PENDING",
@@ -213,7 +227,7 @@ def _reachable_nodes(model: SurveyModel) -> set[str]:
         if node_id in visited:
             continue
         visited.add(node_id)
-        for edge in model.outgoing_edges(node_id):
+        for edge in _outgoing_edges(model, node_id):
             target = _edge_node_id(edge, "target")
             if target is not None and model.node_exists(target):
                 stack.append(target)
@@ -233,7 +247,7 @@ def _reachability_issues(model: SurveyModel) -> list[ValidationIssue]:
                 "orphan_node",
                 f"{node_id} is not reachable from the entry node.",
                 node_id=node_id,
-                evidence={"entry_node": model.entry_node, "incoming_edges": [_edge_id(edge) for edge in model.incoming_edges(node_id)]},
+                evidence={"entry_node": model.entry_node, "incoming_edges": [_edge_id(edge) for edge in _incoming_edges(model, node_id)]},
             )
         )
     return issues
@@ -252,7 +266,7 @@ def _cycle_issues(model: SurveyModel) -> list[ValidationIssue]:
         if node_id in visited or model.is_terminal(node_id):
             return
         visiting.add(node_id)
-        for edge in model.outgoing_edges(node_id):
+        for edge in _outgoing_edges(model, node_id):
             target = _edge_node_id(edge, "target")
             if target is not None and model.node_exists(target):
                 visit(target, path + [target])
@@ -316,7 +330,7 @@ def _nodes_that_can_reach_terminal(model: SurveyModel) -> set[str]:
 def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
     issues = []
     for source in sorted({source for edge in model.edges if (source := _edge_node_id(edge, "source")) is not None}):
-        outgoing = model.outgoing_edges(source)
+        outgoing = _outgoing_edges(model, source)
         has_branch = any(edge.get("type") == "branch" for edge in outgoing)
         has_fallthrough = any(edge.get("type") == "fallthrough" and edge.get("condition") is None for edge in outgoing)
         if has_branch and not has_fallthrough:
@@ -331,6 +345,25 @@ def _fallthrough_issues(model: SurveyModel) -> list[ValidationIssue]:
                 )
             )
     return issues
+
+
+def _outgoing_edges(model: SurveyModel, node_id: str) -> list[dict[str, Any]]:
+    return sorted(
+        (edge for edge in model.edges if _edge_node_id(edge, "source") == node_id),
+        key=lambda edge: (_priority_sort_value(edge), _edge_id(edge)),
+    )
+
+
+def _incoming_edges(model: SurveyModel, node_id: str) -> list[dict[str, Any]]:
+    return sorted(
+        (edge for edge in model.edges if _edge_node_id(edge, "target") == node_id),
+        key=_edge_id,
+    )
+
+
+def _priority_sort_value(edge: dict[str, Any]) -> int:
+    priority = edge.get("priority")
+    return priority if type(priority) is int else 999
 
 
 def _edge_id(edge: dict[str, Any]) -> str:
