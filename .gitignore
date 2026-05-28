@@ -13,6 +13,12 @@ restart/
 handoffs/
 cc_scripts/
 
+# agent-local instructions/context
+AGENTS.md
+AGENT.md
+agents.md
+agent.md
+
 
 
 # Byte-compiled / optimized / DLL files
