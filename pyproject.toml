@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "survey-dag-extractor"
+version = "0.1.0"
+description = "Survey DAG validation, healing, and test automation workbench"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "jsonschema>=4.22.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0"
+]
+
+[project.scripts]
+survey-dag = "survey_dag_extractor.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["survey_dag_extractor*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
