@@ -5,6 +5,10 @@ import json
 from pathlib import Path
 from typing import Sequence
 
+from survey_dag_extractor.model import SurveyModel
+from survey_dag_extractor.reports import format_markdown_report
+from survey_dag_extractor.validation import validate_model
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="survey-dag")
@@ -13,7 +17,7 @@ def build_parser() -> argparse.ArgumentParser:
     validate = subcommands.add_parser("validate", help="Validate a canonical survey DAG JSON file")
     validate.add_argument("survey_path", type=Path)
     validate.add_argument("--report", type=Path)
-    validate.set_defaults(func=_not_implemented)
+    validate.set_defaults(func=_validate)
 
     heal = subcommands.add_parser("heal", help="Generate deterministic repair recommendations")
     heal.add_argument("survey_path", type=Path)
@@ -33,6 +37,21 @@ def build_parser() -> argparse.ArgumentParser:
     test_cmd.set_defaults(func=_not_implemented)
 
     return parser
+
+
+def _validate(args: argparse.Namespace) -> int:
+    model = SurveyModel.from_path(args.survey_path)
+    issues = validate_model(model)
+    if args.report:
+        args.report.write_text(format_markdown_report(model, issues), encoding="utf-8")
+    payload = {
+        "survey_id": model.survey_id,
+        "status": "valid" if not issues else "invalid",
+        "issue_count": len(issues),
+        "issues": [issue.to_dict() for issue in issues],
+    }
+    print(json.dumps(payload, indent=2))
+    return 0 if not issues else 1
 
 
 def _not_implemented(args: argparse.Namespace) -> int:
