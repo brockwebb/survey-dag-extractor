@@ -192,6 +192,32 @@ def test_applied_edge_is_isolated_from_later_recommendation_mutation():
     assert applied_edges[0]["target"] == "Q2"
 
 
+def test_duplicate_approved_decisions_apply_patch_once_and_log_both_decisions():
+    model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
+    recommendations = recommend_repairs(model, validate_model(model))
+    decision = approved_decision(recommendations[0].id)
+    duplicate_decision = {
+        **approved_decision(recommendations[0].id),
+        "rationale": "Duplicate approval should be audited but not re-applied.",
+    }
+
+    patched = apply_approved_recommendations(model.document, recommendations, [decision, duplicate_decision])
+
+    patched_model = SurveyModel(patched)
+    issue_types = {issue.type for issue in validate_model(patched_model)}
+    applied_edge_id = recommendations[0].patch[0]["edge"]["id"]
+    applied_edges = [edge for edge in patched["survey"]["dag"]["edges"] if edge["id"] == applied_edge_id]
+    logged_decisions = [
+        entry
+        for entry in patched["survey"]["metadata"]["decision_log"]
+        if entry["recommendation_id"] == recommendations[0].id
+    ]
+
+    assert len(applied_edges) == 1
+    assert "duplicate_priority" not in issue_types
+    assert [entry["rationale"] for entry in logged_decisions] == [decision["rationale"], duplicate_decision["rationale"]]
+
+
 def test_heal_cli_prints_recommendations(capsys):
     exit_code = main(["heal", str(FIXTURES / "missing_fallthrough_survey.json")])
 

@@ -14,11 +14,14 @@ def apply_approved_recommendations(
 ) -> dict[str, Any]:
     patched = copy.deepcopy(document)
     recommendation_by_id = {recommendation.id: recommendation for recommendation in recommendations}
+    applied_recommendation_ids: set[str] = set()
     for decision in decisions:
-        recommendation = recommendation_by_id.get(decision["recommendation_id"])
-        if decision.get("decision") == "approved" and recommendation is not None:
+        recommendation_id = decision["recommendation_id"]
+        recommendation = recommendation_by_id.get(recommendation_id)
+        if decision.get("decision") == "approved" and recommendation is not None and recommendation_id not in applied_recommendation_ids:
             for operation in recommendation.patch:
                 _apply_operation(patched, operation)
+            applied_recommendation_ids.add(recommendation_id)
         _append_decision(patched, recommendation, decision)
     return patched
 
