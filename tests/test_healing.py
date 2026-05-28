@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from survey_dag_extractor.cli import main
 from survey_dag_extractor.healing import recommend_repairs
 from survey_dag_extractor.model import SurveyModel
@@ -9,6 +11,20 @@ from survey_dag_extractor.validation import validate_model
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def load_fixture(path: str) -> dict:
+    with (FIXTURES / path).open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def approved_decision(recommendation_id: str) -> dict:
+    return {
+        "recommendation_id": recommendation_id,
+        "decision": "approved",
+        "approver": "human",
+        "rationale": "Approved for test.",
+    }
 
 
 def test_missing_fallthrough_gets_add_edge_recommendation():
@@ -42,6 +58,138 @@ def test_approved_fallthrough_patch_resolves_missing_fallthrough():
     issue_types = {issue.type for issue in validate_model(patched_model)}
 
     assert "missing_fallthrough" not in issue_types
+
+
+@pytest.mark.parametrize(
+    "edge_item",
+    [
+        None,
+        {
+            "source": "Q1",
+            "target": "Q2",
+            "condition": None,
+            "condition_text": "malformed edge without id",
+            "priority": 2,
+            "type": "terminal",
+        },
+    ],
+)
+def test_recommendation_generation_tolerates_malformed_edge_entries(edge_item):
+    document = load_fixture("missing_fallthrough_survey.json")
+    document["survey"]["dag"]["edges"].append(edge_item)
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert recommendations
+    assert recommendations[0].patch[0]["edge"]["source"] == "Q1"
+
+
+def test_terminal_fallback_skips_undefined_terminal_ids():
+    document = load_fixture("missing_fallthrough_survey.json")
+    document["survey"]["dag"]["terminal_nodes"] = ["MISSING_TERMINAL"]
+    document["survey"]["dag"]["edges"] = [
+        {
+            "id": "E001",
+            "source": "Q1",
+            "target": "Q2",
+            "condition": None,
+            "condition_text": "continue",
+            "priority": 999,
+            "type": "fallthrough",
+        },
+        {
+            "id": "E002",
+            "source": "Q2",
+            "target": "SURVEY_COMPLETE",
+            "condition": ["=", "Q2", 1],
+            "condition_text": "Q2 = 1",
+            "priority": 1,
+            "type": "branch",
+        },
+    ]
+    model = SurveyModel(document)
+    issues = [issue for issue in validate_model(model) if issue.type == "missing_fallthrough"]
+
+    recommendations = recommend_repairs(model, issues)
+
+    assert recommendations == []
+
+
+def test_recommendation_priority_avoids_duplicate_source_priorities():
+    document = load_fixture("missing_fallthrough_survey.json")
+    document["survey"]["dag"]["edges"].append(
+        {
+            "id": "E003",
+            "source": "Q1",
+            "target": "SURVEY_COMPLETE",
+            "condition": None,
+            "condition_text": "existing terminal priority",
+            "priority": 999,
+            "type": "terminal",
+        }
+    )
+    model = SurveyModel(document)
+
+    recommendations = recommend_repairs(model, validate_model(model))
+
+    assert recommendations[0].patch[0]["edge"]["priority"] == 1000
+
+
+def test_rejected_decision_is_logged_without_applying_patch():
+    model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
+    recommendations = recommend_repairs(model, validate_model(model))
+    decision = {
+        "recommendation_id": recommendations[0].id,
+        "decision": "rejected",
+        "approver": "human",
+        "rationale": "Rejected for audit test.",
+    }
+
+    patched = apply_approved_recommendations(model.document, recommendations, [decision])
+
+    edges = patched["survey"]["dag"]["edges"]
+    decision_log = patched["survey"]["metadata"]["decision_log"]
+    assert len(edges) == len(model.document["survey"]["dag"]["edges"])
+    assert decision_log[-1]["decision"] == "rejected"
+    assert decision_log[-1]["issue_id"] == recommendations[0].issue_id
+    assert decision_log[-1]["recommendation_id"] == recommendations[0].id
+
+
+def test_unknown_recommendation_decision_is_logged_without_applying_patch():
+    model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
+    recommendations = recommend_repairs(model, validate_model(model))
+    decision = {
+        "recommendation_id": "REC_STALE",
+        "decision": "approved",
+        "approver": "human",
+        "rationale": "Stale decision should still be auditable.",
+    }
+
+    patched = apply_approved_recommendations(model.document, recommendations, [decision])
+
+    edges = patched["survey"]["dag"]["edges"]
+    decision_log = patched["survey"]["metadata"]["decision_log"]
+    assert len(edges) == len(model.document["survey"]["dag"]["edges"])
+    assert decision_log[-1]["decision"] == "approved"
+    assert decision_log[-1]["issue_id"] is None
+    assert decision_log[-1]["recommendation_id"] == "REC_STALE"
+
+
+def test_applied_edge_is_isolated_from_later_recommendation_mutation():
+    model = SurveyModel.from_path(FIXTURES / "missing_fallthrough_survey.json")
+    recommendations = recommend_repairs(model, validate_model(model))
+    patched = apply_approved_recommendations(
+        model.document,
+        recommendations,
+        [approved_decision(recommendations[0].id)],
+    )
+    applied_edge_id = recommendations[0].patch[0]["edge"]["id"]
+
+    recommendations[0].patch[0]["edge"]["target"] = "MUTATED"
+
+    applied_edges = [edge for edge in patched["survey"]["dag"]["edges"] if edge["id"] == applied_edge_id]
+    assert applied_edges[0]["target"] == "Q2"
 
 
 def test_heal_cli_prints_recommendations(capsys):

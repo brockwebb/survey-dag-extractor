@@ -18,11 +18,11 @@ def _recommend_fallthrough(model: SurveyModel, issue: ValidationIssue, index: in
     source = issue.node_id
     target = model.next_question_after(source)
     if target is None:
-        terminal_ids = model.terminal_ids
-        target = terminal_ids[0] if terminal_ids else None
+        target = _first_valid_terminal_id(model)
     if target is None:
         return None
     edge_id = _next_edge_id(model, index)
+    priority = _next_fallthrough_priority(model, source)
     return Recommendation(
         id=f"REC_{index:04d}",
         issue_id=issue.id,
@@ -38,7 +38,7 @@ def _recommend_fallthrough(model: SurveyModel, issue: ValidationIssue, index: in
                     "target": target,
                     "condition": None,
                     "condition_text": "fallthrough",
-                    "priority": 999,
+                    "priority": priority,
                     "type": "fallthrough",
                 },
             }
@@ -46,10 +46,29 @@ def _recommend_fallthrough(model: SurveyModel, issue: ValidationIssue, index: in
     )
 
 
+def _first_valid_terminal_id(model: SurveyModel) -> str | None:
+    for terminal_id in model.terminal_ids:
+        if model.node_exists(terminal_id):
+            return terminal_id
+    return None
+
+
 def _next_edge_id(model: SurveyModel, index: int) -> str:
-    existing = {edge["id"] for edge in model.edges}
+    existing = {str(edge["id"]) for edge in model.edges if isinstance(edge, dict) and "id" in edge}
     candidate = f"E_AUTO_{index:04d}"
     while candidate in existing:
         index += 1
         candidate = f"E_AUTO_{index:04d}"
     return candidate
+
+
+def _next_fallthrough_priority(model: SurveyModel, source: str) -> int:
+    existing = {
+        edge.get("priority")
+        for edge in model.outgoing_edges(source)
+        if type(edge.get("priority")) is int
+    }
+    priority = 999
+    while priority in existing:
+        priority += 1
+    return priority
